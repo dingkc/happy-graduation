@@ -13,13 +13,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * @Author Dk
+ * @Description user service
+ * @Date 11:46 2018/12/4
+ * @Param
+ * @return
+ **/
 @Service
-@Transactional
+@Transactional(rollbackFor = Throwable.class)
 public class UserSVImpl implements IUserSV {
 
     @Autowired
-    @Qualifier(value =  )
     private UserDao userDao;
 
     @Override
