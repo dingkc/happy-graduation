@@ -26,8 +26,7 @@ public class BeanMapperUtil {
 
     private static MapperFacade mapper;
 
-    private BeanMapperUtil() {
-    }
+    private BeanMapperUtil(){}
 
     static {
         MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();

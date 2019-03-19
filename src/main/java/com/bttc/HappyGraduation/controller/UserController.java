@@ -1,11 +1,13 @@
 package com.bttc.HappyGraduation.controller;
 
-import com.bttc.HappyGraduation.user.pojo.vo.UserVO;
-import com.bttc.HappyGraduation.user.pojo.vo.VerifyCodeRecordVO;
-import com.bttc.HappyGraduation.user.service.interfaces.ISystemUserSV;
-import com.bttc.HappyGraduation.user.service.interfaces.IUserSV;
-import com.bttc.HappyGraduation.user.service.interfaces.IVerifyCodeRecordSV;
+
+import com.bttc.HappyGraduation.session.service.interfaces.IUserSV;
+import com.bttc.HappyGraduation.session.pojo.vo.UserVO;
+import com.bttc.HappyGraduation.utils.IVerifyCodeRecordSV;
 import com.bttc.HappyGraduation.utils.ResultBean;
+import com.bttc.HappyGraduation.utils.VerifyCodeRecordVO;
+import com.bttc.HappyGraduation.utils.VerifyCodeValidationVO;
+import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +16,6 @@ public class UserController {
 
     @Autowired
     private IVerifyCodeRecordSV iVerifyCodeRecordSV;
-
-    @Autowired
-    private ISystemUserSV iSystemUserSV;
 
     @Autowired
     private IUserSV iUserSV;
@@ -45,18 +44,18 @@ public class UserController {
         return ResultBean.ok(iUserSV.queryByUserId(userId));
     }
 
-    /**
-     * @Author Dk
-     * @Description 查询所有用户
-     * @Date 10:59 2018/12/4
-     * @Param []
-     * @return com.bttc.HappyGraduation.utils.ResultBean
-     **/
-    @GetMapping(value="${apiVersion1}/users")
-    public ResultBean queryAllUser(){
-        return ResultBean.ok(iSystemUserSV.getAllUsers());
-
-    }
+//    /**
+//     * @Author Dk
+//     * @Description 查询所有用户
+//     * @Date 10:59 2018/12/4
+//     * @Param []
+//     * @return com.bttc.HappyGraduation.utils.ResultBean
+//     **/
+//    @GetMapping(value="${apiVersion1}/users")
+//    public ResultBean queryAllUser(){
+//        return ResultBean.ok(iUserSV.getAllUsers());
+//
+//    }
 
    /**
     * @Author Dk
@@ -66,8 +65,8 @@ public class UserController {
     * @return com.bttc.HappyGraduation.utils.ResultBean
     **/
     @PostMapping("${apiVersion1}/users")
-    public ResultBean addUser(@RequestBody UserVO userVO) {
-        iSystemUserSV.addUser(userVO);
+    public ResultBean addUser(@RequestBody UserVO userVO) throws BusinessException {
+        iUserSV.addUser(userVO);
         return ResultBean.ok(null);
     }
 
@@ -79,8 +78,8 @@ public class UserController {
      * @return com.bttc.HappyGraduation.utils.ResultBean
      **/
     @PutMapping("${apiVersion1}/users/{userId}")
-    public ResultBean updateUser(@PathVariable Integer userId, @RequestBody UserVO userVO) {
-        iSystemUserSV.updateUser(userId, userVO);
+    public ResultBean updateUser(@PathVariable Integer userId, @RequestBody UserVO userVO) throws BusinessException {
+        iUserSV.updateUser(userId, userVO);
         return ResultBean.ok(null);
     }
 
@@ -92,8 +91,8 @@ public class UserController {
      * @return com.bttc.HappyGraduation.utils.ResultBean
      **/
     @PutMapping("${apiVersion1}/users/password-resetting")
-    public ResultBean resetByPassword(@RequestBody UserVO userVO) {
-        iSystemUserSV.updateUser(userVO);
+    public ResultBean resetByPassword(@RequestBody UserVO userVO) throws BusinessException {
+        iUserSV.updateUser(userVO);
         return ResultBean.ok(null);
     }
 
@@ -105,7 +104,7 @@ public class UserController {
      * @return com.bttc.HappyGraduation.utils.ResultBean
      **/
     @PostMapping(value = "${apiVersion1}/verifyCodes")
-    public ResultBean sendVerifyCodeByEmail(@RequestBody VerifyCodeRecordVO verifyCodeRecordVO) {
+    public ResultBean sendVerifyCodeByEmail(@RequestBody VerifyCodeRecordVO verifyCodeRecordVO) throws BusinessException {
         return ResultBean.ok(iVerifyCodeRecordSV.sendVerifyCodeByEmail(verifyCodeRecordVO));
     }
 
@@ -116,9 +115,9 @@ public class UserController {
      * @Param [verifyCodeId, verifyCode, email]
      * @return com.bttc.HappyGraduation.utils.ResultBean
      **/
-    @GetMapping(value = "${apiVersion1}/verifyCodes-validation")
-    public ResultBean validateEmailByVerifyCode(@RequestParam Integer verifyCodeId, @RequestParam String verifyCode, @RequestParam String email) {
-        iVerifyCodeRecordSV.validateEmailByVerifyCode(verifyCodeId, verifyCode, email);
+    @PostMapping(value = "${apiVersion1}/verification-codes/validations")
+    public ResultBean validateEmailByVerifyCode(@RequestBody VerifyCodeValidationVO verifyCodeValidationVO) throws BusinessException{
+        iVerifyCodeRecordSV.validateEmailByVerifyCode(verifyCodeValidationVO);
         return ResultBean.ok(null);
     }
 
