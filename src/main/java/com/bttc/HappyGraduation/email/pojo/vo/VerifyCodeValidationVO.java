@@ -1,4 +1,4 @@
-package com.bttc.HappyGraduation.utils;
+package com.bttc.HappyGraduation.email.pojo.vo;
 
 /**
  * @Author KD

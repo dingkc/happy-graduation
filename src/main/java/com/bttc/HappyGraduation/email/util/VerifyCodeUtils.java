@@ -1,4 +1,4 @@
-package com.bttc.HappyGraduation.utils;
+package com.bttc.HappyGraduation.email.util;
 
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.bttc.HappyGraduation.utils;
+package com.bttc.HappyGraduation.common;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;

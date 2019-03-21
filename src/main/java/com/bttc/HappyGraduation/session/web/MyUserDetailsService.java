@@ -3,7 +3,7 @@ package com.bttc.HappyGraduation.session.web;
 import ch.qos.logback.classic.Logger;
 import com.bttc.HappyGraduation.session.pojo.po.UserPO;
 import com.bttc.HappyGraduation.session.service.interfaces.IUserSV;
-import com.bttc.HappyGraduation.utils.BeanMapperUtil;
+import com.bttc.HappyGraduation.common.BeanMapperUtil;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;

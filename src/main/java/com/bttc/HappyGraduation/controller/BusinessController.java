@@ -1,11 +1,7 @@
 package com.bttc.HappyGraduation.controller;
 
-import com.bttc.HappyGraduation.doc.pojo.vo.WordVO;
 import com.bttc.HappyGraduation.doc.service.interfaces.IWordToHtml;
-import com.bttc.HappyGraduation.utils.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 public class BusinessController {
 

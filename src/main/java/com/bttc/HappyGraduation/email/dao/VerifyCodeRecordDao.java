@@ -1,5 +1,6 @@
-package com.bttc.HappyGraduation.utils;
+package com.bttc.HappyGraduation.email.dao;
 
+import com.bttc.HappyGraduation.email.pojo.po.VerifyCodeRecordPO;
 import com.bttc.HappyGraduation.utils.base.BaseRepository;
 import org.springframework.data.jpa.repository.Query;
 

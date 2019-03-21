@@ -1,6 +1,6 @@
 package com.bttc.HappyGraduation.utils.exception;
 
-import com.bttc.HappyGraduation.utils.ResultBean;
+import com.bttc.HappyGraduation.common.ResultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;

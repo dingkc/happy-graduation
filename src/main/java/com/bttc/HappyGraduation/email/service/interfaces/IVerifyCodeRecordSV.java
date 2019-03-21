@@ -1,5 +1,8 @@
-package com.bttc.HappyGraduation.utils;
+package com.bttc.HappyGraduation.email.service.interfaces;
 
+import com.bttc.HappyGraduation.email.pojo.po.VerifyCodeRecordPO;
+import com.bttc.HappyGraduation.email.pojo.vo.VerifyCodeRecordVO;
+import com.bttc.HappyGraduation.email.pojo.vo.VerifyCodeValidationVO;
 import com.bttc.HappyGraduation.utils.exception.BusinessException;
 
 public interface IVerifyCodeRecordSV {

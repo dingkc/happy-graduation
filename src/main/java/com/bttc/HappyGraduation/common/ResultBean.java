@@ -1,4 +1,4 @@
-package com.bttc.HappyGraduation.utils;
+package com.bttc.HappyGraduation.common;
 
 /**
 * <p>Title: ResultBean</p>

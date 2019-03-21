@@ -1,4 +1,4 @@
-package com.bttc.HappyGraduation.utils;
+package com.bttc.HappyGraduation.email.pojo.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import org.hibernate.annotations.DynamicUpdate;

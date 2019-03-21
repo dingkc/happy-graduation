@@ -1,4 +1,4 @@
-package com.bttc.HappyGraduation.utils;
+package com.bttc.HappyGraduation.common;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;

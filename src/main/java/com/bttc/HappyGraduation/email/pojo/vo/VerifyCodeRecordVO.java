@@ -1,4 +1,4 @@
-package com.bttc.HappyGraduation.utils;
+package com.bttc.HappyGraduation.email.pojo.vo;
 
 /**
  * Created by yuqh3 on 2018/7/5.
