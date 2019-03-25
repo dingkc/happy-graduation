@@ -9,11 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* <p>Title: IUserSV</p>
-* <p>Description: </p> 
-* @author liuxf6
-* @date 2018年7月3日
-*/
+ * @Author: Dk
+ * @Date: 2019/3/25 23:23
+ **/
 public interface IUserSV {
 
 	/**
@@ -24,37 +22,39 @@ public interface IUserSV {
 	 * @param userName : 用户名称（登录名）
 	 * @param queryType : 查询类型0所有用户1当前用户
 	 * @return: java.util.List<com.ai.osrdc.core.business.user.pojo.vo.UserVO>
-	 * @Date: 2018/12/19 15:03
+	 * @Date: 2019/3/25 23:23
 	 **/
 	List<UserVO> queryByConditions(Integer userId, String userName, Integer queryType) throws BusinessException;
 
 	/**
 	 * <p>Title: addUser</p>
 	 * <p>Description: 增加一条用户信息（各字段非空校验，邮箱验证码校验，gitlab账号校验和账号唯一性校验）</p>
-	 * @author liuxf6
-	 * @throws BusinessException
-	 * @date 2018年7月4日
-	 * @modifier Dk
-	 * @date 2018年10月23日
-	 */
+	 * @Author: Dk
+	 * @param userVO : 用户信息
+	 * @return: void
+	 * @Date: 2019/3/25 23:24
+	 **/
 	void addUser(UserVO userVO) throws BusinessException;
 
 	/**
 	 * <p>Title: updateUser</p>
 	 * <p>Description: 更新用户信息</p>
-	 * @author liuxf6
-	 * @throws BusinessException
-	 * @date 2018年7月4日
-	 */
+	 * @Author: Dk
+	 * @param userId : 用户id
+	 * @param userVO : 用户信息
+	 * @return: void
+	 * @Date: 2019/3/25 23:24
+	 **/
 	void updateUser(Integer userId, UserVO userVO) throws BusinessException;
 
 	/**
 	 * <p>Title: updateUser</p>
 	 * <p>Description: 重置用户密码</p>
-	 * @author liuxf6
-	 * @throws BusinessException
-	 * @date 2018年7月9日
-	 */
+	 * @Author: Dk
+	 * @param userVO : 用户信息
+	 * @return: void
+	 * @Date: 2019/3/25 23:25
+	 **/
 	void updateUser(UserVO userVO) throws BusinessException;
 
 	/**
@@ -63,40 +63,48 @@ public interface IUserSV {
 	 * @Author: Dk
 	 * @param name : 用户中文名
 	 * @return: java.util.List<com.ai.osrdc.frame.session.pojo.po.business.UserPO>
-	 * @Date: 2018/12/20 14:07
+	 * @Date: 2019/3/25 23:25
 	 **/
 	List<UserPO> queryByName(String name);
 
 	/**
 	 * <p>Title: queryByUserId</p>
 	 * <p>Description: 根据用户编号查询用户信息</p>
-	 * @author liuxf6
-	 * @date 2018年7月4日
-	 */
+	 * @Author: Dk
+	 * @param userId : 用户编号
+	 * @return: com.bttc.HappyGraduation.session.pojo.po.UserPO
+	 * @Date: 2019/3/25 23:25
+	 **/
 	UserPO queryByUserId(Integer userId);
 
 	/**
 	 * <p>Title: queryByAccountName</p>
 	 * <p>Description: 根据账户名查询用户信息</p>
-	 * @author liuxf6
-	 * @date 2018年7月4日
-	 */
+	 * @Author: Dk
+	 * @param username : 账户名
+	 * @return: com.bttc.HappyGraduation.session.pojo.po.UserPO
+	 * @Date: 2019/3/25 23:26
+	 **/
 	UserPO queryByUsername(String username);
 
 	/**
 	 * <p>Title: addUser</p>
 	 * <p>Description: 增加一条用户信息</p>
-	 * @author liuxf6
-	 * @date 2018年7月4日
-	 */
+	 * @Author: Dk
+	 * @param userPO : 用户信息
+	 * @return: com.bttc.HappyGraduation.session.pojo.po.UserPO
+	 * @Date: 2019/3/25 23:26
+	 **/
 	UserPO addUser(UserPO userPO);
 
 	/**
 	 * <p>Title: updateUser</p>
 	 * <p>Description: 更新用户信息</p>
-	 * @author liuxf6
-	 * @date 2018年7月4日
-	 */
+	 * @Author: Dk
+	 * @param userPO : 用户信息
+	 * @return: com.bttc.HappyGraduation.session.pojo.po.UserPO
+	 * @Date: 2019/3/25 23:28
+	 **/
 	UserPO updateUser(UserPO userPO);
 
 	/**
@@ -120,22 +128,4 @@ public interface IUserSV {
 	 **/
 	List<UserPO> queryByState(Integer state);
 
-	/**
-	 * <p>Title: queryByUserIds</p>
-	 * <p>Description: 根据用户编号列表查询用户信息列表</p>
-	 * @author kaiz
-	 * @date 2018年11月9日
-	 */
-	Map<Integer,UserPO> queryByUserIds(List<Integer> userIds);
-
-	/**
-	 * <p>Title: </p>
-	 * <p>Description:根据用户编号列表和用户名字查询 </p>
-	 * @Author:songjd
-	 * @param userIdList :
-	 * @param name :
-	 * @return: java.util.List<com.ai.osrdc.frame.session.pojo.po.business.UserPO>
-	 * @Date: 2019/3/1 14:45
-	 */
-	List<UserPO> queryByUserIdsAndUsername(List<Integer> userIdList, String name);
 }

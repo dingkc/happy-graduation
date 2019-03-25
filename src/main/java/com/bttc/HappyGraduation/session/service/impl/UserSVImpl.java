@@ -303,27 +303,4 @@ public class UserSVImpl implements IUserSV {
 		return userDao.findAllByState(CommonConstant.CommonState.EFFECT.getValue());
 	}
 
-	@Override
-	public List<UserPO> queryByUserIdsAndUsername(List<Integer> userIdList, String name) {
-		List<UserPO> userPOList = null;
-		if(name == null || name.equals("")){
-			userPOList = userDao.findAllByUserIdInAndStateOrderByNameAsc(userIdList, CommonConstant.CommonState.EFFECT.getValue());
-		}else{
-			userPOList = userDao.findAllByUserIdInAndNameLikeAndStateOrderByNameAsc(userIdList, "%" + name + "%", CommonConstant.CommonState.EFFECT.getValue());
-		}
-		return userPOList;
-	}
-
-	@Override
-	public Map<Integer,UserPO> queryByUserIds(List<Integer> userIds) {
-		HashMap<Integer,UserPO> userPOHashMap = new HashMap<>();
-		List<UserPO> userPOS = userDao.findAllByUserIdInAndState(userIds, CommonConstant.CommonState.EFFECT.getValue());
-		if (null != userPOS){
-			for (UserPO userPO : userPOS){
-				userPOHashMap.put(userPO.getUserId(),userPO);
-			}
-		}
-		return userPOHashMap;
-	}
-
 }
