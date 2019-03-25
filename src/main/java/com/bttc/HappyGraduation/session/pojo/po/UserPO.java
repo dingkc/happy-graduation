@@ -16,7 +16,7 @@ public class UserPO {
     public static final Integer DEACTIVE = 4;
     public static final Integer BLOCK = 2;
     public static final Integer STOP = 0;
-    /*account_name已经删除*/
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(columnDefinition="int(10) COMMENT '用户编号'")
@@ -50,9 +50,6 @@ public class UserPO {
 	@Column(columnDefinition = "datetime COMMENT '操作时间'", nullable=false)
 	private Date doneDate;
 
-	@Column(columnDefinition="int(10) COMMENT '系统角色编号'")
-	private Integer systemRoleId;
-	
 	public Integer getUserId() {
 		return userId;
 	}
@@ -125,12 +122,4 @@ public class UserPO {
 		this.doneDate = doneDate;
 	}
 
-	public Integer getSystemRoleId() {
-		return systemRoleId;
-	}
-
-	public void setSystemRoleId(Integer systemRoleId) {
-		this.systemRoleId = systemRoleId;
-	}
-	
 }

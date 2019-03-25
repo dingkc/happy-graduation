@@ -2,9 +2,9 @@
 //
 //import com.asiainfo.mybatis.service.impl.SaveHtmlImpl;
 //import com.asiainfo.service.impl.WordToHtmlImpl;
-//import com.bttc.HappyGraduation.doc.service.impl.POIReadExcel;
-//import com.bttc.HappyGraduation.doc.service.impl.PptToHtmlImpl;
-//import com.bttc.HappyGraduation.doc.service.interfaces.IExcelTransformHtml;
+//import com.bttc.HappyGraduation.business.service.impl.POIReadExcel;
+//import com.bttc.HappyGraduation.business.service.impl.PptToHtmlImpl;
+//import com.bttc.HappyGraduation.business.service.interfaces.IExcelTransformHtml;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.web.bind.annotation.RequestMapping;
 //import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +13,7 @@
 //import java.util.Date;
 //
 ///**
-// * ".doc"、".docx"
+// * ".business"、".docx"
 // *
 // * @author DK
 // * @create 2018-06-21 17:35
@@ -38,7 +38,7 @@
 //        System.out.println("split[0]的值是：---" + split[0] + ",当前方法=com.asiainfo.WordToHtmlImpl.main()");
 //        System.out.println("split[1]的值是：---" + split[1] + ",当前方法=com.asiainfo.WordToHtmlImpl.main()");
 //        switch (split[1]) {
-//            case "doc":
+//            case "business":
 //                readWordFile = word.readWordFile2003(filePath);
 //                break;
 //            case "docx":

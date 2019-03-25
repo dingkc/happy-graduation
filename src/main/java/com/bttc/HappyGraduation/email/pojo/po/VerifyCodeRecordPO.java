@@ -7,9 +7,9 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by yuqh3 on 2018/7/5.
- */
-
+ * @Author: Dk
+ * @Date: 2019/3/25 22:39
+ **/
 @Entity
 @Table(name="verify_code_record")
 @DynamicUpdate

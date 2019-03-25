@@ -48,7 +48,7 @@ const memoizeOneFormatter = memoizeOne(formatter, isEqual);
  * get SubMenu or Item
  */
 const getSubMenu = item => {
-  // doc: add hideChildrenInMenu
+  // business: add hideChildrenInMenu
   if (item.children && !item.hideChildrenInMenu && item.children.some(child => child.name)) {
     return {
       ...item,

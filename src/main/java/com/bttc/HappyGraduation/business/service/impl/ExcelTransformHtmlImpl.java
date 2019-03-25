@@ -1,7 +1,7 @@
-//package com.bttc.HappyGraduation.doc.service.impl;
+//package com.bttc.HappyGraduation.business.service.impl;
 //
 //import com.asiainfo.service.IExcelTransformHtml;
-//import com.bttc.HappyGraduation.doc.service.interfaces.IExcelTransformHtml;
+//import com.bttc.HappyGraduation.business.service.interfaces.IExcelTransformHtml;
 //import jxl.Cell;
 //import jxl.Range;
 //import jxl.Sheet;

@@ -1,4 +1,4 @@
-package com.bttc.HappyGraduation.doc.service.impl;//package com.asiainfo.mybatis.service.impl;
+package com.bttc.HappyGraduation.business.service.impl;//package com.asiainfo.mybatis.service.impl;
 //
 //import com.asiainfo.mybatis.dao.ISaveHtmlMapper;
 //import com.asiainfo.mybatis.service.interfaces.ISaveHtml;

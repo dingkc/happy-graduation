@@ -1,4 +1,4 @@
-package com.bttc.HappyGraduation.doc.service.interfaces;
+package com.bttc.HappyGraduation.business.service.interfaces;
 
 /**
  * @author DK

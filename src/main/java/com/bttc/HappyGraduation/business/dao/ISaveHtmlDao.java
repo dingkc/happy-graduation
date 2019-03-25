@@ -1,4 +1,4 @@
-package com.bttc.HappyGraduation.doc.dao;//package com.asiainfo.mybatis.dao;
+package com.bttc.HappyGraduation.business.dao;//package com.asiainfo.mybatis.dao;
 //
 //import org.apache.ibatis.annotations.Insert;
 //import org.apache.ibatis.annotations.Param;

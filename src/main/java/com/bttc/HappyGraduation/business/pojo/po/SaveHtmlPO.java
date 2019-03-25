@@ -1,13 +1,11 @@
-package com.bttc.HappyGraduation.doc.pojo.po;
+package com.bttc.HappyGraduation.business.pojo.po;
 
 /**
- * this is a bean
- *
  * @author DK
  * @create 2018-06-28 17:21
  */
 
-public class SaveHtml {
+public class SaveHtmlPO {
     private String fileId;
     private String fileName;
     private String fileType;
@@ -16,10 +14,10 @@ public class SaveHtml {
     private String filePath;
     private String fileContent;
 
-    public SaveHtml() {
+    public SaveHtmlPO() {
     }
 
-    public SaveHtml(String fileId, String fileName, String fileType, String projectName, String createTime, String filePath, String fileContent) {
+    public SaveHtmlPO(String fileId, String fileName, String fileType, String projectName, String createTime, String filePath, String fileContent) {
         this.fileId = fileId;
         this.fileName = fileName;
         this.fileType = fileType;
@@ -87,7 +85,7 @@ public class SaveHtml {
 
     @Override
     public String toString() {
-        return "SaveHtml{" +
+        return "SaveHtmlPO{" +
                 "fileId='" + fileId + '\'' +
                 ", fileName='" + fileName + '\'' +
                 ", fileType='" + fileType + '\'' +

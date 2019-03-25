@@ -1,6 +1,6 @@
-package com.bttc.HappyGraduation.doc.service.impl;
+package com.bttc.HappyGraduation.business.service.impl;
 
-import com.bttc.HappyGraduation.doc.service.interfaces.IWordToHtml;
+import com.bttc.HappyGraduation.business.service.interfaces.IWordToHtml;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.converter.PicturesManager;
 import org.apache.poi.hwpf.converter.WordToHtmlConverter;
@@ -108,7 +108,7 @@ public class WordToHtmlImpl implements IWordToHtml {
         String fileName = file1.getName();
         String[] split = fileName.split("[.]");
         String htmlName = split[0].concat(".html");
-//        String fileName = "测试A.doc";
+//        String fileName = "测试A.business";
 //        String htmlName = "测试A.html";
         final String fileAP = filepath + fileName;
         InputStream input = new FileInputStream(new File(fileAP));

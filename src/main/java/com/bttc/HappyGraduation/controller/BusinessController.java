@@ -1,6 +1,6 @@
 package com.bttc.HappyGraduation.controller;
 
-import com.bttc.HappyGraduation.doc.service.interfaces.IWordToHtml;
+import com.bttc.HappyGraduation.business.service.interfaces.IWordToHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class BusinessController {

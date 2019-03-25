@@ -280,7 +280,6 @@ public class UserSVImpl implements IUserSV {
 		userPO.setCreateDate(nowDate);
 		userPO.setDoneDate(nowDate);
 		userPO.setState(CommonConstant.CommonState.EFFECT.getValue());
-		userPO.setSystemRoleId(CommonConstant.SysTemRole.MEMBER.getValue());
 		return userDao.save(userPO);
 	}
 
