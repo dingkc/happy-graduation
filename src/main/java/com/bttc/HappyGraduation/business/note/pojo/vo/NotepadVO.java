@@ -12,8 +12,12 @@ import java.util.Date;
 public class NotepadVO {
     private Integer notepadId;
     private String notepadName;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
     private Integer creatorId;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date doneDate;
     private Integer operatorId;
 

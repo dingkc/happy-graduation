@@ -15,7 +15,9 @@ import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import com.bttc.HappyGraduation.utils.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.Optional;
 
@@ -23,6 +25,8 @@ import java.util.Optional;
  * @author Dk
  * @date 23:10 2019/3/25.
  */
+@Service
+@Transactional(rollbackOn = Exception.class)
 public class NoteSVImpl implements INoteSV {
 
     @Autowired

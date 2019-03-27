@@ -14,8 +14,12 @@ public class NoteVO {
     private String noteName;
     private String noteContent;
     private Integer notepadId;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
     private Integer creatorId;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date doneDate;
     private Integer operatorId;
     private Integer state;

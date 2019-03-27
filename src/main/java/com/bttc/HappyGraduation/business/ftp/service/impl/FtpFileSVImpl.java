@@ -10,9 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -22,6 +24,8 @@ import java.net.URLEncoder;
  * @author Dk
  * @date 23:09 2019/3/25.
  */
+@Service
+@Transactional(rollbackOn = Exception.class)
 public class FtpFileSVImpl implements IFtpFileSV {
 
     private static final Logger logger = LoggerFactory.getLogger(FtpFileSVImpl.class);
