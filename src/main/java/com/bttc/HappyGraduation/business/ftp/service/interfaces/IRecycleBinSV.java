@@ -10,13 +10,13 @@ import com.bttc.HappyGraduation.utils.exception.BusinessException;
  **/
 public interface IRecycleBinSV {
 
-    void addRrecord(RecycleBinVO recycleBinVO) throws BusinessException;
+    void addRecord(RecycleBinVO recycleBinVO) throws BusinessException;
 
-    void deleteRrecord(Integer recycleBinId);
+    void deleteRecord(Integer recycleBinId);
 
-    void updateRrecord(RecycleBinVO recycleBinVO);
+    void updateRecord(RecycleBinVO recycleBinVO);
 
     RecycleBinVO queryById(Integer recycleBinId);
 
-    RecycleBinListVO queryByCondition(RecycleBinVO recycleBinVO, Integer pageNumber, Integer pageSize);
+    RecycleBinListVO queryByCondition(String recycleBinName, Integer pageNumber, Integer pageSize);
 }

@@ -103,7 +103,7 @@ public class UserController {
      * @Param [verifyCodeRecordVO]
      * @return com.bttc.HappyGraduation.common.ResultBean
      **/
-    @PostMapping(value = "${apiVersion1}/verifyCodes")
+    @PostMapping(value = "${apiVersion1}/verify-codes")
     public ResultBean sendVerifyCodeByEmail(@RequestBody VerifyCodeRecordVO verifyCodeRecordVO) throws BusinessException {
         return ResultBean.ok(iVerifyCodeRecordSV.sendVerifyCodeByEmail(verifyCodeRecordVO));
     }

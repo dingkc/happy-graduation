@@ -31,7 +31,7 @@ public class RecycleBinSVImpl implements IRecycleBinSV {
     private RecycleBinDao recycleBinDao;
 
     @Override
-    public void addRrecord(RecycleBinVO recycleBinVO) throws BusinessException {
+    public void addRecord(RecycleBinVO recycleBinVO) throws BusinessException {
         RecycleBinPO recycleBinPO = BeanMapperUtil.map(recycleBinVO, RecycleBinPO.class);
         Date nowDate = DateUtil.getNowDate();
         Integer userId = SessionManager.getUserInfo().getUserId();
@@ -41,7 +41,7 @@ public class RecycleBinSVImpl implements IRecycleBinSV {
     }
 
     @Override
-    public void deleteRrecord(Integer recycleBinId) {
+    public void deleteRecord(Integer recycleBinId) {
         RecycleBinPO recycleBinPO = new RecycleBinPO();
         recycleBinPO.setState(CommonConstant.CommonState.INVALID.getValue());
         recycleBinPO.setRecycleBinId(recycleBinId);
@@ -49,7 +49,7 @@ public class RecycleBinSVImpl implements IRecycleBinSV {
     }
 
     @Override
-    public void updateRrecord(RecycleBinVO recycleBinVO) {
+    public void updateRecord(RecycleBinVO recycleBinVO) {
         RecycleBinPO recycleBinPO = BeanMapperUtil.map(recycleBinVO, RecycleBinPO.class);
         recycleBinPO.setState(CommonConstant.CommonState.INVALID.getValue());
         recycleBinDao.save(recycleBinPO);
@@ -62,12 +62,10 @@ public class RecycleBinSVImpl implements IRecycleBinSV {
     }
 
     @Override
-    public RecycleBinListVO queryByCondition(RecycleBinVO recycleBinVO, Integer pageNumber, Integer pageSize) {
+    public RecycleBinListVO queryByCondition(String recycleBinName, Integer pageNumber, Integer pageSize) {
         QueryParams<RecycleBinPO> queryParams = new QueryParams<>(RecycleBinPO.class);
-        RecycleBinPO recycleBinPO = BeanMapperUtil.map(recycleBinVO, RecycleBinPO.class);
-        recycleBinPO.setState(CommonConstant.CommonState.EFFECT.getValue());
-        queryParams.and(Filter.like("fileName",recycleBinVO.getFileName()));
-        Page<RecycleBinPO> beans = recycleBinDao.getBeans(recycleBinPO, queryParams, pageNumber - 1, pageSize);
+        queryParams.and(Filter.like("fileName",recycleBinName)).and(Filter.eq("state", CommonConstant.CommonState.EFFECT.getValue()));
+        Page<RecycleBinPO> beans = recycleBinDao.getBeans(queryParams, pageNumber - 1, pageSize);
         RecycleBinListVO recycleBinListVO = new RecycleBinListVO();
         recycleBinListVO.setRows(BeanMapperUtil.mapList(beans.getContent(), RecycleBinPO.class, RecycleBinVO.class));
         recycleBinListVO.setTotal((int)beans.getTotalElements());
