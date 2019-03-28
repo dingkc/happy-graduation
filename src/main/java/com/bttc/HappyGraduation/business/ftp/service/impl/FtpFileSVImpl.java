@@ -1,9 +1,19 @@
 package com.bttc.HappyGraduation.business.ftp.service.impl;
 
+import com.bttc.HappyGraduation.business.ftp.dao.FtpFileDao;
+import com.bttc.HappyGraduation.business.ftp.pojo.po.FtpFilePO;
+import com.bttc.HappyGraduation.business.ftp.pojo.po.RecycleBinPO;
+import com.bttc.HappyGraduation.business.ftp.pojo.vo.FtpFileVO;
+import com.bttc.HappyGraduation.business.ftp.pojo.vo.RecycleBinVO;
 import com.bttc.HappyGraduation.business.ftp.service.interfaces.IFtpFileSV;
+import com.bttc.HappyGraduation.business.ftp.service.interfaces.IRecycleBinSV;
 import com.bttc.HappyGraduation.business.ftp.utils.FTPConfig;
 import com.bttc.HappyGraduation.business.ftp.utils.FTPConstant;
 import com.bttc.HappyGraduation.business.ftp.utils.FTPUtil;
+import com.bttc.HappyGraduation.common.BeanMapperUtil;
+import com.bttc.HappyGraduation.common.DateUtil;
+import com.bttc.HappyGraduation.session.web.SessionManager;
+import com.bttc.HappyGraduation.utils.constant.CommonConstant;
 import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import com.bttc.HappyGraduation.utils.exception.ErrorCode;
 import org.slf4j.Logger;
@@ -19,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.Date;
 
 /**
  * @author Dk
@@ -29,6 +40,12 @@ import java.net.URLEncoder;
 public class FtpFileSVImpl implements IFtpFileSV {
 
     private static final Logger logger = LoggerFactory.getLogger(FtpFileSVImpl.class);
+
+    @Autowired
+    private FtpFileDao ftpFileDao;
+
+    @Autowired
+    private IRecycleBinSV iRecycleBinSV;
 
     @Autowired
     private FTPConfig ftpConfig;//注入配置
@@ -44,6 +61,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
     @Value("${local.ftp.root}")
     private String rootPath;
 
+    @Override
     public void uploadFile(MultipartFile file) throws Exception {
         // 上传文件输入流
         InputStream inputStream = null;
@@ -59,6 +77,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
         } catch (Exception e) {
             BusinessException.throwBusinessException(ErrorCode.CORE_UPLOADFILE_FAILED);
         }
+
     }
 
     public void downLoadOnline(String documentName, String documentRealName, String documentPath, String sourceType, HttpServletResponse response) throws Exception {
@@ -125,4 +144,35 @@ public class FtpFileSVImpl implements IFtpFileSV {
         return inputStream;
     }
 
+    @Override
+    public void saveUploadFile(FtpFilePO ftpFilePO) throws BusinessException {
+        Date nowDate = DateUtil.getNowDate();
+        Integer userId = SessionManager.getUserInfo().getUserId();
+        ftpFilePO.setCreatorId(userId);
+        ftpFilePO.setCreateDate(nowDate);
+        ftpFilePO.setOperatorId(userId);
+        ftpFilePO.setDoneDate(nowDate);
+        ftpFilePO.setState(CommonConstant.CommonState.EFFECT.getValue());
+        ftpFileDao.save(ftpFilePO);
+    }
+
+    @Override
+    public void deleteFile(FtpFileVO ftpFileVO) throws BusinessException {
+        //ftp删除
+
+        //文件表删除记录
+        FtpFilePO ftpFilePO = BeanMapperUtil.map(ftpFileVO, FtpFilePO.class);
+        ftpFilePO.setState(CommonConstant.CommonState.INVALID.getValue());
+        ftpFileDao.save(ftpFilePO);
+        //回收站新增记录
+        RecycleBinVO recycleBinVO = new RecycleBinVO();
+        recycleBinVO.setFileName(ftpFilePO.getFileName());
+        recycleBinVO.setFileType(ftpFilePO.getFileType());
+        recycleBinVO.setFilePath(ftpFilePO.getFilePath());
+        recycleBinVO.setFileSize(ftpFilePO.getFileSize());
+        recycleBinVO.setDoneDate(DateUtil.getNowDate());
+        recycleBinVO.setOperatorId(SessionManager.getUserInfo().getUserId());
+        recycleBinVO.setState(CommonConstant.CommonState.EFFECT.getValue());
+        iRecycleBinSV.addRecord(recycleBinVO);
+    }
 }
