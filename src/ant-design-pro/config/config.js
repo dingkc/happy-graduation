@@ -79,13 +79,6 @@ export default {
     '@antv/data-set': 'DataSet',
     bizcharts: 'BizCharts',
   },
-  // proxy: {
-  //   '/server/api/': {
-  //     target: 'https://preview.pro.ant.design/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,
@@ -115,6 +108,13 @@ export default {
   },
   manifest: {
     basePath: '/',
+  },
+  proxy: {
+    '/api': {
+      target: 'https://localhost:8888',
+      changeOrigin: true,
+      // pathRewrite: { '^/server': '' },
+    },
   },
 
   chainWebpack: webpackPlugin,
