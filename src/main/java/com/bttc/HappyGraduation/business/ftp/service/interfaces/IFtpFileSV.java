@@ -1,6 +1,7 @@
 package com.bttc.HappyGraduation.business.ftp.service.interfaces;
 
 import com.bttc.HappyGraduation.business.ftp.pojo.po.FtpFilePO;
+import com.bttc.HappyGraduation.business.ftp.pojo.vo.FtpFileListVO;
 import com.bttc.HappyGraduation.business.ftp.pojo.vo.FtpFileVO;
 import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,4 +17,8 @@ public interface IFtpFileSV {
     void saveUploadFile(FtpFilePO ftpFilePO) throws BusinessException;
 
     void deleteFile(FtpFileVO ftpFileVO) throws BusinessException;
+
+    FtpFileVO queryFileByFileId(Integer fileId);
+
+    FtpFileListVO queryFileByUserId(Integer userId, Integer pageNumber, Integer pageSize);
 }

@@ -26,14 +26,14 @@ public class MyUserDetailsService implements UserDetailsService {
     private static final String BOMC_AES_KEY = "Osrdc2018";
 
     @Autowired
-    private IUserSV userSV;
+    private IUserSV iUserSV;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
         //这里可以可以通过username（登录时输入的用户名）然后到数据库中找到对应的用户信息，并构建成我们自己的UserInfo来返回。
         //这里可以通过数据库来查找到实际的用户信息，这里我们先模拟下,后续我们用数据库来实现
         try {
-            UserPO user = userSV.queryByUsername(username);
+            UserPO user = iUserSV.queryByUsername(username);
             UserInfo userInfo = BeanMapperUtil.map(user, UserInfo.class);
             logger.info(userInfo.toString());
             return userInfo;

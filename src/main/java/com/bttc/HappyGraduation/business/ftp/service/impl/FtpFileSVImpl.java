@@ -3,6 +3,7 @@ package com.bttc.HappyGraduation.business.ftp.service.impl;
 import com.bttc.HappyGraduation.business.ftp.dao.FtpFileDao;
 import com.bttc.HappyGraduation.business.ftp.pojo.po.FtpFilePO;
 import com.bttc.HappyGraduation.business.ftp.pojo.po.RecycleBinPO;
+import com.bttc.HappyGraduation.business.ftp.pojo.vo.FtpFileListVO;
 import com.bttc.HappyGraduation.business.ftp.pojo.vo.FtpFileVO;
 import com.bttc.HappyGraduation.business.ftp.pojo.vo.RecycleBinVO;
 import com.bttc.HappyGraduation.business.ftp.service.interfaces.IFtpFileSV;
@@ -13,6 +14,8 @@ import com.bttc.HappyGraduation.business.ftp.utils.FTPUtil;
 import com.bttc.HappyGraduation.common.BeanMapperUtil;
 import com.bttc.HappyGraduation.common.DateUtil;
 import com.bttc.HappyGraduation.session.web.SessionManager;
+import com.bttc.HappyGraduation.utils.base.Filter;
+import com.bttc.HappyGraduation.utils.base.QueryParams;
 import com.bttc.HappyGraduation.utils.constant.CommonConstant;
 import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import com.bttc.HappyGraduation.utils.exception.ErrorCode;
@@ -20,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -138,7 +142,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
         return fullPathNoName;
     }
 
-    private InputStream downloadFromFtp(FTPUtil ftpUtil, String fullPathNoFileName,String fileName) throws Exception {
+    private InputStream downloadFromFtp(FTPUtil ftpUtil, String fullPathNoFileName, String fileName) throws Exception {
         ftpUtil.changeDirectory(fullPathNoFileName);
         InputStream inputStream = ftpUtil.download(fileName);
         return inputStream;
@@ -174,5 +178,22 @@ public class FtpFileSVImpl implements IFtpFileSV {
         recycleBinVO.setOperatorId(SessionManager.getUserInfo().getUserId());
         recycleBinVO.setState(CommonConstant.CommonState.EFFECT.getValue());
         iRecycleBinSV.addRecord(recycleBinVO);
+    }
+
+    @Override
+    public FtpFileVO queryFileByFileId(Integer fileId) {
+        return BeanMapperUtil.map(ftpFileDao.queryAllByFtpFileIdAndState(fileId, CommonConstant.CommonState.EFFECT.getValue()), FtpFileVO.class);
+    }
+
+    @Override
+    public FtpFileListVO queryFileByUserId(Integer userId, Integer pageNumber, Integer pageSize) {
+        QueryParams<FtpFilePO> queryParams = new QueryParams<>(FtpFilePO.class);
+        queryParams.and(Filter.eq("state", CommonConstant.CommonState.EFFECT.getValue()))
+                .and(Filter.eq("userId", userId));
+        Page<FtpFilePO> beans = ftpFileDao.getBeans(queryParams, pageNumber - 1, pageSize);
+        FtpFileListVO ftpFileListVO = new FtpFileListVO();
+        ftpFileListVO.setRows(BeanMapperUtil.mapList(beans.getContent(), FtpFilePO.class, FtpFileVO.class));
+        ftpFileListVO.setTotal((int) beans.getTotalElements());
+        return ftpFileListVO;
     }
 }

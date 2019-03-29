@@ -1,7 +1,14 @@
 package com.bttc.HappyGraduation.controller;
 
 import com.bttc.HappyGraduation.business.doc.service.interfaces.IWordToHtml;
+import com.bttc.HappyGraduation.business.ftp.service.interfaces.IFtpFileSV;
+import com.bttc.HappyGraduation.business.note.pojo.vo.NoteVO;
+import com.bttc.HappyGraduation.common.ResultBean;
+import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
 public class FileController {
 
@@ -36,4 +43,13 @@ public class FileController {
 //    public ResultBean wordToHtml(@RequestBody WordVO wordVO) {
 //        return ResultBean.ok(iWordToHtml.readWordFile2007(wordVO));
 //    }
+
+    @Autowired
+    private IFtpFileSV iFtpFileSV;
+
+    @PostMapping(value = "${apiVersion1}/notes")
+    public ResultBean addNote(@RequestBody MultipartFile file) throws Exception {
+        iFtpFileSV.uploadFile(file);
+        return ResultBean.ok(null);
+    }
 }
