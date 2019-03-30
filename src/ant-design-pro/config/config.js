@@ -111,7 +111,7 @@ export default {
   },
   proxy: {
     '/api': {
-      target: 'https://localhost:8888',
+      target: 'http://localhost:8888',
       changeOrigin: true,
       // pathRewrite: { '^/server': '' },
     },
