@@ -8,6 +8,7 @@ import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 public class FileController {
@@ -47,9 +48,9 @@ public class FileController {
     @Autowired
     private IFtpFileSV iFtpFileSV;
 
-    @PostMapping(value = "${apiVersion1}/notes")
-    public ResultBean addNote(@RequestBody MultipartFile file) throws Exception {
-        iFtpFileSV.uploadFile(file);
+    @PostMapping(value = "${apiVersion1}/ftpfile")
+    public ResultBean addNote(@RequestBody MultipartFile file, @RequestParam(required = false) Integer parentFileId) throws Exception {
+        iFtpFileSV.uploadFile(file, parentFileId);
         return ResultBean.ok(null);
     }
 }

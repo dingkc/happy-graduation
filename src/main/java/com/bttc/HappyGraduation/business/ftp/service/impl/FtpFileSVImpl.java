@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.*;
 import java.net.URLEncoder;
-import java.nio.channels.FileChannel;
 import java.nio.file.Paths;
 import java.util.Date;
 /**
@@ -68,7 +67,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
     private String fileLocation;
 
     @Override
-    public File uploadFile(MultipartFile file) throws Exception {
+    public void uploadFile(MultipartFile file, Integer parentFileId) throws Exception {
         //获取文件的内容
         InputStream is = file.getInputStream();
         //获取原始文件名
@@ -90,9 +89,16 @@ public class FtpFileSVImpl implements IFtpFileSV {
 //        System.out.println(newFile.getCanonicalPath());
         //将文件输出到目标的文件中
 //        file.transferTo(newFile);
+        String[] split = UploadUtils.getRealName(originalFilename).split("\\.");
         file.transferTo(Paths.get(newFile.getPath()).toFile());
         String savePath = randomDir + "/" + uuidFilename;
-        return newFile;
+        FtpFilePO ftpFilePO = new FtpFilePO();
+        ftpFilePO.setFileName(split[0]);
+        ftpFilePO.setFilePath(savePath);
+        ftpFilePO.setFileSize(size);
+        ftpFilePO.setFileType(split[split.length - 1]);
+        ftpFilePO.setParentFileId(parentFileId);
+        saveUploadFile(ftpFilePO);
     }
 
     public void downLoadOnline(String documentName, String documentRealName, String documentPath, String sourceType, HttpServletResponse response) throws Exception {
