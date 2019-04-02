@@ -6,6 +6,8 @@ import com.bttc.HappyGraduation.business.ftp.pojo.vo.FtpFileVO;
 import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * @Author: Dk
  * @Date: 2019/3/25 23:08
@@ -23,4 +25,10 @@ public interface IFtpFileSV {
     FtpFileListVO queryFileByUserId(Integer userId, Integer parentFileId, Integer pageNumber, Integer pageSize);
 
     String previewFile(Integer ftpFileId);
+
+    List<FtpFilePO> queryByXmlIsNull();
+
+//    FtpFileVO parserDocument(FtpFilePO ftpFilePO);
+//
+//    void saveFullDocument(FtpFileVO ftpFileVO);
 }
