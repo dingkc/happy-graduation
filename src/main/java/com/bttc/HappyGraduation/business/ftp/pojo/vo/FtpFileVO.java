@@ -17,11 +17,14 @@ public class FtpFileVO {
     private String fileType;
     private String fileSize;
     private String filePath;
+    private Integer parentFileId;
+    private String filePreview;
     private Date createDate;
     private Integer creatorId;
     private Date doneDate;
     private Integer operatorId;
     private MultipartFile file;
+
     public Integer getFtpFileId() {
         return ftpFileId;
     }
@@ -62,6 +65,22 @@ public class FtpFileVO {
         this.filePath = filePath;
     }
 
+    public Integer getParentFileId() {
+        return parentFileId;
+    }
+
+    public void setParentFileId(Integer parentFileId) {
+        this.parentFileId = parentFileId;
+    }
+
+    public String getFilePreview() {
+        return filePreview;
+    }
+
+    public void setFilePreview(String filePreview) {
+        this.filePreview = filePreview;
+    }
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -92,5 +111,13 @@ public class FtpFileVO {
 
     public void setOperatorId(Integer operatorId) {
         this.operatorId = operatorId;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 }

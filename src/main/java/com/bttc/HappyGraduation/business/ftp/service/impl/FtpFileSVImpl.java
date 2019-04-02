@@ -213,4 +213,10 @@ public class FtpFileSVImpl implements IFtpFileSV {
         ftpFileListVO.setTotal((int) beans.getTotalElements());
         return ftpFileListVO;
     }
+
+    @Override
+    public String previewFile(Integer ftpFileId) {
+        FtpFilePO ftpFilePO = ftpFileDao.queryAllByFtpFileIdAndState(ftpFileId, CommonConstant.CommonState.EFFECT.getValue());
+        return ftpFilePO.getFilePreview();
+    }
 }

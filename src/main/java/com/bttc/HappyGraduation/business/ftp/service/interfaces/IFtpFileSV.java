@@ -21,4 +21,6 @@ public interface IFtpFileSV {
     FtpFileVO queryFileByFileId(Integer fileId);
 
     FtpFileListVO queryFileByUserId(Integer userId, Integer parentFileId, Integer pageNumber, Integer pageSize);
+
+    String previewFile(Integer ftpFileId);
 }

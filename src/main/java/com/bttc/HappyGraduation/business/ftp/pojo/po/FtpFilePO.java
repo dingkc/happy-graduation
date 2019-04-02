@@ -33,6 +33,9 @@ public class FtpFilePO {
     @Column(columnDefinition="int(10) COMMENT '父文件编号'")
     private Integer parentFileId;
 
+    @Column(columnDefinition="LONGTEXT COMMENT '文件预览/xml'")
+    private String filePreview;
+
     @Temporal(TemporalType.TIMESTAMP)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @Column(columnDefinition = "datetime COMMENT '创建时间'", nullable=false)
@@ -98,6 +101,14 @@ public class FtpFilePO {
 
     public void setParentFileId(Integer parentFileId) {
         this.parentFileId = parentFileId;
+    }
+
+    public String getFilePreview() {
+        return filePreview;
+    }
+
+    public void setFilePreview(String filePreview) {
+        this.filePreview = filePreview;
     }
 
     public Date getCreateDate() {

@@ -6,6 +6,7 @@ import com.bttc.HappyGraduation.business.note.pojo.vo.NoteVO;
 import com.bttc.HappyGraduation.common.ResultBean;
 import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,8 +50,22 @@ public class FileController {
     private IFtpFileSV iFtpFileSV;
 
     @PostMapping(value = "${apiVersion1}/ftpfile")
-    public ResultBean addNote(@RequestBody MultipartFile file, @RequestParam(required = false) Integer parentFileId) throws Exception {
+    public ResultBean addFile(@RequestBody MultipartFile file, @RequestParam(required = false) Integer parentFileId) throws Exception {
         iFtpFileSV.uploadFile(file, parentFileId);
+        return ResultBean.ok(null);
+    }
+
+    /**
+     * <p>Title: previewFile</p>
+     * <p>Description: 文件预览接口</p>
+     * @Author: Dk
+     * @param ftpFileId : 文件编号
+     * @return: com.bttc.HappyGraduation.common.ResultBean
+     * @Date: 2019/4/2 20:58
+     **/
+    @PostMapping(value = "${apiVersion1}/ftpfile/{ftpFileId}/previews")
+    public ResultBean previewFile(@PathVariable Integer ftpFileId) {
+        iFtpFileSV.previewFile(ftpFileId);
         return ResultBean.ok(null);
     }
 }
