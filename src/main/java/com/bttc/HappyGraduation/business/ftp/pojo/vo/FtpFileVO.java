@@ -1,6 +1,7 @@
 package com.bttc.HappyGraduation.business.ftp.pojo.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,7 +21,7 @@ public class FtpFileVO {
     private Integer creatorId;
     private Date doneDate;
     private Integer operatorId;
-
+    private MultipartFile file;
     public Integer getFtpFileId() {
         return ftpFileId;
     }

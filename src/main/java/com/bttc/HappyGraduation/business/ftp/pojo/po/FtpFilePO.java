@@ -24,11 +24,14 @@ public class FtpFilePO {
     @Column(columnDefinition="varchar(255) COMMENT '文件类型'", nullable=false)
     private String fileType;
 
-    @Column(columnDefinition="varchar(255) COMMENT '文件大小'", nullable=false)
-    private String fileSize;
+    @Column(columnDefinition="bigint(10) COMMENT '文件大小'", nullable=false)
+    private Long fileSize;
 
     @Column(columnDefinition="varchar(255) COMMENT '文件路径'", nullable=false)
     private String filePath;
+
+    @Column(columnDefinition="int(10) COMMENT '父文件编号'")
+    private Integer parentFileId;
 
     @Temporal(TemporalType.TIMESTAMP)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
@@ -73,11 +76,11 @@ public class FtpFilePO {
         this.fileType = fileType;
     }
 
-    public String getFileSize() {
+    public Long getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(String fileSize) {
+    public void setFileSize(Long fileSize) {
         this.fileSize = fileSize;
     }
 
@@ -87,6 +90,14 @@ public class FtpFilePO {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public Integer getParentFileId() {
+        return parentFileId;
+    }
+
+    public void setParentFileId(Integer parentFileId) {
+        this.parentFileId = parentFileId;
     }
 
     public Date getCreateDate() {

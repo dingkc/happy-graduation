@@ -13,7 +13,7 @@ public class RecycleBinVO {
     private Integer recycleBinId;
     private String fileName;
     private String fileType;
-    private String fileSize;
+    private Long fileSize;
     private String filePath;
     @Temporal(TemporalType.TIMESTAMP)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
@@ -45,11 +45,11 @@ public class RecycleBinVO {
         this.fileType = fileType;
     }
 
-    public String getFileSize() {
+    public Long getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(String fileSize) {
+    public void setFileSize(Long fileSize) {
         this.fileSize = fileSize;
     }
 

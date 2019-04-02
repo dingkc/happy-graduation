@@ -2,7 +2,6 @@ package com.bttc.HappyGraduation.business.ftp.service.impl;
 
 import com.bttc.HappyGraduation.business.ftp.dao.FtpFileDao;
 import com.bttc.HappyGraduation.business.ftp.pojo.po.FtpFilePO;
-import com.bttc.HappyGraduation.business.ftp.pojo.po.RecycleBinPO;
 import com.bttc.HappyGraduation.business.ftp.pojo.vo.FtpFileListVO;
 import com.bttc.HappyGraduation.business.ftp.pojo.vo.FtpFileVO;
 import com.bttc.HappyGraduation.business.ftp.pojo.vo.RecycleBinVO;
@@ -11,6 +10,7 @@ import com.bttc.HappyGraduation.business.ftp.service.interfaces.IRecycleBinSV;
 import com.bttc.HappyGraduation.business.ftp.utils.FTPConfig;
 import com.bttc.HappyGraduation.business.ftp.utils.FTPConstant;
 import com.bttc.HappyGraduation.business.ftp.utils.FTPUtil;
+import com.bttc.HappyGraduation.business.ftp.utils.UploadUtils;
 import com.bttc.HappyGraduation.common.BeanMapperUtil;
 import com.bttc.HappyGraduation.common.DateUtil;
 import com.bttc.HappyGraduation.session.web.SessionManager;
@@ -29,12 +29,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URLEncoder;
+import java.nio.channels.FileChannel;
+import java.nio.file.Paths;
 import java.util.Date;
-
 /**
  * @author Dk
  * @date 23:09 2019/3/25.
@@ -65,23 +64,35 @@ public class FtpFileSVImpl implements IFtpFileSV {
     @Value("${local.ftp.root}")
     private String rootPath;
 
-    @Override
-    public void uploadFile(MultipartFile file) throws Exception {
-        // 上传文件输入流
-        InputStream inputStream = null;
-        //上传文件的名称
-        String filename = "";
-        try {
-            if (null != file) {
-                inputStream = file.getInputStream();
-                filename = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("\\") + 1);
-            } else {
-                BusinessException.throwBusinessException(ErrorCode.CORE_UPLOADFILE_FAILED);
-            }
-        } catch (Exception e) {
-            BusinessException.throwBusinessException(ErrorCode.CORE_UPLOADFILE_FAILED);
-        }
+    @Value("${spring.servlet.multipart.location}")
+    private String fileLocation;
 
+    @Override
+    public File uploadFile(MultipartFile file) throws Exception {
+        //获取文件的内容
+        InputStream is = file.getInputStream();
+        //获取原始文件名
+        String originalFilename = file.getOriginalFilename();
+        //生成一个uuid名称出来
+        String uuidFilename = UploadUtils.getUUIDName(originalFilename);
+        //产生一个随机目录
+        String randomDir = UploadUtils.getDir();
+        File fileDir = new File(fileLocation + randomDir);
+        //若文件夹不存在,则创建出文件夹
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
+        File newFile = new File(fileLocation + randomDir, uuidFilename);
+        FileInputStream fileInputStream = new FileInputStream(newFile);
+        long size = fileInputStream.getChannel().size();
+//        System.out.println(newFile.getPath());
+//        System.out.println(newFile.getAbsolutePath());
+//        System.out.println(newFile.getCanonicalPath());
+        //将文件输出到目标的文件中
+//        file.transferTo(newFile);
+        file.transferTo(Paths.get(newFile.getPath()).toFile());
+        String savePath = randomDir + "/" + uuidFilename;
+        return newFile;
     }
 
     public void downLoadOnline(String documentName, String documentRealName, String documentPath, String sourceType, HttpServletResponse response) throws Exception {
@@ -186,10 +197,10 @@ public class FtpFileSVImpl implements IFtpFileSV {
     }
 
     @Override
-    public FtpFileListVO queryFileByUserId(Integer userId, Integer pageNumber, Integer pageSize) {
+    public FtpFileListVO queryFileByUserId(Integer userId, Integer parentFileId, Integer pageNumber, Integer pageSize) {
         QueryParams<FtpFilePO> queryParams = new QueryParams<>(FtpFilePO.class);
         queryParams.and(Filter.eq("state", CommonConstant.CommonState.EFFECT.getValue()))
-                .and(Filter.eq("userId", userId));
+                .and(Filter.eq("userId", userId)).and(Filter.eq("parentFileId", parentFileId));
         Page<FtpFilePO> beans = ftpFileDao.getBeans(queryParams, pageNumber - 1, pageSize);
         FtpFileListVO ftpFileListVO = new FtpFileListVO();
         ftpFileListVO.setRows(BeanMapperUtil.mapList(beans.getContent(), FtpFilePO.class, FtpFileVO.class));
