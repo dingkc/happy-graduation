@@ -16,8 +16,8 @@ export default {
         payload: response,
       });
     },
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+    *fetchCurrent({ payload }, { call, put }) {
+      const response = yield call(queryCurrent, payload);
       yield put({
         type: 'saveCurrentUser',
         payload: response,
@@ -33,9 +33,18 @@ export default {
       };
     },
     saveCurrentUser(state, action) {
+      let currentUser;
+      if(!action.payload){
+        currentUser={
+          name:'请登录',
+        };
+      }
+      else {
+        currentUser=action.payload.data[0];
+      }
       return {
         ...state,
-        currentUser: action.payload || {},
+        currentUser: currentUser,
       };
     },
     changeNotifyCount(state, action) {

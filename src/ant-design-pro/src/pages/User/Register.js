@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
-import router from 'umi/router';
+// import router from 'umi/router';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
 import styles from './Register.less';
 
@@ -11,21 +11,21 @@ const { Option } = Select;
 const InputGroup = Input.Group;
 
 const passwordStatusMap = {
-  ok: (
-    <div className={styles.success}>
-      <FormattedMessage id="validation.password.strength.strong" />
-    </div>
-  ),
-  pass: (
-    <div className={styles.warning}>
-      <FormattedMessage id="validation.password.strength.medium" />
-    </div>
-  ),
-  poor: (
-    <div className={styles.error}>
-      <FormattedMessage id="validation.password.strength.short" />
-    </div>
-  ),
+    ok: (
+      <div className={styles.success}>
+  <FormattedMessage id="validation.password.strength.strong" />
+  </div>
+),
+pass: (
+<div className={styles.warning}>
+<FormattedMessage id="validation.password.strength.medium" />
+  </div>
+),
+poor: (
+<div className={styles.error}>
+<FormattedMessage id="validation.password.strength.short" />
+  </div>
+),
 };
 
 const passwordProgressMap = {
@@ -33,39 +33,61 @@ const passwordProgressMap = {
   pass: 'normal',
   poor: 'exception',
 };
+let verifyCodeId= '';
 
 @connect(({ register, loading }) => ({
   register,
   submitting: loading.effects['register/submit'],
 }))
 @Form.create()
-class Register extends Component {
+export default class Register extends Component {
   state = {
     count: 0,
     confirmDirty: false,
     visible: false,
     help: '',
     prefix: '86',
+    gitLoading: false,
+    gitPasswordCheckIcon: null,
+    userUnique: true,
   };
 
-  componentDidUpdate() {
-    const { form, register } = this.props;
-    const account = form.getFieldValue('mail');
-    if (register.status === 'ok') {
-      router.push({
-        pathname: '/user/register-result',
-        state: {
-          account,
-        },
-      });
+  // componentDidUpdate() {
+  //   const { form, register } = this.props;
+  //   const account = form.getFieldValue('mail');
+  //   if (register.status === 'ok') {
+  //     router.push({
+  //       pathname: '/user/register-result',
+  //       state: {
+  //         account,
+  //       },
+  //     });
+  //   }
+  // }
+
+  componentWillReceiveProps(nextProps) {
+    const account = this.props.form.getFieldValue('email');
+    if (nextProps.register.status === 'ok') {
+      this.props.dispatch(
+        routerRedux.push({
+          pathname: '/user/register-result',
+          state: {
+            account,
+          },
+        }),
+      );
     }
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  };
+
+  componentDidMount = () =>{
+
   }
 
-  onGetCaptcha = () => {
+  onGetCaptcha = () =>{
     let count = 59;
     this.setState({ count });
     this.interval = setInterval(() => {
@@ -75,6 +97,23 @@ class Register extends Component {
         clearInterval(this.interval);
       }
     }, 1000);
+    const { dispatch, form } = this.props;
+    const { thiz } = this;
+    const email = form.getFieldValue('email');
+    form.validateFields('email',{ force: true },(err, values) =>{
+      if(!err){
+        dispatch({
+          type: 'register/getVerifyCodes',
+          payload: {
+            mailAccount: email,
+            verifyCodeType: 1,
+          },
+          callback(resp) {
+            verifyCodeId = resp.data;
+          },
+        });
+      }
+    })
   };
 
   getPasswordStatus = () => {
@@ -93,14 +132,14 @@ class Register extends Component {
     e.preventDefault();
     const { form, dispatch } = this.props;
     form.validateFields({ force: true }, (err, values) => {
+      let params = {
+        ...values,
+        verifyCodeId: verifyCodeId,
+      };
       if (!err) {
-        const { prefix } = this.state;
-        dispatch({
+        this.props.dispatch({
           type: 'register/submit',
-          payload: {
-            ...values,
-            prefix,
-          },
+          payload: params,
         });
       }
     });
@@ -121,6 +160,32 @@ class Register extends Component {
     }
   };
 
+  checkVerifyCode = (rule, value, callback) => {
+    const { dispatch, form } = this.props;
+    const verifyCode = value;
+    const email = form.getFieldValue('email');
+    if (verifyCode === undefined || verifyCode.trim() === '' || verifyCode.length==5) {
+      callback();
+      return;
+    }
+    const verifyCodeId = verifyCodeId;
+    if (verifyCodeId === undefined || verifyCodeId === '') {
+      callback('请先发送验证码！');
+      return;
+    }
+    // dispatch({
+    //   type: 'register/checkVerifyCode',
+    //   payload: { verifyCode: verifyCode, verifyCodeId: verifyCodeId, email: email },
+    //   callback(resp) {
+    //     if (resp.status === "0") {
+    //       callback();
+    //     } else {
+    //       callback(resp.errMessage);
+    //     }
+    //   },
+    // });
+  };
+
   checkPassword = (rule, value, callback) => {
     const { visible, confirmDirty } = this.state;
     if (!value) {
@@ -139,7 +204,7 @@ class Register extends Component {
         });
       }
       if (value.length < 6) {
-        callback('error');
+        callback('密码不能少于6从头再来');
       } else {
         const { form } = this.props;
         if (value && confirmDirty) {
@@ -162,44 +227,90 @@ class Register extends Component {
     const passwordStatus = this.getPasswordStatus();
     return value && value.length ? (
       <div className={styles[`progress-${passwordStatus}`]}>
-        <Progress
-          status={passwordProgressMap[passwordStatus]}
-          className={styles.progress}
-          strokeWidth={6}
-          percent={value.length * 10 > 100 ? 100 : value.length * 10}
-          showInfo={false}
-        />
-      </div>
-    ) : null;
+      <Progress
+    status={passwordProgressMap[passwordStatus]}
+    className={styles.progress}
+    strokeWidth={6}
+    percent={value.length * 10 > 100 ? 100 : value.length * 10}
+    showInfo={false}
+    />
+    </div>
+  ) : null;
   };
 
   render() {
     const { form, submitting } = this.props;
     const { getFieldDecorator } = form;
     const { count, prefix, help, visible } = this.state;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 18 },
+      },
+    };
+    const tailFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+          offset: 0,
+        },
+        sm: {
+          span: 18,
+          offset: 6,
+        },
+      },
+    };
     return (
       <div className={styles.main}>
-        <h3>
-          <FormattedMessage id="app.register.register" />
-        </h3>
         <Form onSubmit={this.handleSubmit}>
-          <FormItem>
-            {getFieldDecorator('mail', {
+          <FormItem {...formItemLayout} label='用户名'>
+            {
+              getFieldDecorator('username', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入用户名！',
+                  },
+                  {
+                    pattern: /^[^\s]*$/,
+                    message: '用户名不能包含空格！'
+                  },
+                  {
+                    max: 20,
+                    message: '用户名不能超过20个字符！',
+                  },
+                  {
+                    min: 4,
+                    message: '用户名不能少于4个字符！',
+                  },
+                ]
+              })(<Input placeholder="请输入用户名" />)
+            }
+          </FormItem>
+          <FormItem {...formItemLayout} label="姓名" hasFeedback>
+            {getFieldDecorator('name', {
+              validateTrigger: 'onBlur',
               rules: [
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.email.required' }),
+                  message: '请输入姓名！',
                 },
                 {
-                  type: 'email',
-                  message: formatMessage({ id: 'validation.email.wrong-format' }),
+                  max: 10,
+                  message: '姓名不能超过10个字符！',
                 },
+                {
+                  pattern: /^[^\s]*$/,
+                  message: '姓名不能包含空格！'
+                }
               ],
-            })(
-              <Input size="large" placeholder={formatMessage({ id: 'form.email.placeholder' })} />
-            )}
+            })(<Input placeholder="请输入真实姓名" />)}
           </FormItem>
-          <FormItem help={help}>
+          <FormItem {...formItemLayout} label="密码" hasFeedback help={help}>
             <Popover
               getPopupContainer={node => node.parentNode}
               content={
@@ -218,6 +329,10 @@ class Register extends Component {
               {getFieldDecorator('password', {
                 rules: [
                   {
+                    required: true,
+                    message: '请输入密码！',
+                  },
+                  {
                     validator: this.checkPassword,
                   },
                 ],
@@ -230,7 +345,7 @@ class Register extends Component {
               )}
             </Popover>
           </FormItem>
-          <FormItem>
+          <FormItem {...formItemLayout} label='确认密码'>
             {getFieldDecorator('confirm', {
               rules: [
                 {
@@ -249,7 +364,51 @@ class Register extends Component {
               />
             )}
           </FormItem>
-          <FormItem>
+          <FormItem {...formItemLayout} label="邮箱" hasFeedback>
+            {getFieldDecorator('email', {
+              rules: [
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.email.required' }),
+                },
+                {
+                  type: 'email',
+                  message: formatMessage({ id: 'validation.email.wrong-format' }),
+                },
+              ],
+            })(
+              <Input size="large" placeholder={formatMessage({ id: 'form.email.placeholder' })} />
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout}
+                    label="邮箱验证码">
+            <Row gutter={8}>
+              <Col span={16}>
+                {getFieldDecorator('verifyCode', {
+                  rules: [
+                    {
+                      required: true,
+                      message: '请输入验证码！',
+                    },
+                    {
+                      validator: this.checkVerifyCode,
+                      validateStatus: 'error',
+                    },
+                  ],
+                })(<Input placeholder="验证码" />)}
+              </Col>
+              <Col span={8}>
+                <Button
+                  disabled={count}
+                  className={styles.getCaptcha}
+                  onClick={this.onGetCaptcha}
+                >
+                  {count ? `${count} s` : '获取验证码'}
+                </Button>
+              </Col>
+            </Row>
+          </FormItem>
+          <FormItem {...formItemLayout} label='手机号'>
             <InputGroup compact>
               <Select
                 size="large"
@@ -280,38 +439,7 @@ class Register extends Component {
               )}
             </InputGroup>
           </FormItem>
-          <FormItem>
-            <Row gutter={8}>
-              <Col span={16}>
-                {getFieldDecorator('captcha', {
-                  rules: [
-                    {
-                      required: true,
-                      message: formatMessage({ id: 'validation.verification-code.required' }),
-                    },
-                  ],
-                })(
-                  <Input
-                    size="large"
-                    placeholder={formatMessage({ id: 'form.verification-code.placeholder' })}
-                  />
-                )}
-              </Col>
-              <Col span={8}>
-                <Button
-                  size="large"
-                  disabled={count}
-                  className={styles.getCaptcha}
-                  onClick={this.onGetCaptcha}
-                >
-                  {count
-                    ? `${count} s`
-                    : formatMessage({ id: 'app.register.get-verification-code' })}
-                </Button>
-              </Col>
-            </Row>
-          </FormItem>
-          <FormItem>
+          <FormItem {...tailFormItemLayout}>
             <Button
               size="large"
               loading={submitting}
@@ -327,8 +455,6 @@ class Register extends Component {
           </FormItem>
         </Form>
       </div>
-    );
+  );
   }
 }
-
-export default Register;

@@ -76,28 +76,31 @@ class LoginPage extends Component {
             this.loginForm = form;
           }}
         >
-          <Tab key="account" tab={formatMessage({ id: 'app.login.tab-login-credentials' })}>
+          {/*<Tab key="account" tab={formatMessage({ id: 'app.login.tab-login-credentials' })}>*/}
+          <div className={styles.divSty}>
+          <div className={styles.titleFont}>帐号登录</div>
+          <div className={styles.userSty}>
             {login.status === 'error' &&
               login.type === 'account' &&
               !submitting &&
               this.renderMessage(formatMessage({ id: '账户名或密码错误' }))}
             <UserName
               name="username"
-              placeholder={`${formatMessage({ id: 'app.login.userName' })}`}
+              // placeholder='请输入用户名'
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'validatiodsdn.userName.required' }),
+                  message: '请输入用户名',
                 },
               ]}
             />
             <Password
               name="password"
-              placeholder={`${formatMessage({ id: 'app.login.password' })}`}
+              // placeholder='请输入密码'
               rules={[
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.password.required' }),
+                  message: '请输入密码',
                 },
               ]}
               onPressEnter={e => {
@@ -105,18 +108,26 @@ class LoginPage extends Component {
                 this.loginForm.validateFields(this.handleSubmit);
               }}
             />
-          </Tab>
-          <Submit loading={submitting}>
-            <FormattedMessage id="app.login.login" />
-          </Submit>
-          <div className={styles.other}>
-<Link className={styles.register} to="/user/forget">
-    忘记密码 |
-    </Link>
-    <Link className={styles.register} to="/user/register">
-    注册账户
-    </Link>
+            <div className={styles.other}>
+              {/*<Link className={styles.leftSty} to="/user/register">注册帐号</Link>*/}
+              <a className={styles.leftSty}>注册帐号</a>
+              <a className={styles.register}>忘记密码 |</a>
+              <a className={styles.register}>反馈</a>
+              {/*<Link className={styles.register} to="/user/forget">*/}
+                {/*忘记密码 |*/}
+              {/*</Link>*/}
+              {/*<Link className={styles.register} to="/user/register">*/}
+                {/*反馈*/}
+              {/*</Link>*/}
+            </div>
+            <Submit loading={submitting} className={styles.submitSty}>
+              <FormattedMessage id="app.login.login" />
+            </Submit>
           </div>
+          </div>
+          {/*</Tab>*/}
+
+
         </Login>
       </div>
     );

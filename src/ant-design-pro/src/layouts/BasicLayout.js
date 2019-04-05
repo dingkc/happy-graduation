@@ -50,8 +50,12 @@ class BasicLayout extends React.Component {
       dispatch,
       route: { routes, authority },
     } = this.props;
+    const params={
+      queryType:1,
+    }
     dispatch({
       type: 'user/fetchCurrent',
+      payload: params,
     });
     dispatch({
       type: 'setting/getSetting',
