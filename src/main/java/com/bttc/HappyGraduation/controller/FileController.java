@@ -1,15 +1,13 @@
 package com.bttc.HappyGraduation.controller;
 
 import com.bttc.HappyGraduation.business.doc.service.interfaces.IWordToHtml;
+import com.bttc.HappyGraduation.business.ftp.pojo.vo.FtpFileVO;
 import com.bttc.HappyGraduation.business.ftp.service.interfaces.IFtpFileSV;
 import com.bttc.HappyGraduation.business.note.pojo.vo.NoteVO;
 import com.bttc.HappyGraduation.common.ResultBean;
 import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 public class FileController {
@@ -49,7 +47,7 @@ public class FileController {
     @Autowired
     private IFtpFileSV iFtpFileSV;
 
-    @PostMapping(value = "${apiVersion1}/ftpfile")
+    @PostMapping(value = "${apiVersion1}/ftpFiles")
     public ResultBean addFile(@RequestBody MultipartFile file, @RequestParam(required = false) Integer parentFileId) throws Exception {
         iFtpFileSV.uploadFile(file, parentFileId);
         return ResultBean.ok(null);
@@ -63,9 +61,57 @@ public class FileController {
      * @return: com.bttc.HappyGraduation.common.ResultBean
      * @Date: 2019/4/2 20:58
      **/
-    @PostMapping(value = "${apiVersion1}/ftpfile/{ftpFileId}/previews")
+    @PostMapping(value = "${apiVersion1}/ftpFiles/{ftpFileId}/previews")
     public ResultBean previewFile(@PathVariable Integer ftpFileId) {
         iFtpFileSV.previewFile(ftpFileId);
         return ResultBean.ok(null);
     }
+
+    /**
+     * <p>Title: deleteFile</p>
+     * <p>Description: 删除文件接口</p>
+     * @Author: Dk
+     * @param ftpFileId : 文件编号
+     * @param ftpFileVO : 文件信息
+     * @return: com.bttc.HappyGraduation.common.ResultBean
+     * @Date: 2019/4/5 20:50
+     **/
+    @DeleteMapping(value = "${apiVersion1}/ftpFiles/{ftpFileId}")
+    public ResultBean deleteFile(@PathVariable Integer ftpFileId, @RequestBody FtpFileVO ftpFileVO) throws BusinessException {
+        iFtpFileSV.deleteFile(ftpFileVO);
+        return ResultBean.ok(null);
+    }
+
+    /**
+     * <p>Title: fileDetails</p>
+     * <p>Description: 查询文件详情</p>
+     * @Author: Dk
+     * @param ftpFileId : 文件编号
+     * @return: com.bttc.HappyGraduation.common.ResultBean
+     * @Date: 2019/4/5 20:52
+     **/
+    @GetMapping(value = "${apiVersion1}/ftpFiles/{ftpFileId}")
+    public ResultBean fileDetails(@PathVariable Integer ftpFileId) {
+        iFtpFileSV.queryFileByFileId(ftpFileId);
+        return ResultBean.ok(null);
+    }
+
+    /**
+     * <p>Title: queryFileByConditions</p>
+     * <p>Description: 多条件查询文件</p>
+     * @Author: Dk
+     * @param userId : 用户编号
+     * @param parentFileId : 父文件编号
+     * @param fileType : 文件类型
+     * @param pageNumber : 分页页码
+     * @param pageSize : 分页大小
+     * @return: com.bttc.HappyGraduation.common.ResultBean
+     * @Date: 2019/4/5 21:01
+     **/
+    @GetMapping(value = "${apiVersion1}/ftpFiles")
+    public ResultBean queryFileByConditions(Integer userId, Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize) {
+        iFtpFileSV.queryFileByConditions(userId, parentFileId, fileType, pageNumber, pageSize);
+        return ResultBean.ok(null);
+    }
+
 }

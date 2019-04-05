@@ -248,10 +248,12 @@ public class FtpFileSVImpl implements IFtpFileSV {
     }
 
     @Override
-    public FtpFileListVO queryFileByUserId(Integer userId, Integer parentFileId, Integer pageNumber, Integer pageSize) {
+    public FtpFileListVO queryFileByConditions(Integer userId, Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize) {
         QueryParams<FtpFilePO> queryParams = new QueryParams<>(FtpFilePO.class);
         queryParams.and(Filter.eq("state", CommonConstant.CommonState.EFFECT.getValue()))
-                .and(Filter.eq("userId", userId)).and(Filter.eq("parentFileId", parentFileId));
+                .and(Filter.eq("userId", userId))
+                .and(Filter.eq("parentFileId", parentFileId))
+                .and(Filter.eq("fileType", fileType));
         Page<FtpFilePO> beans = ftpFileDao.getBeans(queryParams, pageNumber - 1, pageSize);
         FtpFileListVO ftpFileListVO = new FtpFileListVO();
         ftpFileListVO.setRows(BeanMapperUtil.mapList(beans.getContent(), FtpFilePO.class, FtpFileVO.class));

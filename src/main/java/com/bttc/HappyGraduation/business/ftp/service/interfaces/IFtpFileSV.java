@@ -22,7 +22,7 @@ public interface IFtpFileSV {
 
     FtpFileVO queryFileByFileId(Integer fileId);
 
-    FtpFileListVO queryFileByUserId(Integer userId, Integer parentFileId, Integer pageNumber, Integer pageSize);
+    FtpFileListVO queryFileByConditions(Integer userId, Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize);
 
     String previewFile(Integer ftpFileId);
 
