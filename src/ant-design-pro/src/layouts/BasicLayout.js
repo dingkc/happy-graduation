@@ -143,7 +143,6 @@ class BasicLayout extends React.Component {
           <Content className={styles.content} style={contentStyle}>
             {children}
           </Content>
-          <Footer />
         </Layout>
       </Layout>
     );

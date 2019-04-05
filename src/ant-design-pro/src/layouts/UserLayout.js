@@ -32,10 +32,10 @@ class UserLayout extends Component {
       <DocumentTitle title={getPageTitle(pathname, breadcrumbNameMap)}>
         <div className={styles.container}>
           <div className={styles.content}>
-            <div className={styles.top}>
-              <div className={styles.header}>
-              </div>
-            </div>
+            {/*<div className={styles.top}>*/}
+              {/*<div className={styles.header}>*/}
+              {/*</div>*/}
+            {/*</div>*/}
             {children}
           </div>
         </div>
