@@ -32,17 +32,17 @@ public class UserController {
         return ResultBean.ok("Hello world!");
     }
 
-    /**
-     * @Author Dk
-     * @Description 查询用户信息
-     * @Date 11:01 2018/12/4
-     * @Param [userId]
-     * @return com.bttc.HappyGraduation.common.ResultBean
-     **/
-    @GetMapping(value = "${apiVersion1}/users/{userId}")
-    public ResultBean getUserById(@PathVariable Integer userId) {
-        return ResultBean.ok(iUserSV.queryByUserId(userId));
-    }
+//    /**
+//     * @Author Dk
+//     * @Description 查询用户信息
+//     * @Date 11:01 2018/12/4
+//     * @Param [userId]
+//     * @return com.bttc.HappyGraduation.common.ResultBean
+//     **/
+//    @GetMapping(value = "${apiVersion1}/users/{userId}")
+//    public ResultBean getUserById(@PathVariable Integer userId) {
+//        return ResultBean.ok(iUserSV.queryByUserId(userId));
+//    }
 
 //    /**
 //     * @Author Dk
@@ -56,6 +56,22 @@ public class UserController {
 //        return ResultBean.ok(iUserSV.getAllUsers());
 //
 //    }
+
+    /**
+     * <p>Title: </p>
+     * <p>Description: 多条件查询用户信息支持按照用户id、userName、gitlabUserName精准查询，根据name模糊查询</p>
+     * @Author: Dk
+     * @param userId : 用户id
+     * @param name : 用户名称
+     * @param queryType : 查询类型
+     * @return: com.ai.osrdc.frame.springboot.config.util.ResultBean
+     * @Date: 2018/12/19 15:47
+     **/
+    @GetMapping("${apiVersion1}/users")
+    public ResultBean getUser(@RequestParam(required = false) Integer userId, @RequestParam(required = false) String name,
+                              @RequestParam Integer queryType) throws BusinessException {
+        return ResultBean.ok(iUserSV.queryByConditions(userId, name, queryType));
+    }
 
    /**
     * @Author Dk

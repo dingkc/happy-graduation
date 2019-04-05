@@ -1,5 +1,6 @@
 package com.bttc.HappyGraduation.session.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.bttc.HappyGraduation.session.dao.UserDao;
 import com.bttc.HappyGraduation.session.pojo.po.UserPO;
 import com.bttc.HappyGraduation.session.pojo.vo.UserVO;
@@ -17,6 +18,8 @@ import com.bttc.HappyGraduation.utils.constant.UserConstant;
 import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import com.bttc.HappyGraduation.utils.exception.ErrorCode;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +30,9 @@ import java.util.*;
 @Service
 @Transactional(rollbackFor=Exception.class)
 public class UserSVImpl implements IUserSV {
+
+	/** logger */
+	private static final Logger logger = LoggerFactory.getLogger(UserSVImpl.class);
 
 	@Autowired
 	private IUserSV iUserSV;
@@ -39,50 +45,43 @@ public class UserSVImpl implements IUserSV {
 
 	@Override
 	public List<UserVO> queryByConditions(Integer userId, String name, Integer queryType) throws BusinessException {
-//		List<UserVO> list = new ArrayList<>();
-//		if (UserConstant.userQueryType.ALL.getValue().equals(queryType)) {
-//			if (null != userId) {
-//				list.add(BeanMapperUtil.map(iUserSV.queryByUserId(userId), UserVO.class));
-//				return list;
-//			}
-//			if (StringUtils.isNotBlank(name)) {
-//				list.addAll(BeanMapperUtil.mapList(iUserSV.queryByName(name),UserPO.class,UserVO.class));
-//				return list;
-//			}
-//			list = BeanMapperUtil.mapList(iUserSV.queryByState(CommonConstant.CommonState.EFFECT.getValue()),UserPO.class,UserVO.class);
+		List<UserVO> list = new ArrayList<>();
+		if (UserConstant.userQueryType.ALL.getValue().equals(queryType)) {
+			if (null != userId) {
+				list.add(BeanMapperUtil.map(iUserSV.queryByUserId(userId), UserVO.class));
+				return list;
+			}
+			if (StringUtils.isNotBlank(name)) {
+				list.addAll(BeanMapperUtil.mapList(iUserSV.queryByName(name),UserPO.class,UserVO.class));
+				return list;
+			}
+			list = BeanMapperUtil.mapList(iUserSV.queryByState(CommonConstant.CommonState.EFFECT.getValue()),UserPO.class,UserVO.class);
 //			StringBuffer stringBuffer = new StringBuffer();
 //			for (UserVO userVO:list) {
 //				StringBuffer nameAndUserName = stringBuffer.append(userVO.getName()).append("(").append(userVO.getUsername()).append(")");
 //				userVO.setNameAndUserName(nameAndUserName.toString());
 //				stringBuffer.setLength(0);
 //			}
-//			return list;
-//		}
-//		if (UserConstant.userQueryType.CURRENT.getValue().equals(queryType)) {
-//			UserVO userVO = new UserVO();
-//			try{
-//				UserInfo userInfo = SessionManager.getUserInfo();
-//				userVO = BeanMapperUtil.map(userInfo, UserVO.class);
-//				Integer currentUserId = userInfo.getUserId();
-//				UserGitRelPO userGitRelPO = iUserGitRelSV.queryByUserId(currentUserId);
-//				if(userGitRelPO != null) {
-//					userVO.setGitUserName(userGitRelPO.getGitUserName());
-//				}
-//				UserAgileRelPO userAgileRelPO = iUserAgileRelSV.queryByUserId(currentUserId);
-//				if(userAgileRelPO != null) {
-//					userVO.setAgileUserId(userAgileRelPO.getAgileUserId());
-//				}
-//			}catch (Exception e) {
-//				// 演示临时修改，后续恢复
-//				userVO.setName("请登录");
-//			}
-//			if (logger.isInfoEnabled()) {
-//				logger.info("当前用户信息：" + JSON.toJSONString(userVO));
-//			}
-//			list.add(userVO);
-//		}
-//		return list;
-		return null;
+			return list;
+		}
+		if (UserConstant.userQueryType.CURRENT.getValue().equals(queryType)) {
+			UserVO userVO = new UserVO();
+			try{
+				UserInfo userInfo = SessionManager.getUserInfo();
+				userVO = BeanMapperUtil.map(userInfo, UserVO.class);
+				userVO.setOldPassword("");
+				userVO.setPassword("");
+				Integer currentUserId = userInfo.getUserId();
+			}catch (Exception e) {
+				// 演示临时修改，后续恢复
+				userVO.setName("请登录");
+			}
+			if (logger.isInfoEnabled()) {
+				logger.info("当前用户信息：" + JSON.toJSONString(userVO));
+			}
+			list.add(userVO);
+		}
+		return list;
 	}
 
 	@Override
