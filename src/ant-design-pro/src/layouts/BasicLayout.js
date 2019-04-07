@@ -1,11 +1,11 @@
 import React, { Suspense } from 'react';
-import { Layout } from 'antd';
+import { Layout, Menu, Icon } from 'antd';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'dva';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
 import Media from 'react-media';
-import logo from '../assets/logo.svg';
+import logo from '../assets/可云logo.png';
 import Footer from './Footer';
 import Header from './Header';
 import Context from './MenuContext';
@@ -13,11 +13,13 @@ import PageLoading from '@/components/PageLoading';
 import SiderMenu from '@/components/SiderMenu';
 import getPageTitle from '@/utils/getPageTitle';
 import styles from './BasicLayout.less';
+import FileLayout from './FileLayout';
 
 // lazy load SettingDrawer
 const SettingDrawer = React.lazy(() => import('@/components/SettingDrawer'));
 
-const { Content } = Layout;
+const { Content, Sider } = Layout;
+const { SubMenu } = Menu;
 
 const query = {
   'screen-xs': {
@@ -102,6 +104,9 @@ class BasicLayout extends React.Component {
   };
 
   render() {
+    // const {
+    //   Header, Content, Footer, Sider,
+    // } = Layout;
     const {
       navTheme,
       layout: PropsLayout,
@@ -112,6 +117,9 @@ class BasicLayout extends React.Component {
       breadcrumbNameMap,
       fixedHeader,
     } = this.props;
+
+    console.log('menuData=====',menuData)
+    console.log('childern=====',children)
 
     const isTop = PropsLayout === 'topmenu';
     const contentStyle = !fixedHeader ? { paddingTop: 0 } : {};
@@ -142,6 +150,7 @@ class BasicLayout extends React.Component {
           />
           <Content className={styles.content} style={contentStyle}>
             {children}
+            {/*<FileLayout menuData={menuData}/>*/}
           </Content>
         </Layout>
       </Layout>

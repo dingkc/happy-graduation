@@ -8,6 +8,7 @@ import HeaderSearch from '../HeaderSearch';
 import HeaderDropdown from '../HeaderDropdown';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
+import { Link, routerRedux } from 'dva/router';
 
 export default class GlobalHeaderRight extends PureComponent {
   getNoticeData() {
@@ -63,6 +64,15 @@ export default class GlobalHeaderRight extends PureComponent {
     });
   };
 
+  pageJumpLogin = () => {
+    const { dispatch } = this.props;
+    dispatch(
+      routerRedux.push({
+        pathname: '/user/login',
+      })
+    );
+  };
+
   render() {
     const {
       currentUser,
@@ -75,19 +85,10 @@ export default class GlobalHeaderRight extends PureComponent {
     console.log('currentUser====',currentUser)
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-        <Menu.Item key="userCenter">
-          <Icon type="user" />
-          <FormattedMessage id="menu.account.center" defaultMessage="account center" />
-        </Menu.Item>
         <Menu.Item key="userinfo">
           <Icon type="setting" />
           <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
         </Menu.Item>
-        <Menu.Item key="triggerError">
-          <Icon type="close-circle" />
-          <FormattedMessage id="menu.account.trigger" defaultMessage="Trigger Error" />
-        </Menu.Item>
-        <Menu.Divider />
         <Menu.Item key="logout">
           <Icon type="logout" />
           <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
@@ -102,20 +103,30 @@ export default class GlobalHeaderRight extends PureComponent {
     }
     return (
       <div className={className}>
-        {currentUser.name ? (
+        {currentUser.name !== '请登录' ? (
           <HeaderDropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
               <Avatar
                 size="small"
                 className={styles.avatar}
-                src={currentUser.avatar}
+                src={
+                  !currentUser.avatar
+                    ? 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'
+                    : currentUser.avatar
+                }
                 alt="avatar"
               />
-              <span className={styles.name}>{currentUser.name}</span>
+              <span className={styles.name}>
+                {currentUser.name}
+              </span>
             </span>
           </HeaderDropdown>
         ) : (
-          <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
+          <span className={`${styles.action} ${styles.account}`}>
+            <span className={`${styles.name}`} onClick={this.pageJumpLogin}>
+              {currentUser.name}
+              </span>
+          </span>
         )}
       </div>
     );

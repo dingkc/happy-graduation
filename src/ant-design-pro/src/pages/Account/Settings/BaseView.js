@@ -82,6 +82,40 @@ class BaseView extends Component {
     this.view = ref;
   };
 
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        const params = {
+          userId: this.props.currentUser.userId,
+          ...values,
+        };
+        this.updateUser(params);
+      }
+    });
+  };
+
+  updateUser = (param) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'user/updateUser',
+      payload: param,
+      callback(resp) {
+        if (resp) {
+          if (resp.status === '0') {
+            message.success("修改用户信息成功");
+            dispatch({
+              type: 'user/fetchCurrent',
+              payload:{queryType:1}
+            });
+          } else {
+            message.error(resp.errMessage);
+          }
+        }
+      },
+    });
+  };
+
   render() {
     const {
       form: { getFieldDecorator },
@@ -90,90 +124,42 @@ class BaseView extends Component {
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>
           <Form layout="vertical" onSubmit={this.handleSubmit} hideRequiredMark>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.email' })}>
-              {getFieldDecorator('email', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.email-message' }, {}),
-                  },
-                ],
-              })(<Input />)}
+            <FormItem label='用户名'>
+              {getFieldDecorator('username')(<Input disabled={true}/>)}
             </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.nickname' })}>
+            <FormItem label='姓名'>
               {getFieldDecorator('name', {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'app.settings.basic.nickname-message' }, {}),
-                  },
-                ],
-              })(<Input />)}
-            </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.profile' })}>
-              {getFieldDecorator('profile', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.profile-message' }, {}),
-                  },
-                ],
-              })(
-                <Input.TextArea
-                  placeholder={formatMessage({ id: 'app.settings.basic.profile-placeholder' })}
-                  rows={4}
-                />
-              )}
-            </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.country' })}>
-              {getFieldDecorator('country', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.country-message' }, {}),
-                  },
-                ],
-              })(
-                <Select style={{ maxWidth: 220 }}>
-                  <Option value="China">中国</Option>
-                </Select>
-              )}
-            </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.geographic' })}>
-              {getFieldDecorator('geographic', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.geographic-message' }, {}),
+                    message: '请输入您的姓名！',
                   },
                   {
-                    validator: validatorGeographic,
+                    max:10,
+                    message:'姓名不能超过10个字符！',
                   },
-                ],
-              })(<GeographicView />)}
-            </FormItem>
-            <FormItem label={formatMessage({ id: 'app.settings.basic.address' })}>
-              {getFieldDecorator('address', {
-                rules: [
                   {
-                    required: true,
-                    message: formatMessage({ id: 'app.settings.basic.address-message' }, {}),
-                  },
+                    pattern: /^[^\s]*$/,
+                    message: '姓名不能包含空格！'
+                  }
                 ],
               })(<Input />)}
             </FormItem>
             <FormItem label={formatMessage({ id: 'app.settings.basic.phone' })}>
-              {getFieldDecorator('phone', {
+              {getFieldDecorator('mobile', {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'app.settings.basic.phone-message' }, {}),
+                    message: '请输入您的联系电话！',
                   },
-                  { validator: validatorPhone },
+                  {
+                    pattern: /^1\d{10}$/,
+                    message: '手机号格式错误！',
+                  },
                 ],
-              })(<PhoneView />)}
+              })(<Input />)}
             </FormItem>
-            <Button type="primary">
+            <Button type="primary" htmlType="submit">
               <FormattedMessage
                 id="app.settings.basic.update"
                 defaultMessage="Update Information"
