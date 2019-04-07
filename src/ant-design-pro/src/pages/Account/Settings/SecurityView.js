@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { List, Modal, message } from 'antd';
-import styles from './SecurityView.less';
 import { connect } from 'dva';
 import EmailModal from '../../../components/Dingkc/UserPersonalMessage/EmailModal';
 import PasswordModal from '../../../components/Dingkc/UserPersonalMessage/PasswordModal';
