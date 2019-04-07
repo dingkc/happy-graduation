@@ -22,38 +22,40 @@ export default [
     routes: [
       {
         path: '/file',
-        // icon: 'file',
         name: '文件',
-        routes: [
-          {
-            path: '/file/all-file',
-            name: '全部文件'
-          },
-          {
-            path: '/file/document',
-            name: '文档',
-          },
-          {
-            path: '/file/picture',
-            name: '图片'
-          },
-          {
-            path: '/file/vedio',
-            name: '视频'
-          },
-          {
-            path: '/file/recycle',
-            name: '回收站'
-          },
-          {
-            path: '/file/share',
-            name: '分享'
-          }
-        ],
+        component: './File/FileLayout',
+        // routes: [
+        //   {
+        //     path: '/file/all-file',
+        //     name: '全部文件',
+        //     component: './File/AllFiles'
+        //   },
+        //   {
+        //     path: '/file/document',
+        //     name: '文档',
+        //   },
+        //   {
+        //     path: '/file/picture',
+        //     name: '图片'
+        //   },
+        //   {
+        //     path: '/file/vedio',
+        //     name: '视频'
+        //   },
+        //   {
+        //     path: '/file/recycle',
+        //     name: '回收站'
+        //   },
+        //   {
+        //     path: '/file/share',
+        //     name: '分享'
+        //   }
+        // ],
       },
       {
         path: '/note',
         name: '记事本',
+        component: './Note/NoteLayout'
       },
       // list
       // {

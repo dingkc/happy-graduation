@@ -70,7 +70,7 @@ export default class BaseMenu extends PureComponent {
           }
           key={item.path}
         >
-          {this.getNavMenuItems(item.children)}
+          {/*{this.getNavMenuItems(item.children)}*/}
         </SubMenu>
       );
     }
