@@ -109,6 +109,7 @@ export default {
   manifest: {
     basePath: '/',
   },
+  outputPath: "../main/resources/static",
   proxy: {
     '/api': {
       target: 'http://localhost:8888',
