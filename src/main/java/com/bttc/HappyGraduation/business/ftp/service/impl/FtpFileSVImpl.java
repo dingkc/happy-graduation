@@ -1,5 +1,6 @@
 package com.bttc.HappyGraduation.business.ftp.service.impl;
 
+import com.bttc.HappyGraduation.business.ftp.constant.FtpFileConstant;
 import com.bttc.HappyGraduation.business.ftp.dao.FtpFileDao;
 import com.bttc.HappyGraduation.business.ftp.pojo.po.FtpFilePO;
 import com.bttc.HappyGraduation.business.ftp.pojo.vo.FtpFileListVO;
@@ -251,7 +252,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
     public FtpFileListVO queryFileByConditions(Integer userId, Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize) {
         QueryParams<FtpFilePO> queryParams = new QueryParams<>(FtpFilePO.class);
         queryParams.and(Filter.eq("state", CommonConstant.CommonState.EFFECT.getValue()))
-                .and(Filter.eq("userId", userId))
+                .and(Filter.eq("creatorId", userId))
                 .and(Filter.eq("parentFileId", parentFileId))
                 .and(Filter.eq("fileType", fileType));
         Page<FtpFilePO> beans = ftpFileDao.getBeans(queryParams, pageNumber - 1, pageSize);
@@ -270,5 +271,26 @@ public class FtpFileSVImpl implements IFtpFileSV {
     public String previewFile(Integer ftpFileId) {
         FtpFilePO ftpFilePO = ftpFileDao.queryAllByFtpFileIdAndState(ftpFileId, CommonConstant.CommonState.EFFECT.getValue());
         return ftpFilePO.getFilePreview();
+    }
+
+    /**
+     * <p>Title:calculatFolderSize</p>
+     * <p>Description: 计算文件夹内所有文件大小</p>
+     * @Author: Dk
+     * @param ftpFileId : 文件编号
+     * @return: java.lang.Long
+     * @Date: 2019/4/16 17:31
+     **/
+    private Long calculatFolderSize(Integer ftpFileId) throws BusinessException {
+        FtpFilePO ftpFilePO = ftpFileDao.queryAllByFtpFileIdAndState(ftpFileId, CommonConstant.CommonState.EFFECT.getValue());
+        if (FtpFileConstant.FileType.DIR.equals(ftpFilePO.getFileType())) {
+            return ftpFilePO.getFileSize();
+        }
+        List<FtpFilePO> ftpFilePOS = ftpFileDao.queryAllByStateAndParentFileIdAndCreatorId(CommonConstant.CommonState.EFFECT.getValue(), ftpFileId, SessionManager.getUserInfo().getUserId());
+        Long dirSize = 0L;
+        for (FtpFilePO ftpFile : ftpFilePOS) {
+            dirSize += ftpFile.getFileSize() == null ? 0L : ftpFile.getFileSize();
+        }
+        return dirSize;
     }
 }
