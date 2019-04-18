@@ -20,6 +20,8 @@ public interface IFtpFileSV {
 
     void deleteFile(FtpFileVO ftpFileVO) throws BusinessException;
 
+    void updateFile(FtpFilePO ftpFilePO) throws BusinessException;
+
     FtpFileVO queryFileByFileId(Integer fileId);
 
     FtpFileListVO queryFileByConditions(Integer userId, Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize);

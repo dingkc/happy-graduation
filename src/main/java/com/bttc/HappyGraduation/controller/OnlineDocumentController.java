@@ -1,25 +1,22 @@
-//package com.bttc.HappyGraduation.controller;
-//
-//import com.asiainfo.mybatis.service.impl.SaveHtmlImpl;
-//import com.asiainfo.service.impl.WordToHtmlImpl;
-//import com.bttc.HappyGraduation.business.doc.service.impl.POIReadExcel;
-//import com.bttc.HappyGraduation.business.doc.service.impl.PptToHtmlImpl;
-//import com.bttc.HappyGraduation.business.doc.service.interfaces.IExcelTransformHtml;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RestController;
+package com.bttc.HappyGraduation.controller;
+
 //
 //import java.io.File;
 //import java.util.Date;
 //
-///**
-// * ".business"、".docx"
-// *
-// * @author DK
-// * @create 2018-06-21 17:35
-// */
-//@RestController
-//public class WordToHtmlController {
+
+import com.bttc.HappyGraduation.business.doc.service.interfaces.IWordToHtml;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * ".business"、".docx"
+ *
+ * @author DK
+ * @create 2018-06-21 17:35
+ */
+@RestController
+public class OnlineDocumentController {
 //
 //    @Autowired
 //    private WordToHtmlImpl wordToHtml;
@@ -134,4 +131,9 @@
 //
 //        return String.valueOf(doPPTtoImage);
 //    }
-//}
+
+    @Autowired
+    private IWordToHtml iWordToHtml;
+
+
+}

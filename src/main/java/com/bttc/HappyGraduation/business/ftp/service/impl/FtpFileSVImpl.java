@@ -293,4 +293,12 @@ public class FtpFileSVImpl implements IFtpFileSV {
         }
         return dirSize;
     }
+
+    @Override
+    public void updateFile(FtpFilePO ftpFilePO) throws BusinessException {
+        ftpFilePO = Optional.ofNullable(ftpFilePO).orElseThrow(() -> new BusinessException(ErrorCode.FILE_IS_EMPTY));
+        ftpFilePO.setDoneDate(DateUtil.getNowDate());
+        ftpFilePO.setOperatorId(1);
+        ftpFileDao.updateBeans(ftpFilePO);
+    }
 }

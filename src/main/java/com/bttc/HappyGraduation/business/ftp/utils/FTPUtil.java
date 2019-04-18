@@ -121,7 +121,9 @@ public class FTPUtil {
 	 * @throws Exception
 	 */
 	public void open() throws Exception {
-		client.connect(config.getHostIp(), config.getPort());
+		if(!client.isConnected()){
+			client.connect(config.getHostIp(), config.getPort());
+		}
 		int reply = client.getReplyCode();
 		if (!FTPReply.isPositiveCompletion(reply)) {
 			client.disconnect();

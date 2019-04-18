@@ -17,7 +17,7 @@ public interface IWordToHtml {
      * @param filePath
      * @return
      */
-    public String readWordFile2003(String filePath) throws Exception;
+     String readWordFile2003(String filePath) throws Exception;
 
     /**
      * 读取 word 2007 以上版本文件 .docx格式

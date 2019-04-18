@@ -22,8 +22,8 @@ export default [
     routes: [
       { path: '/', redirect: '/file' },
       {
-        path: '/file',
         name: '文件',
+        path: '/file',
         component: './File/FileLayout',
         // routes: [
         //   {
@@ -54,8 +54,8 @@ export default [
         // ],
       },
       {
+        name: '记事',
         path: '/notes',
-        name: '记事本',
         component: './Note/NoteLayout'
       },
       // list
@@ -176,7 +176,7 @@ export default [
       //   ],
       // },
       {
-        name: '个人设置',
+        name: '个人',
         path: '/account',
         // routes: [
         //   {

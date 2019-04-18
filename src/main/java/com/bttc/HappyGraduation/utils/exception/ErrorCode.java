@@ -95,7 +95,8 @@ public enum ErrorCode {
     UNAUTHORIZED("401", "对不起, 您无法访问该资源"),
     INTERNAL_SERVER_ERROR("500", "出现无法预知的错误"),
 
-    NOTEPAD_ID_EMPTY("OSRDC_B_00666", "请选择记事本！");
+    NOTEPAD_ID_EMPTY("OSRDC_B_00666", "请选择记事本！"),
+    FILE_IS_EMPTY("OSRDC_B_00667", "文件信息为空！");
 
     private String code;
     private String message;
