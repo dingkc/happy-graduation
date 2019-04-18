@@ -9,7 +9,13 @@ import com.bttc.HappyGraduation.email.pojo.vo.VerifyCodeRecordVO;
 import com.bttc.HappyGraduation.email.pojo.vo.VerifyCodeValidationVO;
 import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class UserController {
@@ -134,6 +140,21 @@ public class UserController {
     @PostMapping(value = "${apiVersion1}/verification-codes/validations")
     public ResultBean validateEmailByVerifyCode(@RequestBody VerifyCodeValidationVO verifyCodeValidationVO) throws BusinessException{
         iVerifyCodeRecordSV.validateEmailByVerifyCode(verifyCodeValidationVO);
+        return ResultBean.ok(null);
+    }
+
+    /**
+     * <p>Title: logoutPage</p>
+     * <p>Description: 判断用户是否确实无授权了，若还有授权登出一次</p>
+     * @author Dk
+     * @date 2019年4月18日
+     */
+    @GetMapping(value="${apiVersion1}/users-exit-success")
+    public ResultBean logoutPage (HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
         return ResultBean.ok(null);
     }
 
