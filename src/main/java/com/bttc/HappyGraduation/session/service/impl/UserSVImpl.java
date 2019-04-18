@@ -130,10 +130,6 @@ public class UserSVImpl implements IUserSV {
 			//请求参数 [密码] 不能为空
 			BusinessException.throwBusinessException(ErrorCode.PARAMETER_NULL, "密码");
 		}
-		if(StringUtils.isBlank(userVO.getMobile())) {
-			//请求参数 [手机号码] 不能为空
-			BusinessException.throwBusinessException(ErrorCode.PARAMETER_NULL, "手机号码");
-		}
 		if(StringUtils.isBlank(userVO.getEmail())) {
 			//请求参数 [邮箱] 不能为空
 			BusinessException.throwBusinessException(ErrorCode.PARAMETER_NULL, "邮箱");

@@ -36,9 +36,9 @@ public class UserPO {
     
     @Column(columnDefinition="int(1) COMMENT '帐号状态：1正常；0加锁；2停用；3历史'", nullable=false)
     private Integer state;
-    
-    @Column(columnDefinition="varchar(255) COMMENT '手机号码'", nullable=false)
-    private String mobile;
+
+//    @Column(columnDefinition="varchar(255) COMMENT '手机号码'", nullable=false)
+//    private String mobile;
     
     @Temporal(TemporalType.TIMESTAMP)
 	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
@@ -98,13 +98,13 @@ public class UserPO {
 		this.state = state;
 	}
 
-	public String getMobile() {
-		return mobile;
-	}
-
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
+//	public String getMobile() {
+//		return mobile;
+//	}
+//
+//	public void setMobile(String mobile) {
+//		this.mobile = mobile;
+//	}
 
 	public Date getCreateDate() {
 		return createDate;

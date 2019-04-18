@@ -28,7 +28,7 @@ public class UserVO {
 
 	private Integer verifyCodeType;//验证码类型
 
-	private String mobile;
+//	private String mobile;
 
 	private Integer systemRoleId;
 
@@ -90,13 +90,13 @@ public class UserVO {
 		this.email = email;
 	}
 
-	public String getMobile() {
-		return mobile;
-	}
-
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
+//	public String getMobile() {
+//		return mobile;
+//	}
+//
+//	public void setMobile(String mobile) {
+//		this.mobile = mobile;
+//	}
 
 	public Integer getVerifyCodeId() {
 		return verifyCodeId;
