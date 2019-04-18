@@ -60,7 +60,7 @@ public class VerifyCodeRecordSVImpl implements IVerifyCodeRecordSV {
             StringBuilder sb = new StringBuilder();
             String validTime = ",30分钟内有效！";
             String content = null;
-            sb.append("【").append("蜂云").append("】");
+            sb.append("【").append("可云").append("】");
             switch (verifyCodeRecordVO.getVerifyCodeType()) {
                 case 1:
                     content = sb.append("创建账号的验证码是").append(verifyCode).append(validTime).toString();
@@ -74,7 +74,7 @@ public class VerifyCodeRecordSVImpl implements IVerifyCodeRecordSV {
                 default :
                     break;
             }
-            mailConnection.sendMail(verifyCodeRecordVO.getMailAccount(), "", "蜂云", content,  null);
+            mailConnection.sendMail(verifyCodeRecordVO.getMailAccount(), "", "可云", content,  null);
         } catch (Exception e) {
         	BusinessException.throwBusinessException(ErrorCode.EMAIL_FAIL);
 		}
