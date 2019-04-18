@@ -8,9 +8,7 @@ export default [
       { path: '/user/login', name: 'login', component: './User/Login' },
       { path: '/user/register', name: 'register', component: './User/Register' },
       {
-        path: '/user/register-result',
-        name: 'register.result',
-        component: './User/RegisterResult',
+        path: '/user/forgetPassword', component: './User/ForgetPassword',
       },
     ],
   },

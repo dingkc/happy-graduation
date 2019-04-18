@@ -22,12 +22,12 @@ export async function fakeAccountLogin(params) {
 
 //注册
 export async function fakeRegister(params) {
-  return RequestUtils.requestPOST('/users');
+  return RequestUtils.requestPOST('/users',params);
 }
 
 //获取邮箱验证码
 export async function getVerifyCodes(params) {
-  return RequestUtils.requestPOST(`/verification-codes/sends`, params);
+  return RequestUtils.requestPOST(`/verify-codes`, params);
 }
 
 //校验邮箱验证码

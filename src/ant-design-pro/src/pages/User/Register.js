@@ -70,7 +70,7 @@ export default class Register extends Component {
     if (nextProps.register.status === 'ok') {
       this.props.dispatch(
         routerRedux.push({
-          pathname: '/user/register-result',
+          pathname: '/user/login',
           state: {
             account,
           },
@@ -266,194 +266,165 @@ export default class Register extends Component {
     };
     return (
       <div className={styles.main}>
-        <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} label='用户名'>
-            {
-              getFieldDecorator('username', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请输入用户名！',
-                  },
-                  {
-                    pattern: /^[^\s]*$/,
-                    message: '用户名不能包含空格！'
-                  },
-                  {
-                    max: 20,
-                    message: '用户名不能超过20个字符！',
-                  },
-                  {
-                    min: 4,
-                    message: '用户名不能少于4个字符！',
-                  },
-                ]
-              })(<Input placeholder="请输入用户名" />)
-            }
-          </FormItem>
-          <FormItem {...formItemLayout} label="姓名" hasFeedback>
-            {getFieldDecorator('name', {
-              validateTrigger: 'onBlur',
-              rules: [
+        <div className={styles.divSty}>
+          <div className={styles.titleFont}>注册帐号</div>
+          <div className={styles.formSty}>
+            <Form onSubmit={this.handleSubmit} className={styles.bottomSty}>
+              <FormItem {...formItemLayout} label='用户名'>
                 {
-                  required: true,
-                  message: '请输入姓名！',
-                },
-                {
-                  max: 10,
-                  message: '姓名不能超过10个字符！',
-                },
-                {
-                  pattern: /^[^\s]*$/,
-                  message: '姓名不能包含空格！'
+                  getFieldDecorator('username', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入用户名！',
+                      },
+                      {
+                        pattern: /^[^\s]*$/,
+                        message: '用户名不能包含空格！'
+                      },
+                      {
+                        max: 20,
+                        message: '用户名不能超过20个字符！',
+                      },
+                      {
+                        min: 4,
+                        message: '用户名不能少于4个字符！',
+                      },
+                    ]
+                  })(<Input placeholder="请输入用户名" />)
                 }
-              ],
-            })(<Input placeholder="请输入真实姓名" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="密码" hasFeedback help={help}>
-            <Popover
-              getPopupContainer={node => node.parentNode}
-              content={
-                <div style={{ padding: '4px 0' }}>
-                  {passwordStatusMap[this.getPasswordStatus()]}
-                  {this.renderPasswordProgress()}
-                  <div style={{ marginTop: 10 }}>
-                    <FormattedMessage id="validation.password.strength.msg" />
-                  </div>
-                </div>
-              }
-              overlayStyle={{ width: 240 }}
-              placement="right"
-              visible={visible}
-            >
-              {getFieldDecorator('password', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请输入密码！',
-                  },
-                  {
-                    validator: this.checkPassword,
-                  },
-                ],
-              })(
-                <Input
-                  size="large"
-                  type="password"
-                  placeholder={formatMessage({ id: 'form.password.placeholder' })}
-                />
-              )}
-            </Popover>
-          </FormItem>
-          <FormItem {...formItemLayout} label='确认密码'>
-            {getFieldDecorator('confirm', {
-              rules: [
-                {
-                  required: true,
-                  message: formatMessage({ id: 'validation.confirm-password.required' }),
-                },
-                {
-                  validator: this.checkConfirm,
-                },
-              ],
-            })(
-              <Input
-                size="large"
-                type="password"
-                placeholder={formatMessage({ id: 'form.confirm-password.placeholder' })}
-              />
-            )}
-          </FormItem>
-          <FormItem {...formItemLayout} label="邮箱" hasFeedback>
-            {getFieldDecorator('email', {
-              rules: [
-                {
-                  required: true,
-                  message: formatMessage({ id: 'validation.email.required' }),
-                },
-                {
-                  type: 'email',
-                  message: formatMessage({ id: 'validation.email.wrong-format' }),
-                },
-              ],
-            })(
-              <Input size="large" placeholder={formatMessage({ id: 'form.email.placeholder' })} />
-            )}
-          </FormItem>
-          <FormItem {...formItemLayout}
-                    label="邮箱验证码">
-            <Row gutter={8}>
-              <Col span={16}>
-                {getFieldDecorator('verifyCode', {
+              </FormItem>
+              <FormItem {...formItemLayout} label="姓名" hasFeedback>
+                {getFieldDecorator('name', {
+                  validateTrigger: 'onBlur',
                   rules: [
                     {
                       required: true,
-                      message: '请输入验证码！',
+                      message: '请输入姓名！',
                     },
                     {
-                      validator: this.checkVerifyCode,
-                      validateStatus: 'error',
+                      max: 10,
+                      message: '姓名不能超过10个字符！',
+                    },
+                    {
+                      pattern: /^[^\s]*$/,
+                      message: '姓名不能包含空格！'
+                    }
+                  ],
+                })(<Input placeholder="请输入真实姓名" />)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="密码" hasFeedback help={help}>
+                <Popover
+                  getPopupContainer={node => node.parentNode}
+                  content={
+                    <div style={{ padding: '4px 0' }}>
+                      {passwordStatusMap[this.getPasswordStatus()]}
+                      {this.renderPasswordProgress()}
+                      <div style={{ marginTop: 10 }}>
+                        <FormattedMessage id="validation.password.strength.msg" />
+                      </div>
+                    </div>
+                  }
+                  overlayStyle={{ width: 240 }}
+                  placement="right"
+                  visible={visible}
+                >
+                  {getFieldDecorator('password', {
+                    rules: [
+                      {
+                        required: true,
+                        message: '请输入密码！',
+                      },
+                      {
+                        validator: this.checkPassword,
+                      },
+                    ],
+                  })(
+                    <Input
+                      type="password"
+                      placeholder={formatMessage({ id: 'form.password.placeholder' })}
+                    />
+                  )}
+                </Popover>
+              </FormItem>
+              <FormItem {...formItemLayout} label='确认密码'>
+                {getFieldDecorator('confirm', {
+                  rules: [
+                    {
+                      required: true,
+                      message: formatMessage({ id: 'validation.confirm-password.required' }),
+                    },
+                    {
+                      validator: this.checkConfirm,
                     },
                   ],
-                })(<Input placeholder="验证码" />)}
-              </Col>
-              <Col span={8}>
+                })(
+                  <Input
+                    type="password"
+                    placeholder={formatMessage({ id: 'form.confirm-password.placeholder' })}
+                  />
+                )}
+              </FormItem>
+              <FormItem {...formItemLayout} label="邮箱" hasFeedback>
+                {getFieldDecorator('email', {
+                  rules: [
+                    {
+                      required: true,
+                      message: formatMessage({ id: 'validation.email.required' }),
+                    },
+                    {
+                      type: 'email',
+                      message: formatMessage({ id: 'validation.email.wrong-format' }),
+                    },
+                  ],
+                })(
+                  <Input placeholder={formatMessage({ id: 'form.email.placeholder' })} />
+                )}
+              </FormItem>
+              <FormItem {...formItemLayout}
+                        label="邮箱验证码">
+                <Row>
+                  <Col span={16}>
+                    {getFieldDecorator('verifyCode', {
+                      rules: [
+                        {
+                          required: true,
+                          message: '请输入验证码！',
+                        },
+                        {
+                          validator: this.checkVerifyCode,
+                          validateStatus: 'error',
+                        },
+                      ],
+                    })(<Input placeholder="验证码" className={styles.inputSty}/>)}
+                  </Col>
+                  <Col span={8}>
+                    <Button
+                      disabled={count}
+                      className={styles.getCaptcha}
+                      onClick={this.onGetCaptcha}
+                    >
+                      {count ? `${count} s` : '获取验证码'}
+                    </Button>
+                  </Col>
+                </Row>
+              </FormItem>
+              <FormItem {...tailFormItemLayout}>
                 <Button
-                  disabled={count}
-                  className={styles.getCaptcha}
-                  onClick={this.onGetCaptcha}
+                  loading={submitting}
+                  className={styles.submit}
+                  type="primary"
+                  htmlType="submit"
                 >
-                  {count ? `${count} s` : '获取验证码'}
+                  <FormattedMessage id="app.register.register" />
                 </Button>
-              </Col>
-            </Row>
-          </FormItem>
-          <FormItem {...formItemLayout} label='手机号'>
-            <InputGroup compact>
-              <Select
-                size="large"
-                value={prefix}
-                onChange={this.changePrefix}
-                style={{ width: '20%' }}
-              >
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-              </Select>
-              {getFieldDecorator('mobile', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.phone-number.required' }),
-                  },
-                  {
-                    pattern: /^\d{11}$/,
-                    message: formatMessage({ id: 'validation.phone-number.wrong-format' }),
-                  },
-                ],
-              })(
-                <Input
-                  size="large"
-                  style={{ width: '80%' }}
-                  placeholder={formatMessage({ id: 'form.phone-number.placeholder' })}
-                />
-              )}
-            </InputGroup>
-          </FormItem>
-          <FormItem {...tailFormItemLayout}>
-            <Button
-              size="large"
-              loading={submitting}
-              className={styles.submit}
-              type="primary"
-              htmlType="submit"
-            >
-              <FormattedMessage id="app.register.register" />
-            </Button>
-            <Link className={styles.login} to="/User/Login">
-              <FormattedMessage id="app.register.sign-in" />
-            </Link>
-          </FormItem>
-        </Form>
+                <Link className={styles.login} to="/user/login">
+                  <FormattedMessage id="app.register.sign-in" />
+                </Link>
+              </FormItem>
+            </Form>
+          </div>
+        </div>
       </div>
   );
   }

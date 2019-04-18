@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/*/verification-codes/validations" ,       //邮箱验证码校验接口不需要权限认证
                         "/api/*/gitlab-users/validations",       //gitlab账号密码校验接口不需要权限认证
                 		"/api/*/users", //用户注册接口不需要权限认证
-                		"/api/*/verification-codes/sends"        //邮箱验证码发送接口不需要权限认证
+                		"/api/*/verify-codes"        //邮箱验证码发送接口不需要权限认证
                 		).permitAll() 
                 .antMatchers(HttpMethod.PUT,
                 		"/api/*/users/password-resetting").permitAll()//用户密码重置接口不需要权限认证

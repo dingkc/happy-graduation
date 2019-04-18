@@ -110,8 +110,8 @@ class LoginPage extends Component {
             />
             <div className={styles.other}>
               {/*<Link className={styles.leftSty} to="/user/register">注册帐号</Link>*/}
-              <a className={styles.leftSty}>注册帐号</a>
-              <a className={styles.register}>忘记密码 |</a>
+              <Link className={styles.leftSty} to="/user/register">注册帐号</Link>
+              <Link className={styles.register} to="/user/forgetPassword">忘记密码 |</Link>
               <a className={styles.register}>反馈</a>
               {/*<Link className={styles.register} to="/user/forget">*/}
                 {/*忘记密码 |*/}

@@ -1,10 +1,11 @@
-import { fakeRegister } from '@/services/api';
+// import { fakeRegister } from '@/services/api';
 import { setAuthority } from '@/utils/authority';
 import { reloadAuthorized } from '@/utils/Authorized';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 import {
   getVerifyCodes,
+  fakeRegister
 }
   from '@/services/user';
 
