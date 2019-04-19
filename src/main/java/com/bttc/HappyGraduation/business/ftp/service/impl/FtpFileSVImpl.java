@@ -138,8 +138,10 @@ public class FtpFileSVImpl implements IFtpFileSV {
         String[] split = UploadUtils.getRealName(originalFilename).split("\\.");
         file.transferTo(Paths.get(newFile.getPath()).toFile());
         String savePath = randomDir + "/" + uuidFilename;
+
         FtpFilePO ftpFilePO = new FtpFilePO();
-        ftpFilePO.setFileName(split[0]);
+        ftpFilePO.setFileName(originalFilename);
+        ftpFilePO.setFileUuidName(uuidFilename);
         ftpFilePO.setFilePath(savePath);
         ftpFilePO.setFileSize(size);
         ftpFilePO.setFileType(split[split.length - 1]);

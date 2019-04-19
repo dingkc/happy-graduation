@@ -63,30 +63,4 @@ public class UserConstant {
             return name;
         }
     }
-
-    //敏捷平台用户角色
-    public enum AgileUser {
-        REQ_APPLY(1, "需求申请人"),
-        REQ_ADMIN(2, "需求管理员"),
-        DEV_ADMIN(3, "开发管理员"),
-        DEVELOPER(4,"开发人员"),
-        TESTER(5,"测试人员");
-
-        private Integer value;
-        private String name;
-
-        AgileUser(Integer value, String name) {
-            this.value = value;
-            this.name = name;
-        }
-
-        public Integer getValue() {
-            return value;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
-
 }

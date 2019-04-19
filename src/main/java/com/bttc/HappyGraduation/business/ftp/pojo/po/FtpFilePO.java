@@ -21,6 +21,9 @@ public class FtpFilePO {
     @Column(columnDefinition="varchar(255) COMMENT '文件名称'", nullable=false)
     private String fileName;
 
+    @Column(columnDefinition="varchar(255) COMMENT '文件随机名称'", nullable=false)
+    private String fileUuidName;
+
     @Column(columnDefinition="varchar(255) COMMENT '文件类型'", nullable=false)
     private String fileType;
 
@@ -55,6 +58,7 @@ public class FtpFilePO {
     @Column(columnDefinition="int(1) COMMENT '数据状态0失效1生效'", nullable=false)
     private Integer state;
 
+
     public Integer getFtpFileId() {
         return ftpFileId;
     }
@@ -69,6 +73,14 @@ public class FtpFilePO {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getFileUuidName() {
+        return fileUuidName;
+    }
+
+    public void setFileUuidName(String fileUuidName) {
+        this.fileUuidName = fileUuidName;
     }
 
     public String getFileType() {
