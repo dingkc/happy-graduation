@@ -60,5 +60,5 @@ public interface INoteSV {
      * @return: com.bttc.HappyGraduation.business.note.pojo.vo.NoteListVO
      * @Date: 2019/3/26 22:47
      **/
-    NoteListVO queryNoteByCondition(String noteName, Integer pageNumber, Integer pageSize);
+    NoteListVO queryNoteByCondition(Integer notepadId, String noteName, Integer pageNumber, Integer pageSize);
 }

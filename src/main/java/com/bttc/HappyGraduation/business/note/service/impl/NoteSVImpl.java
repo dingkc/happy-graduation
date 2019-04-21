@@ -76,9 +76,10 @@ public class NoteSVImpl implements INoteSV {
     }
 
     @Override
-    public NoteListVO queryNoteByCondition(String noteName, Integer pageNumber, Integer pageSize) {
+    public NoteListVO queryNoteByCondition(Integer notepadId, String noteName, Integer pageNumber, Integer pageSize) {
         QueryParams<NotePO> queryParams = new QueryParams<>(NotePO.class);
-        queryParams.and(Filter.like("noteName", noteName)).and(Filter.eq("state", CommonConstant.CommonState.EFFECT.getValue()));
+        queryParams.and(Filter.like("noteName", noteName)).and(Filter.eq("state", CommonConstant.CommonState.EFFECT.getValue()))
+                .and(Filter.eq("notepadId", notepadId));
         Page<NotePO> beans = noteDao.getBeans(queryParams, pageSize, pageNumber - 1);
         NoteListVO notepadListVO = new NoteListVO();
         notepadListVO.setRows(BeanMapperUtil.mapList(beans.getContent(), NotePO.class, NoteVO.class));

@@ -109,7 +109,9 @@ public class FileController {
      * @Date: 2019/4/5 21:01
      **/
     @GetMapping(value = "${apiVersion1}/ftpFiles")
-    public ResultBean queryFileByConditions(Integer userId, Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize) {
+    public ResultBean queryFileByConditions(@RequestParam Integer userId, @RequestParam(required = false) Integer parentFileId,
+                                            @RequestParam(required = false) String fileType, @RequestParam Integer pageNumber,
+                                            @RequestParam Integer pageSize) {
         iFtpFileSV.queryFileByConditions(userId, parentFileId, fileType, pageNumber, pageSize);
         return ResultBean.ok(null);
     }

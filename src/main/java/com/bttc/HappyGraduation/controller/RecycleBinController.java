@@ -41,7 +41,7 @@ public class RecycleBinController {
     }
 
     @GetMapping(value = "${apiVersion1}/recycle-bins")
-    public ResultBean queryRecycleBins(@RequestParam String recycleBinName, @RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
+    public ResultBean queryRecycleBins(@RequestParam(required = false) String recycleBinName, @RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
         return ResultBean.ok(iRecycleBinSV.queryByCondition(recycleBinName, pageNumber, pageSize));
     }
 
