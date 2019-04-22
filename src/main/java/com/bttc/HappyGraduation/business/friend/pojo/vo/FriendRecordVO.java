@@ -14,7 +14,7 @@ public class FriendRecordVO {
 
     private Integer friendRecordId;
     private Integer ownerId;
-    private Integer owenrName;
+    private Integer ownerName;
     private Integer friendId;
     private Integer friendName;
     private String remark;
@@ -44,12 +44,12 @@ public class FriendRecordVO {
         this.ownerId = ownerId;
     }
 
-    public Integer getOwenrName() {
-        return owenrName;
+    public Integer getOwnerName() {
+        return ownerName;
     }
 
-    public void setOwenrName(Integer owenrName) {
-        this.owenrName = owenrName;
+    public void setOwnerName(Integer ownerName) {
+        this.ownerName = ownerName;
     }
 
     public Integer getFriendId() {
