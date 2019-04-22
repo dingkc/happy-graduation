@@ -101,7 +101,6 @@ public class FileController {
      * <p>Title: queryFileByConditions</p>
      * <p>Description: 多条件查询文件</p>
      * @Author: Dk
-     * @param userId : 用户编号
      * @param parentFileId : 父文件编号
      * @param fileType : 文件类型
      * @param pageNumber : 分页页码
@@ -110,10 +109,9 @@ public class FileController {
      * @Date: 2019/4/5 21:01
      **/
     @GetMapping(value = "${apiVersion1}/ftpFiles")
-    public ResultBean queryFileByConditions(@RequestParam Integer userId, @RequestParam(required = false) Integer parentFileId,
-                                            @RequestParam(required = false) String fileType, @RequestParam Integer pageNumber,
-                                            @RequestParam Integer pageSize) {
-        return ResultBean.ok(iFtpFileSV.queryFileByConditions(userId, parentFileId, fileType, pageNumber, pageSize));
+    public ResultBean queryFileByConditions(@RequestParam(required = false) Integer parentFileId, @RequestParam(required = false) String fileType,
+                                            @RequestParam Integer pageNumber, @RequestParam Integer pageSize) throws BusinessException {
+        return ResultBean.ok(iFtpFileSV.queryFileByConditions(parentFileId, fileType, pageNumber, pageSize));
     }
 
 }

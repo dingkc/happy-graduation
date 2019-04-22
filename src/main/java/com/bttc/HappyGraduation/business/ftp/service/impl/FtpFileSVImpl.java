@@ -251,11 +251,11 @@ public class FtpFileSVImpl implements IFtpFileSV {
     }
 
     @Override
-    public FtpFileListVO queryFileByConditions(Integer userId, Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize) {
+    public FtpFileListVO queryFileByConditions(Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize) throws BusinessException {
         QueryParams<FtpFilePO> queryParams = new QueryParams<>(FtpFilePO.class);
         FtpFilePO ftpFilePO = new FtpFilePO();
         ftpFilePO.setState(CommonConstant.CommonState.EFFECT.getValue());
-        queryParams.and(Filter.eq("creatorId", userId))
+        queryParams.and(Filter.eq("creatorId", SessionManager.getUserInfo().getUserId()))
                 .and(Filter.eq("parentFileId", parentFileId))
                 .and(Filter.eq("fileType", fileType));
         Page<FtpFilePO> beans = ftpFileDao.getBeansAutoExceptNull(ftpFilePO, queryParams, pageNumber - 1, pageSize);

@@ -24,7 +24,7 @@ public interface IFtpFileSV {
 
     FtpFileVO queryFileByFileId(Integer fileId);
 
-    FtpFileListVO queryFileByConditions(Integer userId, Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize);
+    FtpFileListVO queryFileByConditions(Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize) throws BusinessException;
 
     String previewFile(Integer ftpFileId);
 
