@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,6 +96,12 @@ public class UserSVImpl implements IUserSV {
 			//验证码已失效或错误
 			BusinessException.throwBusinessException(ErrorCode.USER_VERIFY_CODE_UNEXSIT);
 		}
+		//邮箱唯一性校验
+		if(null != iUserSV.queryByEmail(userVO.getEmail())) {
+			//邮箱已存在
+			BusinessException.throwBusinessException(ErrorCode.EMAIL_ALREADY_EXIST);
+		}
+
 		//用户名唯一性校验
 		if(null != iUserSV.queryByUsername(userVO.getUsername())) {
 			//用户名已存在
@@ -267,12 +274,15 @@ public class UserSVImpl implements IUserSV {
 		userPO.setDoneDate(nowDate);
 		return userDao.updateBeans(userPO);
 	}
-	/**
-	 * 查询生效用户
-	 */
+
 	@Override
-	public List<UserPO> queryByNameAndState(Integer state, String name) {
-		return userDao.findAllByStateAndNameLike(state,"%" + name + "%");
+	public List<UserPO> queryByEmailAndState(String email) {
+		UserPO userPO = new UserPO();
+		userPO.setState(CommonConstant.CommonState.EFFECT.getValue());
+		QueryParams<UserPO> queryParams = new QueryParams<>(UserPO.class);
+		queryParams.and(Filter.like("email", email));
+		Page<UserPO> beans = userDao.getBeans(userPO, queryParams, 0, 20);
+		return beans.getContent();
 	}
 
 	@Override
@@ -280,4 +290,8 @@ public class UserSVImpl implements IUserSV {
 		return userDao.findAllByState(CommonConstant.CommonState.EFFECT.getValue());
 	}
 
+	@Override
+	public UserVO queryByEmail(String email) {
+		return BeanMapperUtil.map(userDao.findAllByEmailAndState(email, CommonConstant.CommonState.EFFECT.getValue()), UserVO.class);
+	}
 }

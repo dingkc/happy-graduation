@@ -31,7 +31,8 @@ public enum ErrorCode {
     EMAIL_FAIL("OSRDC_B_00151","邮件发送失败! "),
     VERIFY_CODE_ERROR("OSRDC_B_00152", "验证码错误"),
     EMAIL_VERIFY_ERROR("OSRDC_B_00153","请确认验证码是否已失效"),
-    
+    EMAIL_ALREADY_EXIST("OSRDC_B_00154","邮箱已被注册！"),
+
     //core目录下250-299的错误码
     CORE_PATH_EXISTED("OSRDC_B_00250", "该路径已存在！"),
     CORE_NETWORK_INSTABILITY("OSRDC_B_00251", "连接到ES搜索平台的网络不稳定，请及时联系管理员！"),

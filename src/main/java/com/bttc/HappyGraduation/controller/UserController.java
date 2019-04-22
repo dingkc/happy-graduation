@@ -158,4 +158,16 @@ public class UserController {
         return ResultBean.ok(null);
     }
 
+    /**
+     * <p>Title: queryUserByEmail</p>
+     * <p>Description: 根据邮箱模糊查询用户，只返回前20条</p>
+     * @Author: Dk
+     * @param email : 邮箱账号
+     * @return: com.bttc.HappyGraduation.common.ResultBean
+     * @Date: 2019/4/22 19:56
+     **/
+    @GetMapping(value = "${apiVersion1}/users/approves")
+    public ResultBean queryUserByEmail(@RequestParam String email) {
+        return ResultBean.ok(iUserSV.queryByEmailAndState(email));
+    }
 }

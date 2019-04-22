@@ -73,4 +73,5 @@ public interface UserDao extends BaseRepository<UserPO, Integer> {
 	 */
 	List<UserPO> findAllByUserIdInAndStateOrderByNameAsc(Collection<Integer> userIds, Integer state);
 
+	UserPO findAllByEmailAndState(String email, Integer state);
 }

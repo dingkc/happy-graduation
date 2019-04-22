@@ -107,16 +107,7 @@ public interface IUserSV {
 	 **/
 	UserPO updateUser(UserPO userPO);
 
-	/**
-	 * <p>Title: 查询所有用户</p>
-	 * <p>Description: 模糊查询用户信息</p>
-	 * @Author: Dk
-	 * @param state : 数据状态
-	 * @param name : 用户名称
-	 * @return: java.util.List<com.ai.osrdc.frame.session.pojo.po.business.UserPO>
-	 * @Date: 2018/12/18 12:26
-	 **/
-	List<UserPO> queryByNameAndState(Integer state, String name);
+	List<UserPO> queryByEmailAndState(String email);
 
 	/**
 	 * <p>Title: 查询所有生效用户</p>
@@ -128,4 +119,5 @@ public interface IUserSV {
 	 **/
 	List<UserPO> queryByState(Integer state);
 
+	UserVO queryByEmail(String email);
 }
