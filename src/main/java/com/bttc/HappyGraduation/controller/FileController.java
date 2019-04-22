@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@RestController
 public class FileController {
 
     @Autowired
@@ -112,8 +113,7 @@ public class FileController {
     public ResultBean queryFileByConditions(@RequestParam Integer userId, @RequestParam(required = false) Integer parentFileId,
                                             @RequestParam(required = false) String fileType, @RequestParam Integer pageNumber,
                                             @RequestParam Integer pageSize) {
-        iFtpFileSV.queryFileByConditions(userId, parentFileId, fileType, pageNumber, pageSize);
-        return ResultBean.ok(null);
+        return ResultBean.ok(iFtpFileSV.queryFileByConditions(userId, parentFileId, fileType, pageNumber, pageSize));
     }
 
 }

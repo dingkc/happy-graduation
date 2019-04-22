@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
+import javax.swing.text.html.Option;
 import java.util.*;
 
 @Service
@@ -206,41 +207,22 @@ public class UserSVImpl implements IUserSV {
 
 	@Override
 	public void updateUser(UserVO userVO) throws BusinessException {
-		if(null == userVO) {
-			//请求参数不能为空
-			BusinessException.throwBusinessException(ErrorCode.PARAMETER_UNABLE_NULL);
-			return;
-		}
-		//非空校验
-		String username = userVO.getUsername();
-		if(StringUtils.isBlank(username)) {
-			//请求参数 [用户名] 不能为空
-			BusinessException.throwBusinessException(ErrorCode.PARAMETER_NULL, "用户名");
-		}
-		String password = userVO.getPassword();
-		if(StringUtils.isBlank(password)) {
-			//请求参数 [密码] 不能为空
-			BusinessException.throwBusinessException(ErrorCode.PARAMETER_NULL, "密码");
-		}
-		Integer verifyCodeId = userVO.getVerifyCodeId();
-		if(null == verifyCodeId) {
-			//请求参数 [验证码编号] 不能为空
-			BusinessException.throwBusinessException(ErrorCode.PARAMETER_NULL, UserConstant.VERIFY_CODE_ID);
-		}
-		String verifyCode = userVO.getVerifyCode();
-		if(StringUtils.isBlank(verifyCode)) {
-			//请求参数 [验证码] 不能为空
-			BusinessException.throwBusinessException(ErrorCode.PARAMETER_NULL, "验证码");
-			return;
-		}
+		//请求参数不能为空
+		Optional.ofNullable(userVO).orElseThrow(() -> new BusinessException(ErrorCode.PARAMETER_UNABLE_NULL, "用户信息"));
+		//非空校验,请求参数 [用户名] 不能为空
+		String username = Optional.ofNullable(userVO.getUsername()).orElseThrow(() -> new BusinessException(ErrorCode.PARAMETER_NULL, "用户名"));
+		//请求参数 [密码] 不能为空
+		String password = Optional.ofNullable(userVO.getPassword()).orElseThrow(() -> new BusinessException(ErrorCode.PARAMETER_NULL, "密码"));
+		//请求参数 [验证码编号] 不能为空
+		Integer verifyCodeId = Optional.ofNullable(userVO.getVerifyCodeId()).orElseThrow(() -> new BusinessException(ErrorCode.PARAMETER_NULL, UserConstant.VERIFY_CODE_ID));
+		//请求参数 [验证码] 不能为空
+		String verifyCode = Optional.ofNullable(userVO.getVerifyCode()).orElseThrow(() -> new BusinessException(ErrorCode.PARAMETER_NULL, "验证码"));
 		//根据username查询用户信息
 		UserPO userPO = iUserSV.queryByUsername(username);
-		if(null == userPO) {
-			//用户不存在
-			BusinessException.throwBusinessException(ErrorCode.USER_NOT_EXIST);
-			return;
-		}
-		String email = userPO.getEmail();
+		//用户不存在
+		Optional.ofNullable(userPO).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXIST));
+
+		String email = Optional.ofNullable(userPO.getEmail()).orElseThrow(() -> new BusinessException(ErrorCode.PARAMETER_NULL, "验证码"));
 		//验证码校验
 		VerifyCodeRecordPO verifyCodeRecordPO = iVerifyCodeRecordSV.queryByVerifyCodeIdAndEmail(verifyCodeId, email);
 		if(null == verifyCodeRecordPO || !verifyCode.equals(verifyCodeRecordPO.getVerifyCode())) {
