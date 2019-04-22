@@ -1,4 +1,4 @@
-package com.bttc.HappyGraduation.business.note.pojo.po;
+package com.bttc.HappyGraduation.business.friend.pojo.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import org.hibernate.annotations.DynamicUpdate;
@@ -8,32 +8,33 @@ import java.util.Date;
 
 /**
  * @author Dk
- * @date 22:53 2019/3/25.
+ * @date 16:37 2019/4/22.
  */
 @Entity
-@Table(name = "note")
+@Table(name = "friend_record")
 @DynamicUpdate
-public class NotePO {
+public class FriendRecordPO {
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(columnDefinition="int(10) COMMENT '记事编号'")
-    private Integer noteId;
+    @Column(columnDefinition="int(10) COMMENT '主键'", nullable=false)
+    private Integer friendRecordId;
 
-    @Column(columnDefinition="varchar(255) COMMENT '记事名称'", nullable=false)
-    private String noteName;
+    @Column(columnDefinition="int(10) COMMENT '拥有者id'", nullable=false)
+    private Integer ownerId;
 
-    @Column(columnDefinition="text COMMENT '记事内容'", nullable=false)
-    private String noteContent;
+    @Column(columnDefinition="int(10) COMMENT '好友id'", nullable=false)
+    private Integer friendId;
 
-    @Column(columnDefinition="int(10) COMMENT '记事本编号'")
-    private Integer notepadId;
+    @Column(columnDefinition="varchar(500) COMMENT '备注'")
+    private String remark;
 
     @Temporal(TemporalType.TIMESTAMP)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @Column(columnDefinition = "datetime COMMENT '创建时间'", nullable=false)
     private Date createDate;
 
-    @Column(columnDefinition="int(10) COMMENT '创建人id'")
+    @Column(columnDefinition="int(10) COMMENT '创建人id'", nullable=false)
     private Integer creatorId;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -41,42 +42,42 @@ public class NotePO {
     @Column(columnDefinition = "datetime COMMENT '操作时间'", nullable=false)
     private Date doneDate;
 
-    @Column(columnDefinition="int(10) COMMENT '操作人id'")
+    @Column(columnDefinition="int(10) COMMENT '操作人id'", nullable=false)
     private Integer operatorId;
 
     @Column(columnDefinition="int(1) COMMENT '数据状态0失效1生效'", nullable=false)
     private Integer state;
 
-    public Integer getNoteId() {
-        return noteId;
+    public Integer getFriendRecordId() {
+        return friendRecordId;
     }
 
-    public void setNoteId(Integer noteId) {
-        this.noteId = noteId;
+    public void setFriendRecordId(Integer friendRecordId) {
+        this.friendRecordId = friendRecordId;
     }
 
-    public String getNoteName() {
-        return noteName;
+    public Integer getOwnerId() {
+        return ownerId;
     }
 
-    public void setNoteName(String noteName) {
-        this.noteName = noteName;
+    public void setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
     }
 
-    public String getNoteContent() {
-        return noteContent;
+    public Integer getFriendId() {
+        return friendId;
     }
 
-    public void setNoteContent(String noteContent) {
-        this.noteContent = noteContent;
+    public void setFriendId(Integer friendId) {
+        this.friendId = friendId;
     }
 
-    public Integer getNotepadId() {
-        return notepadId;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setNotepadId(Integer notepadId) {
-        this.notepadId = notepadId;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public Date getCreateDate() {

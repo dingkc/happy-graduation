@@ -19,8 +19,12 @@ public class FtpFileVO {
     private String filePath;
     private Integer parentFileId;
     private String filePreview;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
     private Integer creatorId;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date doneDate;
     private Integer operatorId;
     private MultipartFile file;

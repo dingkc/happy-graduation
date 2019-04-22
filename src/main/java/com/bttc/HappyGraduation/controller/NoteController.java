@@ -76,15 +76,13 @@ public class NoteController {
      * <p>Title: queryNotes</p>
      * <p>Description: 查询记事列表</p>
      * @Author: Dk
-     * @param noteName :
-     * @param pageNumber :
-     * @param pageSize :
+     * @param pageNumber : 分页页码
+     * @param pageSize :分页大小
      * @return: com.bttc.HappyGraduation.common.ResultBean
      * @Date: 2019/4/21 17:34
      **/
     @GetMapping(value = "${apiVersion1}/notes")
-    public ResultBean queryNotes(@RequestParam Integer notepadId, @RequestParam(required = false) String noteName,
-                                 @RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
-        return ResultBean.ok(iNoteSV.queryNoteByCondition(notepadId, noteName, pageNumber, pageSize));
+    public ResultBean queryNotes(@RequestParam Integer notepadId, @RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
+        return ResultBean.ok(iNoteSV.queryNoteByCondition(notepadId, pageNumber, pageSize));
     }
 }

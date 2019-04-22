@@ -1,6 +1,7 @@
 package com.bttc.HappyGraduation.business.note.pojo.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "notepad")
+@DynamicUpdate
 public class NotepadPO {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

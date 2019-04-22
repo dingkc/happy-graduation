@@ -54,11 +54,10 @@ public interface INoteSV {
      * <p>Title: queryNoteByCondition</p>
      * <p>Description: 多条件查询记事</p>
      * @Author: Dk
-     * @param noteName : 记事名称
      * @param pageNumber : 分页页码
      * @param pageSize : 分页大小
      * @return: com.bttc.HappyGraduation.business.note.pojo.vo.NoteListVO
      * @Date: 2019/3/26 22:47
      **/
-    NoteListVO queryNoteByCondition(Integer notepadId, String noteName, Integer pageNumber, Integer pageSize);
+    NoteListVO queryNoteByCondition(Integer notepadId, Integer pageNumber, Integer pageSize);
 }
