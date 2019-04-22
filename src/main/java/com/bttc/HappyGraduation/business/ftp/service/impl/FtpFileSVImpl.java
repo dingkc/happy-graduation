@@ -78,6 +78,9 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Dk
@@ -251,17 +254,25 @@ public class FtpFileSVImpl implements IFtpFileSV {
     }
 
     @Override
-    public FtpFileListVO queryFileByConditions(Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize) throws BusinessException {
+    public FtpFileListVO queryFileByConditions(Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize, String fileName) throws BusinessException {
         QueryParams<FtpFilePO> queryParams = new QueryParams<>(FtpFilePO.class);
         FtpFilePO ftpFilePO = new FtpFilePO();
         ftpFilePO.setState(CommonConstant.CommonState.EFFECT.getValue());
         queryParams.and(Filter.eq("creatorId", SessionManager.getUserInfo().getUserId()))
                 .and(Filter.eq("parentFileId", parentFileId))
+                .and(Filter.like("fileName", fileName))
                 .and(Filter.eq("fileType", fileType));
         Page<FtpFilePO> beans = ftpFileDao.getBeansAutoExceptNull(ftpFilePO, queryParams, pageNumber - 1, pageSize);
         FtpFileListVO ftpFileListVO = new FtpFileListVO();
-        ftpFileListVO.setRows(BeanMapperUtil.mapList(beans.getContent(), FtpFilePO.class, FtpFileVO.class));
-        ftpFileListVO.setTotal((int) beans.getTotalElements());
+        List<FtpFilePO> ftpFilePOS = beans.getContent();
+        List<FtpFilePO> collect;
+        if (null == parentFileId) {
+            collect = ftpFilePOS.stream().filter(ftpFile -> ftpFile.getParentFileId() == null).collect(toList());
+        } else {
+            collect = ftpFilePOS;
+        }
+        ftpFileListVO.setRows(BeanMapperUtil.mapList(collect, FtpFilePO.class, FtpFileVO.class));
+        ftpFileListVO.setTotal(collect.size());
         return ftpFileListVO;
     }
 
@@ -303,5 +314,18 @@ public class FtpFileSVImpl implements IFtpFileSV {
         ftpFilePO.setDoneDate(DateUtil.getNowDate());
         ftpFilePO.setOperatorId(1);
         ftpFileDao.updateBeans(ftpFilePO);
+    }
+
+    @Override
+    public void addDir(FtpFileVO ftpFileVO) throws BusinessException {
+        Integer userId = SessionManager.getUserInfo().getUserId();
+        Date nowDate = DateUtil.getNowDate();
+        FtpFilePO ftpFilePO = BeanMapperUtil.map(ftpFileVO, FtpFilePO.class);
+        ftpFilePO.setCreatorId(userId);
+        ftpFilePO.setCreateDate(nowDate);
+        ftpFilePO.setDoneDate(nowDate);
+        ftpFilePO.setOperatorId(userId);
+        ftpFilePO.setState(CommonConstant.CommonState.EFFECT.getValue());
+        ftpFileDao.save(ftpFilePO);
     }
 }

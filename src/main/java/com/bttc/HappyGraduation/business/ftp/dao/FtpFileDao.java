@@ -2,7 +2,9 @@ package com.bttc.HappyGraduation.business.ftp.dao;
 
 import com.bttc.HappyGraduation.business.ftp.pojo.po.FtpFilePO;
 import com.bttc.HappyGraduation.utils.base.BaseRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.util.Date;
 import java.util.List;
 
 /**

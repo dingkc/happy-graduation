@@ -24,11 +24,13 @@ public interface IFtpFileSV {
 
     FtpFileVO queryFileByFileId(Integer fileId);
 
-    FtpFileListVO queryFileByConditions(Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize) throws BusinessException;
+    FtpFileListVO queryFileByConditions(Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize, String fileName) throws BusinessException;
 
     String previewFile(Integer ftpFileId);
 
     List<FtpFilePO> queryByXmlIsNull();
+
+    void addDir( FtpFileVO ftpFileVO) throws BusinessException;
 
 //    FtpFileVO parserDocument(FtpFilePO ftpFilePO);
 //

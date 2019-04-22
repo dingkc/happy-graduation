@@ -110,8 +110,14 @@ public class FileController {
      **/
     @GetMapping(value = "${apiVersion1}/ftpFiles")
     public ResultBean queryFileByConditions(@RequestParam(required = false) Integer parentFileId, @RequestParam(required = false) String fileType,
-                                            @RequestParam Integer pageNumber, @RequestParam Integer pageSize) throws BusinessException {
-        return ResultBean.ok(iFtpFileSV.queryFileByConditions(parentFileId, fileType, pageNumber, pageSize));
+                                            @RequestParam Integer pageNumber, @RequestParam Integer pageSize, @RequestParam(required = false) String fileName) throws BusinessException {
+        return ResultBean.ok(iFtpFileSV.queryFileByConditions(parentFileId, fileType, pageNumber, pageSize, fileName));
+    }
+
+    @PostMapping(value = "${apiVersion1}/ftpFiles/dirs")
+    public ResultBean addDir(@RequestBody FtpFileVO ftpFileVO) throws BusinessException {
+        iFtpFileSV.addDir(ftpFileVO);
+        return ResultBean.ok(null);
     }
 
 }
