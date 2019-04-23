@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.*;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -278,6 +279,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
             collect = beansAutoExceptNull;
         }
         List<FtpFileVO> ftpFileVOS = BeanMapperUtil.mapList(collect, FtpFilePO.class, FtpFileVO.class);
+        ftpFileVOS.stream().forEach( ftpFileVO -> ftpFileVO.setFileSize(FormetFileSize(Long.valueOf(ftpFileVO.getFileSize()))));
         if (pageNumber != null && pageSize != null) {
             int size = collect.size();
             ftpFileListVO.setTotal(size);
@@ -292,6 +294,31 @@ public class FtpFileSVImpl implements IFtpFileSV {
             ftpFileListVO.setRows(ftpFileVOS);
         }
         return ftpFileListVO;
+    }
+
+    /**
+     * 转换文件大小
+     *
+     * @param fileS
+     * @return
+     */
+    private static String FormetFileSize(long fileS) {
+        DecimalFormat df = new DecimalFormat("#.00");
+        String fileSizeString = "";
+        String wrongSize = "0B";
+        if (fileS == 0) {
+            return wrongSize;
+        }
+        if (fileS < 1024) {
+            fileSizeString = df.format((double) fileS) + "B";
+        } else if (fileS < 1048576) {
+            fileSizeString = df.format((double) fileS / 1024) + "KB";
+        } else if (fileS < 1073741824) {
+            fileSizeString = df.format((double) fileS / 1048576) + "MB";
+        } else {
+            fileSizeString = df.format((double) fileS / 1073741824) + "GB";
+        }
+        return fileSizeString;
     }
 
     @Override
