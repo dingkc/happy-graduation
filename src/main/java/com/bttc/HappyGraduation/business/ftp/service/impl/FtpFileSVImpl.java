@@ -117,31 +117,6 @@ public class FtpFileSVImpl implements IFtpFileSV {
 
     @Override
     public void uploadFile(MultipartFile file, Integer parentFileId) throws Exception {
-//        //获取文件的内容
-//        InputStream is = file.getInputStream();
-//        //获取原始文件名
-//        String originalFilename = file.getOriginalFilename();
-//        //生成一个uuid名称出来
-//        String uuidFilename = UploadUtils.getUUIDName(originalFilename);
-//        //产生一个随机目录
-//        String randomDir = UploadUtils.getDir();
-//        File fileDir = new File(fileLocation + randomDir);
-//        //若文件夹不存在,则创建出文件夹
-//        if (!fileDir.exists()) {
-//            fileDir.mkdirs();
-//        }
-//        File newFile = new File(fileLocation + randomDir, uuidFilename);
-//        FileInputStream fileInputStream = new FileInputStream(newFile);
-//        long size = fileInputStream.getChannel().size();
-////        System.out.println(newFile.getPath());
-////        System.out.println(newFile.getAbsolutePath());
-////        System.out.println(newFile.getCanonicalPath());
-//        //将文件输出到目标的文件中
-//        file.transferTo(newFile);
-//        String[] split = UploadUtils.getRealName(originalFilename).split("\\.");
-//        file.transferTo(Paths.get(newFile.getPath()).toFile());
-//        String savePath = randomDir + "/" + uuidFilename;
-
         // 上传文件输入流
         InputStream inputStream = null;
         //上传文件的名称
@@ -250,7 +225,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
         }
     }
 
-    public InputStream downloadDocumentFromFtp(FTPUtil ftpUtil, String fullPathNoName, String fileName) {
+    public InputStream downloadDocumentFromFtp(FTPUtil ftpUtil, String fullPathNoName, String fileName) throws Exception {
         fullPathNoName = modifyFullPathNoName(fullPathNoName);
         InputStream inputStream = null;
         try {
