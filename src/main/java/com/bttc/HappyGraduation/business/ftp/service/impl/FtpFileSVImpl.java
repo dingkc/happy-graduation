@@ -165,7 +165,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
                     replaceAll("%40", "@").replaceAll("%23", "\\#").replaceAll("%26", "\\&");
             response.reset();
             response.setContentType("multipart/from-date");
-            response.setHeader("Content-Disposition", "attachment;filename=" + fileUuidName);
+            response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
             byte[] b = new byte[1024];
             int n;// 每次读取到的字节数组的长度
             while ((n = inputStream.read(b)) != -1) {
