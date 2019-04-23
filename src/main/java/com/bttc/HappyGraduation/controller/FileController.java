@@ -49,7 +49,7 @@ public class FileController {
     @Autowired
     private IFtpFileSV iFtpFileSV;
 
-    @PutMapping(value = "${apiVersion1}/ftpFiles/uploads")
+    @PostMapping(value = "${apiVersion1}/ftpFiles/uploads")
     public ResultBean uploadFile(@RequestParam MultipartFile file, @RequestParam(required = false) Integer parentFileId) throws Exception {
         iFtpFileSV.uploadFile(file, parentFileId);
         return ResultBean.ok(null);

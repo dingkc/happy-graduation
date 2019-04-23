@@ -8,8 +8,25 @@ import createIcon from '@/assets/新建记事本.svg';
 import greyIcon from '@/assets/普通@2x.png';
 import yellowIcon from '@/assets/一般@2x.png';
 import redIcon from '@/assets/重要@2x.png';
+import { connect } from 'dva';
+import AddNoteModal from './AddModal/AddNoteModal';
 
+@connect(({ note }) => ({
+  note,
+}))
 export default class NoteList extends PureComponent{
+
+  showModal = () => {
+    const { dispatch } = this.props;
+    const params = {
+      visible: true,
+    }
+    dispatch({
+      type: 'note/showModal',
+      payload: params,
+    })
+  }
+
   render() {
     return (
       <div className={styles.main}>
@@ -23,7 +40,7 @@ export default class NoteList extends PureComponent{
             <Row><span className={styles.recordSty}>丁可成 创建于 2019-3-26</span></Row>
           </Col>
           <Col span={9}>
-            <Button type='primary'><img src={createIcon} className={styles.iconSty}/> 新建记事本</Button>
+            <Button type='primary'><img src={createIcon} className={styles.iconSty} onClick={this.showModal}/> 新建记事本</Button>
             <Button type='primary' style={{marginLeft: '8px'}}><img src={createNoteIcon} className={styles.iconSty}/> 新建记事</Button>
             <Button style={{marginLeft: '8px'}}><img src={deleteNoteIcon} className={styles.iconSty}/> 删除记事本</Button>
           </Col>
@@ -91,6 +108,7 @@ export default class NoteList extends PureComponent{
             </Card>
           </Col>
         </Row>
+        <AddNoteModal/>
       </div>
     );
   }

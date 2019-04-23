@@ -1,4 +1,5 @@
 import { query as queryUsers, queryCurrent } from '@/services/user';
+import { routerRedux } from 'dva/router';
 
 export default {
   namespace: 'user',
@@ -18,6 +19,9 @@ export default {
     },
     *fetchCurrent({ payload }, { call, put }) {
       const response = yield call(queryCurrent, payload);
+      if(!response){
+        yield put(routerRedux.push('/user/login'));
+      }
       yield put({
         type: 'saveCurrentUser',
         payload: response,

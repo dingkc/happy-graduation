@@ -110,12 +110,12 @@ export default class FileLayout extends PureComponent{
           >
             {/*{this.getNavMenuItems(menuData.children)}*/}
             {/*{menuData.map((item) => this.getSubMenu(item))}*/}
-            <SubMenu key="sub1" title={<span><Icon type="file-text" />全部文件</span>}>
+            <SubMenu key="sub1" title={<span><Icon type="file-text" />文件</span>}>
               <Menu.Item key="1">文件夹</Menu.Item>
-              <Menu.Item key="2">图片</Menu.Item>
-              <Menu.Item key="3">文档</Menu.Item>
-              <Menu.Item key="4">视频</Menu.Item>
-              <Menu.Item key="5">音乐</Menu.Item>
+              {/*<Menu.Item key="2">图片</Menu.Item>*/}
+              {/*<Menu.Item key="3">文档</Menu.Item>*/}
+              {/*<Menu.Item key="4">视频</Menu.Item>*/}
+              {/*<Menu.Item key="5">音乐</Menu.Item>*/}
             </SubMenu>
             <SubMenu key="sub2" title={<span><Icon type="delete" />回收站</span>}>
             </SubMenu>
