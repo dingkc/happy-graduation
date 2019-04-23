@@ -361,7 +361,14 @@ public class FtpFileSVImpl implements IFtpFileSV {
             parentFileVO.setDoneDate(DateUtil.getNowDate());
             parentFileVO.setOperatorId(SessionManager.getUserInfo().getUserId());
             ftpFileDao.save(BeanMapperUtil.map(parentFileVO, FtpFilePO.class));
-        }else {
+        } else if ((-1) == ftpFileVO.getNewParentFileId()) {
+            //移动到最外层目录
+            FtpFilePO ftpFilePO = BeanMapperUtil.map(ftpFileVO, FtpFilePO.class);
+            ftpFilePO.setDoneDate(DateUtil.getNowDate());
+            ftpFilePO.setParentFileId(null);
+            ftpFilePO.setOperatorId(SessionManager.getUserInfo().getUserId());
+            ftpFileDao.save(ftpFilePO);
+        } else {
             //编辑
             FtpFilePO ftpFilePO = BeanMapperUtil.map(ftpFileVO, FtpFilePO.class);
             ftpFilePO.setDoneDate(DateUtil.getNowDate());
