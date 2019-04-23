@@ -33,6 +33,7 @@ import javax.transaction.Transactional;
 import java.io.*;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -279,7 +280,11 @@ public class FtpFileSVImpl implements IFtpFileSV {
             collect = beansAutoExceptNull;
         }
         List<FtpFileVO> ftpFileVOS = BeanMapperUtil.mapList(collect, FtpFilePO.class, FtpFileVO.class);
+        //转换文件大小
         ftpFileVOS.stream().forEach( ftpFileVO -> ftpFileVO.setFileSize(FormetFileSize(Long.valueOf(ftpFileVO.getFileSize()))));
+        //创建时间降序
+        sortByCreateDate(ftpFileVOS);
+        Collections.reverse(ftpFileVOS);
         if (pageNumber != null && pageSize != null) {
             int size = collect.size();
             ftpFileListVO.setTotal(size);
@@ -294,6 +299,30 @@ public class FtpFileSVImpl implements IFtpFileSV {
             ftpFileListVO.setRows(ftpFileVOS);
         }
         return ftpFileListVO;
+    }
+
+    private void sortByCreateDate(List<FtpFileVO> list) {
+        Collections.sort(list, new Comparator<FtpFileVO>() {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            @Override
+            public int compare(FtpFileVO o1, FtpFileVO o2) {
+                try {
+                    Date d1 = format.parse(o1.getCreateDate().toString());
+                    Date d2 = format.parse(o2.getCreateDate().toString());
+                    if (d1.getTime() > d2.getTime()) {
+                        return 1;
+                    } else if (d1.getTime() < d2.getTime()) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                } catch (ParseException e) {
+                    logger.error(e.getMessage());
+                    return 0;
+                }
+            }
+        });
     }
 
     /**
