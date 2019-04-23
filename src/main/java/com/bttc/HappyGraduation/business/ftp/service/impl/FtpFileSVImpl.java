@@ -269,17 +269,28 @@ public class FtpFileSVImpl implements IFtpFileSV {
                 .and(Filter.eq("parentFileId", parentFileId))
                 .and(Filter.like("fileName", fileName))
                 .and(Filter.eq("fileType", fileType));
-        Page<FtpFilePO> beans = ftpFileDao.getBeansAutoExceptNull(ftpFilePO, queryParams, pageNumber - 1, pageSize);
+        List<FtpFilePO> beansAutoExceptNull = ftpFileDao.getBeansAutoExceptNull(ftpFilePO, queryParams);
         FtpFileListVO ftpFileListVO = new FtpFileListVO();
-        List<FtpFilePO> ftpFilePOS = beans.getContent();
         List<FtpFilePO> collect;
         if (null == parentFileId) {
-            collect = ftpFilePOS.stream().filter(ftpFile -> ftpFile.getParentFileId() == null).collect(toList());
+            collect = beansAutoExceptNull.stream().filter(ftpFile -> ftpFile.getParentFileId() == null).collect(toList());
         } else {
-            collect = ftpFilePOS;
+            collect = beansAutoExceptNull;
         }
-        ftpFileListVO.setRows(BeanMapperUtil.mapList(collect, FtpFilePO.class, FtpFileVO.class));
-        ftpFileListVO.setTotal(collect.size());
+        List<FtpFileVO> ftpFileVOS = BeanMapperUtil.mapList(collect, FtpFilePO.class, FtpFileVO.class);
+        if (pageNumber != null && pageSize != null) {
+            int size = collect.size();
+            ftpFileListVO.setTotal(size);
+            int end = pageNumber * pageSize;
+            int start = end - pageSize;
+            if (size <= start) {
+                ftpFileListVO.setRows(null);
+            } else {
+                ftpFileListVO.setRows(ftpFileVOS.subList(start, Math.min(end, size)));
+            }
+        } else {
+            ftpFileListVO.setRows(ftpFileVOS);
+        }
         return ftpFileListVO;
     }
 
