@@ -17,7 +17,7 @@ public interface IFtpFileSV {
 
     void uploadFile(MultipartFile file, Integer parentFileId) throws Exception;
 
-    void downloadFile(FtpFileVO ftpFileVO, HttpServletResponse response) throws Exception;
+    void downloadFile(String fileUuidName, String fileName, HttpServletResponse response) throws Exception;
 
     void saveUploadFile(FtpFilePO ftpFilePO) throws BusinessException;
 

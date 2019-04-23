@@ -147,7 +147,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
     }
 
     @Override
-    public void downloadFile(FtpFileVO ftpFileVO, HttpServletResponse response) throws Exception {
+    public void downloadFile(String fileUuidName, String fileName, HttpServletResponse response) throws Exception {
         OutputStream outputStream = null;
         String fullPathNoName = rootPath;
         FTPUtil ftpUtil = new FTPUtil(ftpConfig);
@@ -155,17 +155,17 @@ public class FtpFileSVImpl implements IFtpFileSV {
         ftpUtil.setMode(FTPConstant.PASSIVE_MODE);
         ftpUtil.setFileType(FTPConstant.BIN);
         try {
-            InputStream inputStream = downloadDocumentFromFtp(ftpUtil, fullPathNoName, ftpFileVO.getFileUuidName());
+            InputStream inputStream = downloadDocumentFromFtp(ftpUtil, fullPathNoName, fileUuidName);
             if (null == inputStream) {
                 BusinessException.throwBusinessException(ErrorCode.CODE_FILE_NOTFOUND);
             }
             outputStream = response.getOutputStream();
-            String newDocumentName = URLEncoder.encode(ftpFileVO.getFileName(), "UTF-8").replaceAll("\\+", "%20").
+            String newDocumentName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20").
                     replaceAll("%28", "\\(").replaceAll("%29", "\\)").replaceAll("%3B", ";").
                     replaceAll("%40", "@").replaceAll("%23", "\\#").replaceAll("%26", "\\&");
             response.reset();
             response.setContentType("multipart/from-date");
-            response.setHeader("Content-Disposition", "attachment;filename=" + ftpFileVO.getFileUuidName());
+            response.setHeader("Content-Disposition", "attachment;filename=" + fileUuidName);
             byte[] b = new byte[1024];
             int n;// 每次读取到的字节数组的长度
             while ((n = inputStream.read(b)) != -1) {

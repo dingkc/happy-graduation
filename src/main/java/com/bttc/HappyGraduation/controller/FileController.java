@@ -55,9 +55,9 @@ public class FileController {
         return ResultBean.ok(null);
     }
 
-    @PutMapping(value = "${apiVersion1}/ftpFiles/downloads")
-    public ResultBean downloadFile(@RequestBody FtpFileVO ftpFileVO, HttpServletResponse response) throws Exception {
-        iFtpFileSV.downloadFile(ftpFileVO, response);
+    @GetMapping(value = "${apiVersion1}/ftpFiles/downloads")
+    public ResultBean downloadFile(@RequestParam String fileUuidName, @RequestParam String fileName, HttpServletResponse response) throws Exception {
+        iFtpFileSV.downloadFile(fileUuidName, fileName, response);
         return ResultBean.ok(null);
     }
 
