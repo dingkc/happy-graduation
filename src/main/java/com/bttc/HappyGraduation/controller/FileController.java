@@ -114,9 +114,32 @@ public class FileController {
         return ResultBean.ok(iFtpFileSV.queryFileByConditions(parentFileId, fileType, pageNumber, pageSize, fileName));
     }
 
+    /**
+     * <p>Title: addDir</p>
+     * <p>Description: 新建文件夹</p>
+     * @Author: Dk
+     * @param ftpFileVO : 文件信息
+     * @return: com.bttc.HappyGraduation.common.ResultBean
+     * @Date: 2019/4/23 9:15
+     **/
     @PostMapping(value = "${apiVersion1}/ftpFiles/dirs")
     public ResultBean addDir(@RequestBody FtpFileVO ftpFileVO) throws BusinessException {
         iFtpFileSV.addDir(ftpFileVO);
+        return ResultBean.ok(null);
+    }
+
+    /**
+     * <p>Title: updateFtpFiles</p>
+     * <p>Description: 移动文件或重命名文件</p>
+     * @Author: Dk
+     * @param ftpFileId : 文件编号
+     * @param ftpFileVO : 问价信息
+     * @return: com.bttc.HappyGraduation.common.ResultBean
+     * @Date: 2019/4/23 9:52
+     **/
+    @PutMapping(value = "${apiVersion1}/ftpFiles/{ftpFileId}")
+    public ResultBean updateFtpFiles(@PathVariable Integer ftpFileId, @RequestBody FtpFileVO ftpFileVO) throws BusinessException {
+        iFtpFileSV.updateFtpFile(ftpFileId, ftpFileVO);
         return ResultBean.ok(null);
     }
 

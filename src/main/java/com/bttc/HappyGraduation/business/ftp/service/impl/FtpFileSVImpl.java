@@ -328,4 +328,27 @@ public class FtpFileSVImpl implements IFtpFileSV {
         ftpFilePO.setState(CommonConstant.CommonState.EFFECT.getValue());
         ftpFileDao.save(ftpFilePO);
     }
+
+    @Override
+    public void updateFtpFile(Integer ftpFileId, FtpFileVO ftpFileVO) throws BusinessException {
+        if (null != ftpFileVO.getNewParentFileId()) {
+            //移动到
+            FtpFileVO parentFileVO = queryFileByFileId(ftpFileVO.getNewParentFileId());
+            if (!FtpFileConstant.FileType.DIR.getName().equals(parentFileVO.getFileType())) {
+                BusinessException.throwBusinessException(ErrorCode.TARGET_FILE_IS_NOT_DIR);
+            }
+            //更新父文件大小
+            long newFileSize = Long.valueOf(parentFileVO.getFileSize()) + Long.valueOf(ftpFileVO.getFileSize());
+            parentFileVO.setFileSize(String.valueOf(newFileSize));
+            parentFileVO.setDoneDate(DateUtil.getNowDate());
+            parentFileVO.setOperatorId(SessionManager.getUserInfo().getUserId());
+            ftpFileDao.save(BeanMapperUtil.map(parentFileVO, FtpFilePO.class));
+        }else {
+            //编辑
+            FtpFilePO ftpFilePO = BeanMapperUtil.map(ftpFileVO, FtpFilePO.class);
+            ftpFilePO.setDoneDate(DateUtil.getNowDate());
+            ftpFilePO.setOperatorId(SessionManager.getUserInfo().getUserId());
+            ftpFileDao.save(ftpFilePO);
+        }
+    }
 }

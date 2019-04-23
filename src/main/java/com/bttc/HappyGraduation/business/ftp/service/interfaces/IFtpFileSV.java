@@ -32,6 +32,8 @@ public interface IFtpFileSV {
 
     void addDir( FtpFileVO ftpFileVO) throws BusinessException;
 
+    void updateFtpFile(Integer ftpFileId, FtpFileVO ftpFileVO) throws BusinessException;
+
 //    FtpFileVO parserDocument(FtpFilePO ftpFilePO);
 //
 //    void saveFullDocument(FtpFileVO ftpFileVO);

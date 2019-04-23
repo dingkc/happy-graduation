@@ -18,6 +18,7 @@ public class FtpFileVO {
     private String fileSize;
     private String filePath;
     private Integer parentFileId;
+    private Integer newParentFileId;
     private String filePreview;
     @Temporal(TemporalType.TIMESTAMP)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
@@ -75,6 +76,14 @@ public class FtpFileVO {
 
     public void setParentFileId(Integer parentFileId) {
         this.parentFileId = parentFileId;
+    }
+
+    public Integer getNewParentFileId() {
+        return newParentFileId;
+    }
+
+    public void setNewParentFileId(Integer newParentFileId) {
+        this.newParentFileId = newParentFileId;
     }
 
     public String getFilePreview() {
