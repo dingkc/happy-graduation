@@ -376,7 +376,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
 
     @Override
     public void updateFtpFile(Integer ftpFileId, FtpFileVO ftpFileVO) throws BusinessException {
-        if (null != ftpFileVO.getNewParentFileId()) {
+        if (null != ftpFileVO.getNewParentFileId() && (-1) != ftpFileVO.getNewParentFileId()) {
             //移动到
             FtpFileVO parentFileVO = queryFileByFileId(ftpFileVO.getNewParentFileId());
             if (!FtpFileConstant.FileType.DIR.getName().equals(parentFileVO.getFileType())) {
@@ -388,12 +388,13 @@ public class FtpFileSVImpl implements IFtpFileSV {
             parentFileVO.setDoneDate(DateUtil.getNowDate());
             parentFileVO.setOperatorId(SessionManager.getUserInfo().getUserId());
             ftpFileDao.save(BeanMapperUtil.map(parentFileVO, FtpFilePO.class));
-        } else if ((-1) == ftpFileVO.getNewParentFileId()) {
+        } else if (null != ftpFileVO.getNewParentFileId() && (-1) == ftpFileVO.getNewParentFileId()) {
             //移动到最外层目录
             FtpFilePO ftpFilePO = BeanMapperUtil.map(ftpFileVO, FtpFilePO.class);
             ftpFilePO.setDoneDate(DateUtil.getNowDate());
             ftpFilePO.setParentFileId(null);
             ftpFilePO.setOperatorId(SessionManager.getUserInfo().getUserId());
+            ftpFilePO.setState(CommonConstant.CommonState.EFFECT.getValue());
             ftpFileDao.save(ftpFilePO);
         } else {
             //编辑
