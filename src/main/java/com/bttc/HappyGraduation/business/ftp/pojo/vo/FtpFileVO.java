@@ -14,6 +14,7 @@ public class FtpFileVO {
 
     private Integer ftpFileId;
     private String fileName;
+    private String fileUuidName;
     private String fileType;
     private String fileSize;
     private String filePath;
@@ -44,6 +45,14 @@ public class FtpFileVO {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getFileUuidName() {
+        return fileUuidName;
+    }
+
+    public void setFileUuidName(String fileUuidName) {
+        this.fileUuidName = fileUuidName;
     }
 
     public String getFileType() {

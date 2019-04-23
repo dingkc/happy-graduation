@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 public class FileController {
 
@@ -48,9 +50,15 @@ public class FileController {
     @Autowired
     private IFtpFileSV iFtpFileSV;
 
-    @PostMapping(value = "${apiVersion1}/ftpFiles")
-    public ResultBean addFile(@RequestBody MultipartFile file, @RequestParam(required = false) Integer parentFileId) throws Exception {
+    @PutMapping(value = "${apiVersion1}/ftpFiles/uploads")
+    public ResultBean uploadFile(@RequestParam MultipartFile file, @RequestParam(required = false) Integer parentFileId) throws Exception {
         iFtpFileSV.uploadFile(file, parentFileId);
+        return ResultBean.ok(null);
+    }
+
+    @PutMapping(value = "${apiVersion1}/ftpFiles/downloads")
+    public ResultBean downloadFile(@RequestBody FtpFileVO ftpFileVO, HttpServletResponse response) throws Exception {
+        iFtpFileSV.downloadFile(ftpFileVO, response);
         return ResultBean.ok(null);
     }
 
@@ -93,8 +101,7 @@ public class FileController {
      **/
     @GetMapping(value = "${apiVersion1}/ftpFiles/{ftpFileId}")
     public ResultBean fileDetails(@PathVariable Integer ftpFileId) {
-        iFtpFileSV.queryFileByFileId(ftpFileId);
-        return ResultBean.ok(null);
+        return ResultBean.ok(iFtpFileSV.queryFileByFileId(ftpFileId));
     }
 
     /**

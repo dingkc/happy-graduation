@@ -32,9 +32,9 @@ public class FTPUtil {
 	private void initFtpConfig(String ftpPathCode) throws Exception {
 		this.config = new FTPConfig();
 		Properties activeProperties = getProperties();
-//		if (activeProperties == null) {
-//			throw new Exception("根据当前ftpPathCode：" + ftpPathCode + "找不到对应的ftp配置文件！");
-//		}
+		if (activeProperties == null) {
+			throw new Exception("根据当前ftpPathCode：" + ftpPathCode + "找不到对应的ftp配置文件！");
+		}
 
 		String hostIp = activeProperties.getProperty(ftpPathCode + FTPConstant.PROPERTIES_KEY_IP);
 		if (StringUtils.isNotEmpty(hostIp)) {

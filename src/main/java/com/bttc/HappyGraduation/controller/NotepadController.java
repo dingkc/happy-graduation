@@ -83,7 +83,7 @@ public class NotepadController {
      * @Date: 2019/4/21 17:30
      **/
     @GetMapping(value = "${apiVersion1}/notepads")
-    public ResultBean queryNotepads(@RequestParam String notepadName, @RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
+    public ResultBean queryNotepads(@RequestParam(required = false) String notepadName, @RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
         return ResultBean.ok(iNotepadSV.queryNotepadByCondition(notepadName, pageNumber, pageSize));
     }
 }

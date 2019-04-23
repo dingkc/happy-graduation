@@ -117,55 +117,118 @@ public class FtpFileSVImpl implements IFtpFileSV {
 
     @Override
     public void uploadFile(MultipartFile file, Integer parentFileId) throws Exception {
-        //获取文件的内容
-        InputStream is = file.getInputStream();
+//        //获取文件的内容
+//        InputStream is = file.getInputStream();
+//        //获取原始文件名
+//        String originalFilename = file.getOriginalFilename();
+//        //生成一个uuid名称出来
+//        String uuidFilename = UploadUtils.getUUIDName(originalFilename);
+//        //产生一个随机目录
+//        String randomDir = UploadUtils.getDir();
+//        File fileDir = new File(fileLocation + randomDir);
+//        //若文件夹不存在,则创建出文件夹
+//        if (!fileDir.exists()) {
+//            fileDir.mkdirs();
+//        }
+//        File newFile = new File(fileLocation + randomDir, uuidFilename);
+//        FileInputStream fileInputStream = new FileInputStream(newFile);
+//        long size = fileInputStream.getChannel().size();
+////        System.out.println(newFile.getPath());
+////        System.out.println(newFile.getAbsolutePath());
+////        System.out.println(newFile.getCanonicalPath());
+//        //将文件输出到目标的文件中
+//        file.transferTo(newFile);
+//        String[] split = UploadUtils.getRealName(originalFilename).split("\\.");
+//        file.transferTo(Paths.get(newFile.getPath()).toFile());
+//        String savePath = randomDir + "/" + uuidFilename;
+
+        // 上传文件输入流
+        InputStream inputStream = null;
+        //上传文件的名称
+        String filename = "";
         //获取原始文件名
         String originalFilename = file.getOriginalFilename();
         //生成一个uuid名称出来
         String uuidFilename = UploadUtils.getUUIDName(originalFilename);
         //产生一个随机目录
         String randomDir = UploadUtils.getDir();
-        File fileDir = new File(fileLocation + randomDir);
-        //若文件夹不存在,则创建出文件夹
-        if (!fileDir.exists()) {
-            fileDir.mkdirs();
+        try{
+            if (null != file){
+                inputStream = file.getInputStream();
+                filename = file.getOriginalFilename().substring(originalFilename.lastIndexOf("\\") + 1);
+            } else {
+                BusinessException.throwBusinessException(ErrorCode.CORE_UPLOADFILE_FAILED);
+            }
+        }catch (Exception e){
+            BusinessException.throwBusinessException(ErrorCode.CORE_UPLOADFILE_FAILED);
         }
-        File newFile = new File(fileLocation + randomDir, uuidFilename);
-        FileInputStream fileInputStream = new FileInputStream(newFile);
-        long size = fileInputStream.getChannel().size();
-//        System.out.println(newFile.getPath());
-//        System.out.println(newFile.getAbsolutePath());
-//        System.out.println(newFile.getCanonicalPath());
-        //将文件输出到目标的文件中
-//        file.transferTo(newFile);
-        String[] split = UploadUtils.getRealName(originalFilename).split("\\.");
-        file.transferTo(Paths.get(newFile.getPath()).toFile());
-        String savePath = randomDir + "/" + uuidFilename;
+
+        long size = file.getSize();
+        //ftp服务器上的文件路径
+        String fullPathNoName = rootPath;//+ randomDir;
+
+        FTPUtil ftpUtil = new FTPUtil(ftpConfig);
+        ftpUtil.open();
+        ftpUtil.setMode(FTPConstant.PASSIVE_MODE);
+        ftpUtil.setFileType(FTPConstant.BIN);
+        ftpUpload(ftpUtil, inputStream, fullPathNoName, uuidFilename);
 
         FtpFilePO ftpFilePO = new FtpFilePO();
-        ftpFilePO.setFileName(originalFilename);
+        ftpFilePO.setFileName(filename);
         ftpFilePO.setFileUuidName(uuidFilename);
-        ftpFilePO.setFilePath(savePath);
+        ftpFilePO.setFilePath(fullPathNoName);
         ftpFilePO.setFileSize(size);
-        ftpFilePO.setFileType(split[split.length - 1]);
+        ftpFilePO.setFileType(originalFilename.split("[.]")[1]);
         ftpFilePO.setParentFileId(parentFileId);
         saveUploadFile(ftpFilePO);
     }
 
-    public void downLoadOnline(String documentName, String documentRealName, String documentPath, String sourceType, HttpServletResponse response) throws Exception {
+    void ftpUpload(FTPUtil ftpUtil,InputStream inputStream, String fullPathNoName, String fileName) throws IOException {
+        fullPathNoName = modifyFullPathNoName(fullPathNoName);
+        try{
+            ftpUtil.changeDirectory("/");
+            // 保证可以创建多层目录
+            StringTokenizer s = new StringTokenizer(fullPathNoName, "/");
+            s.countTokens();
+            String pathName = "";
+            while (s.hasMoreElements()) {
+                pathName = pathName + "/" + (String) s.nextElement();
+                try {
+                    ftpUtil.mkdir(pathName);
+                } catch (Exception e) {
+                    logger.error("ftp文件夹创建失败");
+                }
+            }
+            if(fullPathNoName != null){
+                ftpUtil.changeDirectory(fullPathNoName);
+            }
+            if(fileName != null){
+                ftpUtil.upload(fileName,inputStream);
+            }
+        }catch (Exception e){
+            logger.error("ftp上载出错");
+        } finally {
+            if(inputStream != null){
+                inputStream.close();
+            }
+        }
+    }
+
+    @Override
+    public void downloadFile(FtpFileVO ftpFileVO, HttpServletResponse response) throws Exception {
         OutputStream outputStream = null;
-        String fullPathNoName = rootPath + sourceType + documentPath;
+        String fullPathNoName = rootPath;
         FTPUtil ftpUtil = new FTPUtil(ftpConfig);
         ftpUtil.open();
         ftpUtil.setMode(FTPConstant.PASSIVE_MODE);
         ftpUtil.setFileType(FTPConstant.BIN);
         try {
-            InputStream inputStream = downloadDocumentFromFtp(ftpUtil, fullPathNoName, documentRealName);
+            InputStream inputStream = downloadDocumentFromFtp(ftpUtil, fullPathNoName, ftpFileVO.getFileUuidName());
             if (null == inputStream) {
                 BusinessException.throwBusinessException(ErrorCode.CODE_FILE_NOTFOUND);
             }
             outputStream = response.getOutputStream();
-            String newDocumentName = URLEncoder.encode(documentName, "UTF-8").replaceAll("\\+", "%20").
+            String newDocumentName = URLEncoder.encode(ftpFileVO.getFileName(), "UTF-8").replaceAll("\\+", "%20").
                     replaceAll("%28", "\\(").replaceAll("%29", "\\)").replaceAll("%3B", ";").
                     replaceAll("%40", "@").replaceAll("%23", "\\#").replaceAll("%26", "\\&");
             response.reset();

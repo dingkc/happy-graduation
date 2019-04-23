@@ -6,6 +6,7 @@ import com.bttc.HappyGraduation.business.ftp.pojo.vo.FtpFileVO;
 import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -15,6 +16,8 @@ import java.util.List;
 public interface IFtpFileSV {
 
     void uploadFile(MultipartFile file, Integer parentFileId) throws Exception;
+
+    void downloadFile(FtpFileVO ftpFileVO, HttpServletResponse response) throws Exception;
 
     void saveUploadFile(FtpFilePO ftpFilePO) throws BusinessException;
 
