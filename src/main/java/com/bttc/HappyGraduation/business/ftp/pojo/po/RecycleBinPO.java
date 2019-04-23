@@ -36,6 +36,11 @@ public class RecycleBinPO {
     @Column(columnDefinition = "datetime COMMENT '删除时间'", nullable=false)
     private Date doneDate;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @Column(columnDefinition = "datetime COMMENT '到期时间'", nullable=false)
+    private Date expireDate;
+
     @Column(columnDefinition="int(10) COMMENT '删除人id'")
     private Integer operatorId;
 
@@ -104,5 +109,13 @@ public class RecycleBinPO {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+    public Date getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(Date expireDate) {
+        this.expireDate = expireDate;
     }
 }

@@ -18,6 +18,9 @@ public class RecycleBinVO {
     @Temporal(TemporalType.TIMESTAMP)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date doneDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date expireDate;
     private Integer operatorId;
     private Integer state;
 
@@ -83,5 +86,13 @@ public class RecycleBinVO {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+    public Date getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(Date expireDate) {
+        this.expireDate = expireDate;
     }
 }

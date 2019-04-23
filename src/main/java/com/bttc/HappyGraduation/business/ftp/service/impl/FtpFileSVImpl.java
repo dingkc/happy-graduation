@@ -20,65 +20,21 @@ import com.bttc.HappyGraduation.utils.base.QueryParams;
 import com.bttc.HappyGraduation.utils.constant.CommonConstant;
 import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import com.bttc.HappyGraduation.utils.exception.ErrorCode;
-import org.apache.poi.POIXMLDocumentPart;
-import org.apache.poi.hslf.model.Slide;
-import org.apache.poi.hslf.model.TextRun;
-import org.apache.poi.hslf.usermodel.RichTextRun;
-import org.apache.poi.hslf.usermodel.SlideShow;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.hwpf.HWPFDocument;
-import org.apache.poi.hwpf.converter.PicturesManager;
-import org.apache.poi.hwpf.converter.WordToHtmlConverter;
-import org.apache.poi.hwpf.usermodel.Picture;
-import org.apache.poi.hwpf.usermodel.PictureType;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xslf.extractor.XSLFPowerPointExtractor;
-import org.apache.poi.xslf.usermodel.XMLSlideShow;
-import org.apache.poi.xslf.usermodel.XSLFSlide;
-import org.apache.poi.xssf.usermodel.*;
-import org.apache.poi.xwpf.converter.core.BasicURIResolver;
-import org.apache.poi.xwpf.converter.core.FileImageExtractor;
-import org.apache.poi.xwpf.converter.xhtml.XHTMLConverter;
-import org.apache.poi.xwpf.converter.xhtml.XHTMLOptions;
-import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.openxmlformats.schemas.drawingml.x2006.main.*;
-import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
-import org.openxmlformats.schemas.presentationml.x2006.main.CTGroupShape;
-import org.openxmlformats.schemas.presentationml.x2006.main.CTShape;
-import org.openxmlformats.schemas.presentationml.x2006.main.CTSlide;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.w3c.dom.Document;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URLEncoder;
-import java.nio.file.Paths;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -267,11 +223,11 @@ public class FtpFileSVImpl implements IFtpFileSV {
     }
 
     @Override
-    public void deleteFile(FtpFileVO ftpFileVO) throws BusinessException {
+    public void deleteFile(Integer ftpFileId) throws BusinessException {
         //ftp删除
 
         //文件表删除记录
-        FtpFilePO ftpFilePO = BeanMapperUtil.map(ftpFileVO, FtpFilePO.class);
+        FtpFilePO ftpFilePO = ftpFileDao.queryAllByFtpFileIdAndState(ftpFileId, CommonConstant.CommonState.EFFECT.getValue());
         ftpFilePO.setState(CommonConstant.CommonState.INVALID.getValue());
         ftpFileDao.save(ftpFilePO);
         //回收站新增记录
@@ -281,9 +237,22 @@ public class FtpFileSVImpl implements IFtpFileSV {
         recycleBinVO.setFilePath(ftpFilePO.getFilePath());
         recycleBinVO.setFileSize(ftpFilePO.getFileSize());
         recycleBinVO.setDoneDate(DateUtil.getNowDate());
+        recycleBinVO.setExpireDate(getStatetime());
         recycleBinVO.setOperatorId(SessionManager.getUserInfo().getUserId());
         recycleBinVO.setState(CommonConstant.CommonState.EFFECT.getValue());
         iRecycleBinSV.addRecord(recycleBinVO);
+    }
+
+    /**
+     * 获取未来 第 past 天的日期
+     * @return
+     */
+    public Date getStatetime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, +7);
+        Date time = c.getTime();
+        return time;
     }
 
     @Override

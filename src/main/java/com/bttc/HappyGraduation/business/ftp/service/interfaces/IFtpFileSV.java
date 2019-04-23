@@ -21,7 +21,7 @@ public interface IFtpFileSV {
 
     void saveUploadFile(FtpFilePO ftpFilePO) throws BusinessException;
 
-    void deleteFile(FtpFileVO ftpFileVO) throws BusinessException;
+    void deleteFile(Integer ftpFileId) throws BusinessException;
 
     void updateFile(FtpFilePO ftpFilePO) throws BusinessException;
 

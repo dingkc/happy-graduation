@@ -81,13 +81,12 @@ public class FileController {
      * <p>Description: 删除文件接口</p>
      * @Author: Dk
      * @param ftpFileId : 文件编号
-     * @param ftpFileVO : 文件信息
      * @return: com.bttc.HappyGraduation.common.ResultBean
      * @Date: 2019/4/5 20:50
      **/
     @DeleteMapping(value = "${apiVersion1}/ftpFiles/{ftpFileId}")
-    public ResultBean deleteFile(@PathVariable Integer ftpFileId, @RequestBody FtpFileVO ftpFileVO) throws BusinessException {
-        iFtpFileSV.deleteFile(ftpFileVO);
+    public ResultBean deleteFile(@PathVariable Integer ftpFileId) throws BusinessException {
+        iFtpFileSV.deleteFile(ftpFileId);
         return ResultBean.ok(null);
     }
 
