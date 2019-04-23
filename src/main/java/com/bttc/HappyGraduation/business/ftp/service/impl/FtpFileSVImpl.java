@@ -165,7 +165,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
                     replaceAll("%40", "@").replaceAll("%23", "\\#").replaceAll("%26", "\\&");
             response.reset();
             response.setContentType("multipart/from-date");
-            response.setHeader("Content-Disposition", "attachment;filename=" + newDocumentName);
+            response.setHeader("Content-Disposition", "attachment;filename=" + ftpFileVO.getFileUuidName());
             byte[] b = new byte[1024];
             int n;// 每次读取到的字节数组的长度
             while ((n = inputStream.read(b)) != -1) {
@@ -401,6 +401,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
             FtpFilePO ftpFilePO = BeanMapperUtil.map(ftpFileVO, FtpFilePO.class);
             ftpFilePO.setDoneDate(DateUtil.getNowDate());
             ftpFilePO.setOperatorId(SessionManager.getUserInfo().getUserId());
+            ftpFilePO.setState(CommonConstant.CommonState.EFFECT.getValue());
             ftpFileDao.save(ftpFilePO);
         }
     }

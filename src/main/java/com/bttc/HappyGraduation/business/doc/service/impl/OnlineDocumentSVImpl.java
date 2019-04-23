@@ -119,7 +119,7 @@ public class OnlineDocumentSVImpl implements IOnlineDocumentSV {
         FtpFileVO ftpFileVO = Optional.ofNullable(iFtpFileSV.queryFileByFileId(Optional.ofNullable(ftpFileId).orElseThrow(() -> new BusinessException(ErrorCode.PARAMETER_NULL, "文件编号")))).orElseThrow(() -> new BusinessException(ErrorCode.FILE_IS_EMPTY));
         FtpFilePO ftpFilePO = BeanMapperUtil.map(ftpFileVO, FtpFilePO.class);
         //判断文件种类并解析
-        String fullPathNoName = rootPath  + ftpFilePO.getFilePath();
+        String fullPathNoName = rootPath;
         InputStream inputStream = null;
         OutputStream outputStream = null;
         //检查文件输入流的大小
@@ -128,7 +128,7 @@ public class OnlineDocumentSVImpl implements IOnlineDocumentSV {
         ftpUtil.open();
         ftpUtil.setMode(FTPConstant.PASSIVE_MODE);
         ftpUtil.setFileType(FTPConstant.BIN);
-        inputStream = downloadDocumentFromFtp(ftpUtil, fullPathNoName, ftpFilePO.getFileName());
+        inputStream = downloadDocumentFromFtp(ftpUtil, fullPathNoName, ftpFilePO.getFileUuidName());
         File imageFolder = new File(getTemplateFilePath());
         if (!imageFolder.exists()) {
             //本地图片存放目录不存在则创建
@@ -263,7 +263,7 @@ public class OnlineDocumentSVImpl implements IOnlineDocumentSV {
         ftpUtil.open();
         ftpUtil.setMode(FTPConstant.PASSIVE_MODE);
         ftpUtil.setFileType(FTPConstant.BIN);
-        InputStream inputStream = downloadDocumentFromFtp(ftpUtil, fullPathNoName, ftpFilePO.getFileName());
+        InputStream inputStream = downloadDocumentFromFtp(ftpUtil, fullPathNoName, ftpFilePO.getFileUuidName());
         if (null != inputStream) {
             long fileSize = 0;
             byte[] b = new byte[1024];
