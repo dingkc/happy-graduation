@@ -6,12 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- *  
  * <p>Title: DateUtil</p>  
  * <p>Description: 时间转换工具类</p>  
- *
- * @author liuxf6  
- * @date 2018年4月17日  
  */
 public class DateUtil {
 

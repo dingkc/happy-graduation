@@ -1,11 +1,6 @@
 package com.bttc.HappyGraduation.common;
 
-/**
-* <p>Title: ResultBean</p>
-* <p>Description: 后端返回给前端的输出参数</p> 
-* @author liuxf6
-* @date 2018年5月18日
-*/
+
 public class ResultBean {
 	
 	

@@ -8,15 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 
-/**  
-* <p>Title: FastjsonConfig</p>  
-* <p>Description: fastJson配置类</p>  
-* @author liuxf6  
-* @date 2018年4月13日  
-*/
 @Configuration
 public class FastjsonConfig {
-
     @Bean
     public HttpMessageConverters fastJsonHttpMessageConverters(){
         //1.需要定义一个Convert转换消息的对象
@@ -30,5 +23,4 @@ public class FastjsonConfig {
         HttpMessageConverter<?> converter = fastConverter;
         return new HttpMessageConverters(converter);
     }
-
 }

@@ -3,7 +3,6 @@ package com.bttc.HappyGraduation.controller;
 import com.bttc.HappyGraduation.business.doc.service.interfaces.IWordToHtml;
 import com.bttc.HappyGraduation.business.ftp.pojo.vo.FtpFileVO;
 import com.bttc.HappyGraduation.business.ftp.service.interfaces.IFtpFileSV;
-import com.bttc.HappyGraduation.business.note.pojo.vo.NoteVO;
 import com.bttc.HappyGraduation.common.ResultBean;
 import com.bttc.HappyGraduation.utils.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,8 +71,7 @@ public class FileController {
      **/
     @PostMapping(value = "${apiVersion1}/ftpFiles/{ftpFileId}/previews")
     public ResultBean previewFile(@PathVariable Integer ftpFileId) {
-        iFtpFileSV.previewFile(ftpFileId);
-        return ResultBean.ok(null);
+        return ResultBean.ok(iFtpFileSV.previewFile(ftpFileId));
     }
 
     /**
@@ -139,7 +137,7 @@ public class FileController {
      * <p>Description: 移动文件或重命名文件</p>
      * @Author: Dk
      * @param ftpFileId : 文件编号
-     * @param ftpFileVO : 问价信息
+     * @param ftpFileVO : 文件信息
      * @return: com.bttc.HappyGraduation.common.ResultBean
      * @Date: 2019/4/23 9:52
      **/
