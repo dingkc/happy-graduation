@@ -417,7 +417,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
             parentFileVO.setFileSize(String.valueOf(newFileSize));
             parentFileVO.setDoneDate(DateUtil.getNowDate());
             parentFileVO.setOperatorId(SessionManager.getUserInfo().getUserId());
-            ftpFileDao.save(BeanMapperUtil.map(parentFileVO, FtpFilePO.class));
+            ftpFileDao.updateBeans(BeanMapperUtil.map(parentFileVO, FtpFilePO.class));
         } else if (null != ftpFileVO.getNewParentFileId() && (-1) == ftpFileVO.getNewParentFileId()) {
             //移动到最外层目录
             FtpFilePO ftpFilePO = BeanMapperUtil.map(ftpFileVO, FtpFilePO.class);
@@ -425,14 +425,14 @@ public class FtpFileSVImpl implements IFtpFileSV {
             ftpFilePO.setParentFileId(null);
             ftpFilePO.setOperatorId(SessionManager.getUserInfo().getUserId());
             ftpFilePO.setState(CommonConstant.CommonState.EFFECT.getValue());
-            ftpFileDao.save(ftpFilePO);
+            ftpFileDao.updateBeans(ftpFilePO);
         } else {
             //编辑
             FtpFilePO ftpFilePO = BeanMapperUtil.map(ftpFileVO, FtpFilePO.class);
             ftpFilePO.setDoneDate(DateUtil.getNowDate());
             ftpFilePO.setOperatorId(SessionManager.getUserInfo().getUserId());
             ftpFilePO.setState(CommonConstant.CommonState.EFFECT.getValue());
-            ftpFileDao.save(ftpFilePO);
+            ftpFileDao.updateBeans(ftpFilePO);
         }
     }
 }
