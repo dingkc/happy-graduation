@@ -51,4 +51,10 @@ public class RecycleBinController {
         return ResultBean.ok(null);
     }
 
+    @DeleteMapping(value = "${apiVersion1}/recycle-bins-all")
+    public ResultBean emptinessRecycleBin() {
+        iRecycleBinSV.emptinessRecycleBin();
+        return ResultBean.ok(null);
+    }
+
 }

@@ -22,4 +22,6 @@ public interface IRecycleBinSV {
     RecycleBinListVO queryByCondition(String recycleBinName, Integer pageNumber, Integer pageSize);
 
     void returnFile(Integer recycleBinId) throws BusinessException;
+
+    void emptinessRecycleBin();
 }

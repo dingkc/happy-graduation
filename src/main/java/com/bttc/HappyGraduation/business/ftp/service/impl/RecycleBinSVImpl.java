@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Dk
@@ -83,5 +84,14 @@ public class RecycleBinSVImpl implements IRecycleBinSV {
         RecycleBinPO recycleBinPO = deleteRecord(recycleBinId);
         FtpFilePO ftpFilePO = BeanMapperUtil.map(iFtpFileSV.queryFileByFileId(recycleBinPO.getFtpFileId()), FtpFilePO.class);
         iFtpFileSV.updateFile(ftpFilePO);
+    }
+
+    @Override
+    public void emptinessRecycleBin() {
+        RecycleBinPO recycleBinPO = new RecycleBinPO();
+        recycleBinPO.setState(CommonConstant.CommonState.EFFECT.getValue());
+        List<RecycleBinPO> beans = recycleBinDao.getBeans(recycleBinPO);
+        beans.stream().forEach( r -> r.setState(CommonConstant.CommonState.INVALID.getValue()));
+        recycleBinDao.batchUpdate(beans);
     }
 }
