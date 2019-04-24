@@ -1,9 +1,11 @@
 package com.bttc.HappyGraduation.business.ftp.service.impl;
 
 import com.bttc.HappyGraduation.business.ftp.dao.RecycleBinDao;
+import com.bttc.HappyGraduation.business.ftp.pojo.po.FtpFilePO;
 import com.bttc.HappyGraduation.business.ftp.pojo.po.RecycleBinPO;
 import com.bttc.HappyGraduation.business.ftp.pojo.vo.RecycleBinListVO;
 import com.bttc.HappyGraduation.business.ftp.pojo.vo.RecycleBinVO;
+import com.bttc.HappyGraduation.business.ftp.service.interfaces.IFtpFileSV;
 import com.bttc.HappyGraduation.business.ftp.service.interfaces.IRecycleBinSV;
 import com.bttc.HappyGraduation.common.BeanMapperUtil;
 import com.bttc.HappyGraduation.common.DateUtil;
@@ -30,6 +32,9 @@ public class RecycleBinSVImpl implements IRecycleBinSV {
     @Autowired
     private RecycleBinDao recycleBinDao;
 
+    @Autowired
+    private IFtpFileSV iFtpFileSV;
+
     @Override
     public void addRecord(RecycleBinVO recycleBinVO) throws BusinessException {
         RecycleBinPO recycleBinPO = BeanMapperUtil.map(recycleBinVO, RecycleBinPO.class);
@@ -41,11 +46,12 @@ public class RecycleBinSVImpl implements IRecycleBinSV {
     }
 
     @Override
-    public void deleteRecord(Integer recycleBinId) {
-        RecycleBinPO recycleBinPO = new RecycleBinPO();
+    public RecycleBinPO deleteRecord(Integer recycleBinId) throws BusinessException {
+        RecycleBinPO recycleBinPO = BeanMapperUtil.map(queryById(recycleBinId), RecycleBinPO.class);
         recycleBinPO.setState(CommonConstant.CommonState.INVALID.getValue());
         recycleBinPO.setRecycleBinId(recycleBinId);
-        recycleBinDao.save(recycleBinPO);
+        recycleBinDao.updateBeans(recycleBinPO);
+        return recycleBinPO;
     }
 
     @Override
@@ -70,5 +76,12 @@ public class RecycleBinSVImpl implements IRecycleBinSV {
         recycleBinListVO.setRows(BeanMapperUtil.mapList(beans.getContent(), RecycleBinPO.class, RecycleBinVO.class));
         recycleBinListVO.setTotal((int)beans.getTotalElements());
         return recycleBinListVO;
+    }
+
+    @Override
+    public void returnFile(Integer recycleBinId) throws BusinessException {
+        RecycleBinPO recycleBinPO = deleteRecord(recycleBinId);
+        FtpFilePO ftpFilePO = BeanMapperUtil.map(iFtpFileSV.queryFileByFileId(recycleBinPO.getFtpFileId()), FtpFilePO.class);
+        iFtpFileSV.updateFile(ftpFilePO);
     }
 }

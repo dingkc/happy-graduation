@@ -11,6 +11,7 @@ import java.util.Date;
  */
 public class RecycleBinVO {
     private Integer recycleBinId;
+    private Integer ftpFileId;
     private String fileName;
     private String fileType;
     private Long fileSize;
@@ -30,6 +31,14 @@ public class RecycleBinVO {
 
     public void setRecycleBinId(Integer recycleBinId) {
         this.recycleBinId = recycleBinId;
+    }
+
+    public Integer getFtpFileId() {
+        return ftpFileId;
+    }
+
+    public void setFtpFileId(Integer ftpFileId) {
+        this.ftpFileId = ftpFileId;
     }
 
     public String getFileName() {

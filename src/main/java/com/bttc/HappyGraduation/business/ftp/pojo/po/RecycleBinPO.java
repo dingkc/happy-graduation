@@ -19,6 +19,9 @@ public class RecycleBinPO {
     @Column(columnDefinition="int(10) COMMENT '回收站文件编号'")
     private Integer recycleBinId;
 
+    @Column(columnDefinition="int(10) COMMENT '文件编号'")
+    private Integer ftpFileId;
+
     @Column(columnDefinition="varchar(255) COMMENT '文件名称'", nullable=false)
     private String fileName;
 
@@ -53,6 +56,14 @@ public class RecycleBinPO {
 
     public void setRecycleBinId(Integer recycleBinId) {
         this.recycleBinId = recycleBinId;
+    }
+
+    public Integer getFtpFileId() {
+        return ftpFileId;
+    }
+
+    public void setFtpFileId(Integer ftpFileId) {
+        this.ftpFileId = ftpFileId;
     }
 
     public String getFileName() {

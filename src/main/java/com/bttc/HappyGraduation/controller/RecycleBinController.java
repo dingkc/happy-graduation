@@ -24,7 +24,7 @@ public class RecycleBinController {
     }
 
     @DeleteMapping(value = "${apiVersion1}/recycle-bins/{recycleBinId}")
-    public ResultBean deleteRecord(@PathVariable Integer recycleBinId) {
+    public ResultBean deleteRecord(@PathVariable Integer recycleBinId) throws BusinessException {
         iRecycleBinSV.deleteRecord(recycleBinId);
         return ResultBean.ok(null);
     }
@@ -43,6 +43,12 @@ public class RecycleBinController {
     @GetMapping(value = "${apiVersion1}/recycle-bins")
     public ResultBean queryRecycleBins(@RequestParam(required = false) String recycleBinName, @RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
         return ResultBean.ok(iRecycleBinSV.queryByCondition(recycleBinName, pageNumber, pageSize));
+    }
+
+    @PutMapping(value = "${apiVersion1}/recycle-bins/{recycleBinId}/returns")
+    public ResultBean returnFile(@PathVariable Integer recycleBinId) throws BusinessException {
+        iRecycleBinSV.returnFile(recycleBinId);
+        return ResultBean.ok(null);
     }
 
 }
