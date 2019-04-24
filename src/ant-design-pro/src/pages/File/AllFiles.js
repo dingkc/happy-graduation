@@ -375,7 +375,6 @@ export default class AllFiles extends PureComponent{
     const { dispatch } = this.props;
     const thiz = this;
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log('values=== ',values)
       if (!err) {
         const params = {
           fileType: 'dir',
@@ -387,15 +386,18 @@ export default class AllFiles extends PureComponent{
         })
         dispatch({
           type: 'file/addFile',
-          payload: params
-        }).then((response) => {
-          thiz.getFileList();
-        });
+          payload: params,
+          callback(rep){
+            thiz.getFileList();
+            thiz.props.form.resetFields();
+          }
+        })
       }
     })
   }
 
   handleAddCancle = () => {
+    this.props.form.resetFields();
     this.setState({
       addVisible: false
     })
