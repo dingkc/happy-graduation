@@ -27,4 +27,6 @@ public interface FtpFileDao extends BaseRepository<FtpFilePO, Integer> {
     List<FtpFilePO> queryAllByStateAndFilePreviewIsNull(Integer state);
 
     List<FtpFilePO> queryAllByStateAndParentFileIdAndCreatorId(Integer state, Integer parentFileId, Integer userId);
+
+    FtpFilePO queryByFtpFileId(Integer ftpFileId);
 }

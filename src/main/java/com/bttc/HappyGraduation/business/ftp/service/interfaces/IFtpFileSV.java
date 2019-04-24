@@ -25,6 +25,8 @@ public interface IFtpFileSV {
 
     void updateFile(FtpFilePO ftpFilePO) throws BusinessException;
 
+    void updateFileToRecycleBin(FtpFilePO ftpFilePO) throws BusinessException;
+
     FtpFileVO queryFileByFileId(Integer fileId);
 
     FtpFileListVO queryFileByConditions(Integer parentFileId, String fileType, Integer pageNumber, Integer pageSize, String fileName) throws BusinessException;
@@ -36,6 +38,8 @@ public interface IFtpFileSV {
     void addDir( FtpFileVO ftpFileVO) throws BusinessException;
 
     void updateFtpFile(Integer ftpFileId, FtpFileVO ftpFileVO) throws BusinessException;
+
+    FtpFilePO queryFileByFileIdNoState(Integer fileId);
 
 //    FtpFileVO parserDocument(FtpFilePO ftpFilePO);
 //

@@ -82,8 +82,8 @@ public class RecycleBinSVImpl implements IRecycleBinSV {
     @Override
     public void returnFile(Integer recycleBinId) throws BusinessException {
         RecycleBinPO recycleBinPO = deleteRecord(recycleBinId);
-        FtpFilePO ftpFilePO = BeanMapperUtil.map(iFtpFileSV.queryFileByFileId(recycleBinPO.getFtpFileId()), FtpFilePO.class);
-        iFtpFileSV.updateFile(ftpFilePO);
+        FtpFilePO ftpFilePO = iFtpFileSV.queryFileByFileIdNoState(recycleBinPO.getFtpFileId());
+        iFtpFileSV.updateFileToRecycleBin(ftpFilePO);
     }
 
     @Override

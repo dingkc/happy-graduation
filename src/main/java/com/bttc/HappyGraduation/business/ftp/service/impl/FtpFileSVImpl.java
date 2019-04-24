@@ -231,11 +231,12 @@ public class FtpFileSVImpl implements IFtpFileSV {
         //文件表删除记录
         FtpFilePO ftpFilePO = ftpFileDao.queryAllByFtpFileIdAndState(ftpFileId, CommonConstant.CommonState.EFFECT.getValue());
         ftpFilePO.setState(CommonConstant.CommonState.INVALID.getValue());
-        ftpFileDao.save(ftpFilePO);
+        ftpFileDao.updateBeans(ftpFilePO);
         //回收站新增记录
         RecycleBinVO recycleBinVO = new RecycleBinVO();
         recycleBinVO.setFileName(ftpFilePO.getFileName());
         recycleBinVO.setFileType(ftpFilePO.getFileType());
+        recycleBinVO.setFtpFileId(ftpFilePO.getFtpFileId());
         recycleBinVO.setFilePath(ftpFilePO.getFilePath());
         recycleBinVO.setFileSize(ftpFilePO.getFileSize());
         recycleBinVO.setDoneDate(DateUtil.getNowDate());
@@ -402,6 +403,15 @@ public class FtpFileSVImpl implements IFtpFileSV {
     }
 
     @Override
+    public void updateFileToRecycleBin(FtpFilePO ftpFilePO) throws BusinessException {
+        ftpFilePO = Optional.ofNullable(ftpFilePO).orElseThrow(() -> new BusinessException(ErrorCode.FILE_IS_EMPTY));
+        ftpFilePO.setDoneDate(DateUtil.getNowDate());
+        ftpFilePO.setOperatorId(1);
+        ftpFilePO.setState(CommonConstant.CommonState.EFFECT.getValue());
+        ftpFileDao.updateBeans(ftpFilePO);
+    }
+
+    @Override
     public void addDir(FtpFileVO ftpFileVO) throws BusinessException {
         Integer userId = SessionManager.getUserInfo().getUserId();
         Date nowDate = DateUtil.getNowDate();
@@ -445,5 +455,10 @@ public class FtpFileSVImpl implements IFtpFileSV {
             ftpFilePO.setState(CommonConstant.CommonState.EFFECT.getValue());
             ftpFileDao.updateBeans(ftpFilePO);
         }
+    }
+
+    @Override
+    public FtpFilePO queryFileByFileIdNoState(Integer fileId) {
+        return ftpFileDao.queryByFtpFileId(fileId);
     }
 }
