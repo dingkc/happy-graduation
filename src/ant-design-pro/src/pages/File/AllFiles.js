@@ -165,7 +165,7 @@ export default class AllFiles extends PureComponent{
                   <img src={shareIcon} />
                 </Tooltip>
                 <Tooltip placement="top" title='下载'>
-                  <a href={`${RequestUtils.requestPath}/ftpFiles/downloads?fileUuidName=${record.fileUuidName}&fileName=${record.fileName}}`} download="">
+                  <a href={`${RequestUtils.requestPath}/ftpFiles/downloads?fileUuidName=${record.fileUuidName}&fileName=${record.fileName}`} download="">
                     <img src={downloadIcon} className={styles.marginIcon} onClick={() => this.downloadFile(record.fileUuidName, record.fileName)}/>
                   </a>
                 </Tooltip>
