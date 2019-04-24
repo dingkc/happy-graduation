@@ -3,14 +3,19 @@ import {Menu, Icon, Layout} from 'antd';
 import { connect } from 'dva';
 import Link from "umi/link";
 import AllFiles from './AllFiles';
+import RecycleList from './RecycleList';
 
 const { Content, Sider } = Layout;
 const { SubMenu } = Menu;
+const MenuItemGroup = Menu.ItemGroup;
 
 @connect(({ menu }) => ({
   menu
 }))
 export default class FileLayout extends PureComponent{
+  state = {
+    menuKey: 'file',
+  };
   getNavMenuItems = menusData => {
     if (!menusData) {
       return [];
@@ -95,34 +100,48 @@ export default class FileLayout extends PureComponent{
     );
   };
 
+  menuClick = (item) => {
+    console.log('item====',item)
+    this.setState({
+      menuKey: item.key
+    })
+  }
+
 
   render() {
     const { menuData } = this.props.menu;
+    const { menuKey } = this.state;
     console.log('布局menuData=====',menuData)
     return (
       <Layout style={{ padding: '24px 0', background: '#fff' }}>
         <Sider width={200} style={{ background: '#fff' }}>
           <Menu
             mode="inline"
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
+            defaultSelectedKeys={['file']}
+            // defaultOpenKeys={['sub1']}
             style={{ height: '100%' }}
+            onClick={this.menuClick}
           >
             {/*{this.getNavMenuItems(menuData.children)}*/}
             {/*{menuData.map((item) => this.getSubMenu(item))}*/}
-            <SubMenu key="sub1" title={<span><Icon type="file-text" />文件</span>}>
-              <Menu.Item key="1">文件夹</Menu.Item>
+            {/*<SubMenu key="sub1" title={<span><Icon type="file-text" />文件</span>}>*/}
+            {/*<MenuItemGroup title={<span><Icon type="file-text" /> 全部文件</span>}>*/}
+              <Menu.Item key="file"><Icon type="file-text" /> 文件夹</Menu.Item>
               {/*<Menu.Item key="2">图片</Menu.Item>*/}
               {/*<Menu.Item key="3">文档</Menu.Item>*/}
               {/*<Menu.Item key="4">视频</Menu.Item>*/}
               {/*<Menu.Item key="5">音乐</Menu.Item>*/}
-            </SubMenu>
-            <SubMenu key="sub2" title={<span><Icon type="delete" />回收站</span>}>
-            </SubMenu>
+            {/*</SubMenu>*/}
+            {/*<SubMenu key="sub2" title={<span><Icon type="delete" />回收站</span>}>*/}
+            {/*</SubMenu>*/}
+            {/*</MenuItemGroup>*/}
+            {/*<MenuItemGroup title={<span><Icon type="delete" /> 全部文件</span>}>*/}
+              <Menu.Item key='recycle'><Icon type="delete" /> 回收站</Menu.Item>
+            {/*</MenuItemGroup>*/}
           </Menu>
         </Sider>
         <Content>
-          <AllFiles />
+          {menuKey === 'file' ? <AllFiles /> : <RecycleList />}
         </Content>
       </Layout>
     );

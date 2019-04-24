@@ -5,7 +5,7 @@ import {
   deleteFile,
   downloadFile,
   moveFile,
-  uploadFile
+  addFile
 }
   from '@/services/fileApi';
 
@@ -60,18 +60,10 @@ export default {
 
     *deleteFile({ payload }, { call, put }) {
       const responseJSON = yield call(deleteFile, payload);
-      // console.log(response)
       const response = JSON.parse(responseJSON);
       if(response){
         if(response.status === '0'){
           message.success('删除成功');
-          // yield put({
-          //   type: 'getFileList',
-          //   payload: {
-          //     pageNumber: 1,
-          //     pageSize: 10,
-          //   }
-          // })
         }
         else {
           message.error(response.errMessage);
@@ -105,14 +97,14 @@ export default {
       }
     },
 
-    *uploadFile({ payload }, { call, put }) {
-      const response = yield call(uploadFile, payload);
+    *addFile({ payload }, { call, put }) {
+      const response = yield call(addFile,payload);
       if(response){
         if(response.status === '0'){
-          message.success('上传成功')
+          message.success('新建成功')
         }
         else {
-          message.error(response.errMessage)
+          message.error(response.errMessage);
         }
       }
     },
@@ -147,7 +139,6 @@ export default {
       let { moveFiles } = state;
       moveFiles.moveFilesPagination.current = action.params.pageNumber;
       moveFiles.moveFilesList = action.payload.data.rows;
-      // moveFiles.moveFilesPagination.total = action.payload.data.total;
       return{
         ...state,
         moveFiles,
