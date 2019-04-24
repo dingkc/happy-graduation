@@ -126,7 +126,7 @@ export default class FileLayout extends PureComponent{
             {/*{menuData.map((item) => this.getSubMenu(item))}*/}
             {/*<SubMenu key="sub1" title={<span><Icon type="file-text" />文件</span>}>*/}
             {/*<MenuItemGroup title={<span><Icon type="file-text" /> 全部文件</span>}>*/}
-              <Menu.Item key="file"><Icon type="file-text" /> 文件夹</Menu.Item>
+              <Menu.Item key="file"><Icon type="file-text" /> 全部文件</Menu.Item>
               {/*<Menu.Item key="2">图片</Menu.Item>*/}
               {/*<Menu.Item key="3">文档</Menu.Item>*/}
               {/*<Menu.Item key="4">视频</Menu.Item>*/}
