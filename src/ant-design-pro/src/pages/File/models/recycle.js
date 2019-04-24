@@ -66,7 +66,7 @@ export default {
       const response = JSON.parse(responseJSON);
       if(response){
         if(response.status === '0'){
-
+          message.success("回收站已清空");
         }
         else {
           message.error(response.errMessage);
