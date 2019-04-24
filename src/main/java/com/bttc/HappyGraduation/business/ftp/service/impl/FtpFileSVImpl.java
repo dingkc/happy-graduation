@@ -395,6 +395,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
         Integer userId = SessionManager.getUserInfo().getUserId();
         Date nowDate = DateUtil.getNowDate();
         FtpFilePO ftpFilePO = BeanMapperUtil.map(ftpFileVO, FtpFilePO.class);
+        ftpFilePO.setFileSize(0L);
         ftpFilePO.setCreatorId(userId);
         ftpFilePO.setCreateDate(nowDate);
         ftpFilePO.setDoneDate(nowDate);
