@@ -97,11 +97,12 @@ export default {
       }
     },
 
-    *addFile({ payload }, { call, put }) {
+    *addFile({ payload, callback }, { call, put }) {
       const response = yield call(addFile,payload);
       if(response){
         if(response.status === '0'){
           message.success('新建成功')
+          callback(response)
         }
         else {
           message.error(response.errMessage);
