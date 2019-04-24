@@ -166,7 +166,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
                     replaceAll("%40", "@").replaceAll("%23", "\\#").replaceAll("%26", "\\&");
             response.reset();
             response.setContentType("multipart/from-date");
-            response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+            response.setHeader("Content-Disposition", "attachment;filename=" + newDocumentName);
             byte[] b = new byte[1024];
             int n;// 每次读取到的字节数组的长度
             while ((n = inputStream.read(b)) != -1) {
@@ -275,7 +275,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
         FtpFileListVO ftpFileListVO = new FtpFileListVO();
         List<FtpFilePO> collect;
         if (null == parentFileId) {
-            collect = beansAutoExceptNull.stream().filter(ftpFile -> ftpFile.getParentFileId() == null).collect(toList());
+            collect = beansAutoExceptNull.stream().filter(ftpFile -> ftpFile.getParentFileId() == -1).collect(toList());
         } else {
             collect = beansAutoExceptNull;
         }
@@ -352,7 +352,18 @@ public class FtpFileSVImpl implements IFtpFileSV {
 
     @Override
     public List<FtpFilePO> queryByXmlIsNull() {
-        return ftpFileDao.queryAllByStateAndFilePreviewIsNull(CommonConstant.CommonState.EFFECT.getValue());
+        QueryParams<FtpFilePO> queryParams = new QueryParams<>(FtpFilePO.class);
+        queryParams.or(Filter.eq("fileType", FtpFileConstant.FileType.DOC.getName()))
+                .or(Filter.eq("fileType", FtpFileConstant.FileType.DOCX.getName()))
+                .or(Filter.eq("fileType", FtpFileConstant.FileType.PPT.getName()))
+                .or(Filter.eq("fileType", FtpFileConstant.FileType.PPTX.getName()))
+                .or(Filter.eq("fileType", FtpFileConstant.FileType.XLS.getName()))
+                .or(Filter.eq("fileType", FtpFileConstant.FileType.XLSX.getName()));
+        FtpFilePO ftpFilePO = new FtpFilePO();
+        ftpFilePO.setFilePreview(null);
+        ftpFilePO.setState(CommonConstant.CommonState.EFFECT.getValue());
+        List<FtpFilePO> beans = ftpFileDao.getBeans(ftpFilePO, queryParams);
+        return beans;
     }
 
     @Override
