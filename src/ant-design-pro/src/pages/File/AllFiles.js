@@ -505,7 +505,7 @@ export default class AllFiles extends PureComponent{
     };
     const props = {
       name: 'file',
-      action: '/api/v1/ftpFiles/uploads',
+      action: '/api/v1/ftpFiles/uploads?parentFileId=-1',
       showUploadList: false,
       onChange:this.uploadFile,
     };
