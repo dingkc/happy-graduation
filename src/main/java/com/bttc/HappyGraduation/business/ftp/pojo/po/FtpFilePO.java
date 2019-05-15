@@ -32,6 +32,9 @@ public class FtpFilePO {
     @Column(columnDefinition="bigint(10) COMMENT '文件大小'", nullable=false)
     private Long fileSize;
 
+    @Column(columnDefinition="varchar(255) COMMENT '文件单位大小'", nullable=false)
+    private String fileUnitSize;
+
     @Column(columnDefinition="varchar(255) COMMENT '文件路径'", nullable=false)
     private String filePath;
 
@@ -163,5 +166,14 @@ public class FtpFilePO {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+
+    public String getFileUnitSize() {
+        return fileUnitSize;
+    }
+
+    public void setFileUnitSize(String fileUnitSize) {
+        this.fileUnitSize = fileUnitSize;
     }
 }

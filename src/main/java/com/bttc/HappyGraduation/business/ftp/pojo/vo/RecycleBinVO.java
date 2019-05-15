@@ -14,7 +14,7 @@ public class RecycleBinVO {
     private Integer ftpFileId;
     private String fileName;
     private String fileType;
-    private Long fileSize;
+    private String fileSize;
     private String filePath;
     @Temporal(TemporalType.TIMESTAMP)
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
@@ -57,11 +57,12 @@ public class RecycleBinVO {
         this.fileType = fileType;
     }
 
-    public Long getFileSize() {
+
+    public String getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(Long fileSize) {
+    public void setFileSize(String fileSize) {
         this.fileSize = fileSize;
     }
 

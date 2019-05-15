@@ -7,6 +7,7 @@ import com.bttc.HappyGraduation.business.ftp.pojo.vo.RecycleBinListVO;
 import com.bttc.HappyGraduation.business.ftp.pojo.vo.RecycleBinVO;
 import com.bttc.HappyGraduation.business.ftp.service.interfaces.IFtpFileSV;
 import com.bttc.HappyGraduation.business.ftp.service.interfaces.IRecycleBinSV;
+import com.bttc.HappyGraduation.business.ftp.utils.FileUtils;
 import com.bttc.HappyGraduation.common.BeanMapperUtil;
 import com.bttc.HappyGraduation.common.DateUtil;
 import com.bttc.HappyGraduation.session.web.SessionManager;
@@ -74,7 +75,9 @@ public class RecycleBinSVImpl implements IRecycleBinSV {
         queryParams.and(Filter.like("fileName",recycleBinName)).and(Filter.eq("state", CommonConstant.CommonState.EFFECT.getValue()));
         Page<RecycleBinPO> beans = recycleBinDao.getBeans(queryParams, pageNumber - 1, pageSize);
         RecycleBinListVO recycleBinListVO = new RecycleBinListVO();
-        recycleBinListVO.setRows(BeanMapperUtil.mapList(beans.getContent(), RecycleBinPO.class, RecycleBinVO.class));
+        List<RecycleBinVO> recycleBinVOS = BeanMapperUtil.mapList(beans.getContent(), RecycleBinPO.class, RecycleBinVO.class);
+        recycleBinVOS.stream().forEach( recycleBinVO -> recycleBinVO.setFileSize(FileUtils.FormetFileSize(Long.valueOf(recycleBinVO.getFileSize()))));
+        recycleBinListVO.setRows(recycleBinVOS);
         recycleBinListVO.setTotal((int)beans.getTotalElements());
         return recycleBinListVO;
     }
@@ -93,5 +96,18 @@ public class RecycleBinSVImpl implements IRecycleBinSV {
         List<RecycleBinPO> beans = recycleBinDao.getBeans(recycleBinPO);
         beans.stream().forEach( r -> r.setState(CommonConstant.CommonState.INVALID.getValue()));
         recycleBinDao.batchUpdate(beans);
+    }
+
+    @Override
+    public void dealState4Task() {
+        RecycleBinPO recycleBinPO = new RecycleBinPO();
+        recycleBinPO.setState(CommonConstant.CommonState.EFFECT.getValue());
+        List<RecycleBinPO> beans = recycleBinDao.getBeans(recycleBinPO);
+        Date nowDate = DateUtil.getNowDate();
+        beans.stream().forEach(r -> {
+            if (-1 == r.getExpireDate().compareTo(nowDate)){
+                r.setState(CommonConstant.CommonState.INVALID.getValue());
+            }
+        });
     }
 }

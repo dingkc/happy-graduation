@@ -5,6 +5,8 @@ import com.bttc.HappyGraduation.business.ftp.pojo.vo.RecycleBinListVO;
 import com.bttc.HappyGraduation.business.ftp.pojo.vo.RecycleBinVO;
 import com.bttc.HappyGraduation.utils.exception.BusinessException;
 
+import java.util.List;
+
 /**
  * @Author: Dk
  * @Date: 2019/3/25 23:08
@@ -24,4 +26,6 @@ public interface IRecycleBinSV {
     void returnFile(Integer recycleBinId) throws BusinessException;
 
     void emptinessRecycleBin();
+
+    void dealState4Task();
 }

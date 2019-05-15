@@ -8,10 +8,7 @@ import com.bttc.HappyGraduation.business.ftp.pojo.vo.FtpFileVO;
 import com.bttc.HappyGraduation.business.ftp.pojo.vo.RecycleBinVO;
 import com.bttc.HappyGraduation.business.ftp.service.interfaces.IFtpFileSV;
 import com.bttc.HappyGraduation.business.ftp.service.interfaces.IRecycleBinSV;
-import com.bttc.HappyGraduation.business.ftp.utils.FTPConfig;
-import com.bttc.HappyGraduation.business.ftp.utils.FTPConstant;
-import com.bttc.HappyGraduation.business.ftp.utils.FTPUtil;
-import com.bttc.HappyGraduation.business.ftp.utils.UploadUtils;
+import com.bttc.HappyGraduation.business.ftp.utils.*;
 import com.bttc.HappyGraduation.common.BeanMapperUtil;
 import com.bttc.HappyGraduation.common.DateUtil;
 import com.bttc.HappyGraduation.session.web.SessionManager;
@@ -112,6 +109,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
         ftpFilePO.setFilePath(fullPathNoName);
         ftpFilePO.setFileSize(size);
         ftpFilePO.setFileType(originalFilename.split("[.]")[1]);
+        ftpFilePO.setFileUnitSize(FileUtils.FormetFileSize(size));
         ftpFilePO.setParentFileId(parentFileId);
         saveUploadFile(ftpFilePO);
     }
@@ -167,7 +165,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
             response.reset();
             response.setContentType("multipart/from-date");
             response.setHeader("Content-Disposition", "attachment;filename=" + newDocumentName);
-            byte[] b = new byte[1024];
+            byte[] b = new byte[2048];
             int n;// 每次读取到的字节数组的长度
             while ((n = inputStream.read(b)) != -1) {
                 outputStream.write(b, 0, n);
@@ -238,7 +236,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
         recycleBinVO.setFileType(ftpFilePO.getFileType());
         recycleBinVO.setFtpFileId(ftpFilePO.getFtpFileId());
         recycleBinVO.setFilePath(ftpFilePO.getFilePath());
-        recycleBinVO.setFileSize(ftpFilePO.getFileSize());
+        recycleBinVO.setFileSize(String.valueOf(ftpFilePO.getFileSize()));
         recycleBinVO.setDoneDate(DateUtil.getNowDate());
         recycleBinVO.setExpireDate(getStatetime());
         recycleBinVO.setOperatorId(SessionManager.getUserInfo().getUserId());
@@ -282,7 +280,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
         }
         List<FtpFileVO> ftpFileVOS = BeanMapperUtil.mapList(collect, FtpFilePO.class, FtpFileVO.class);
         //转换文件大小
-        ftpFileVOS.stream().forEach( ftpFileVO -> ftpFileVO.setFileSize(FormetFileSize(Long.valueOf(ftpFileVO.getFileSize()))));
+        ftpFileVOS.stream().forEach( ftpFileVO -> ftpFileVO.setFileSize(FileUtils.FormetFileSize(Long.valueOf(ftpFileVO.getFileSize()))));
         //创建时间降序
         sortByCreateDate(ftpFileVOS);
         Collections.reverse(ftpFileVOS);
@@ -326,30 +324,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
         });
     }
 
-    /**
-     * 转换文件大小
-     *
-     * @param fileS
-     * @return
-     */
-    private static String FormetFileSize(long fileS) {
-        DecimalFormat df = new DecimalFormat("#.00");
-        String fileSizeString = "";
-        String wrongSize = "0B";
-        if (fileS == 0) {
-            return wrongSize;
-        }
-        if (fileS < 1024) {
-            fileSizeString = df.format((double) fileS) + "B";
-        } else if (fileS < 1048576) {
-            fileSizeString = df.format((double) fileS / 1024) + "KB";
-        } else if (fileS < 1073741824) {
-            fileSizeString = df.format((double) fileS / 1048576) + "MB";
-        } else {
-            fileSizeString = df.format((double) fileS / 1073741824) + "GB";
-        }
-        return fileSizeString;
-    }
+
 
     @Override
     public List<FtpFilePO> queryByXmlIsNull() {
@@ -421,6 +396,17 @@ public class FtpFileSVImpl implements IFtpFileSV {
         ftpFilePO.setCreateDate(nowDate);
         ftpFilePO.setDoneDate(nowDate);
         ftpFilePO.setOperatorId(userId);
+        if (-1 == (ftpFileVO.getParentFileId())) {
+            ftpFilePO.setFilePath("/");
+        } else {
+            FtpFileVO ftpFileVO1 = queryFileByFileId(ftpFileVO.getParentFileId());
+            if (!FtpFileConstant.FileType.DIR.getName().equals(ftpFileVO1.getFileType())) {
+                BusinessException.throwBusinessException(ErrorCode.PARENT_FILE_IS_NOT_DIR);
+            }
+            String path = ftpFileVO1.getFilePath() + ftpFileVO1.getFileName();
+            ftpFilePO.setFilePath(path);
+        }
+
         ftpFilePO.setState(CommonConstant.CommonState.EFFECT.getValue());
         ftpFileDao.save(ftpFilePO);
     }

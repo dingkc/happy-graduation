@@ -98,7 +98,8 @@ public enum ErrorCode {
 
     NOTEPAD_ID_EMPTY("OSRDC_B_00666", "请选择记事本！"),
     FILE_IS_EMPTY("OSRDC_B_00667", "文件信息为空！"),
-    TARGET_FILE_IS_NOT_DIR("OSRDC_B_00668", "不能移动文件到非文件夹下！");
+    TARGET_FILE_IS_NOT_DIR("OSRDC_B_00668", "不能移动文件到非文件夹下！"),
+    PARENT_FILE_IS_NOT_DIR("OSRDC_B_00669", "不支持在文件下创建文件夹！");
 
     private String code;
     private String message;
