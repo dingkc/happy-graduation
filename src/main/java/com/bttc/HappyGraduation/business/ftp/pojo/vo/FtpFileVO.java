@@ -17,6 +17,7 @@ public class FtpFileVO {
     private String fileUuidName;
     private String fileType;
     private String fileSize;
+    private String fileUnitSize;
     private String filePath;
     private Integer parentFileId;
     private Integer newParentFileId;
@@ -69,6 +70,14 @@ public class FtpFileVO {
 
     public void setFileSize(String fileSize) {
         this.fileSize = fileSize;
+    }
+
+    public String getFileUnitSize() {
+        return fileUnitSize;
+    }
+
+    public void setFileUnitSize(String fileUnitSize) {
+        this.fileUnitSize = fileUnitSize;
     }
 
     public String getFilePath() {

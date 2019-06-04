@@ -280,7 +280,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
         }
         List<FtpFileVO> ftpFileVOS = BeanMapperUtil.mapList(collect, FtpFilePO.class, FtpFileVO.class);
         //转换文件大小
-        ftpFileVOS.stream().forEach( ftpFileVO -> ftpFileVO.setFileSize(FileUtils.FormetFileSize(Long.valueOf(ftpFileVO.getFileSize()))));
+//        ftpFileVOS.stream().forEach( ftpFileVO -> ftpFileVO.setFileSize(FileUtils.FormetFileSize(Long.valueOf(ftpFileVO.getFileSize()))));
         //创建时间降序
         sortByCreateDate(ftpFileVOS);
         Collections.reverse(ftpFileVOS);
@@ -392,6 +392,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
         Date nowDate = DateUtil.getNowDate();
         FtpFilePO ftpFilePO = BeanMapperUtil.map(ftpFileVO, FtpFilePO.class);
         ftpFilePO.setFileSize(0L);
+        ftpFilePO.setFileUnitSize(FileUtils.FormetFileSize(0L));
         ftpFilePO.setCreatorId(userId);
         ftpFilePO.setCreateDate(nowDate);
         ftpFilePO.setDoneDate(nowDate);
@@ -435,6 +436,7 @@ public class FtpFileSVImpl implements IFtpFileSV {
             ftpFileDao.updateBeans(ftpFilePO);
         } else {
             //编辑
+            ftpFileVO.setFileSize(queryFileByFileId(ftpFileVO.getFtpFileId()).getFileSize());
             FtpFilePO ftpFilePO = BeanMapperUtil.map(ftpFileVO, FtpFilePO.class);
             ftpFilePO.setDoneDate(DateUtil.getNowDate());
             ftpFilePO.setOperatorId(SessionManager.getUserInfo().getUserId());
