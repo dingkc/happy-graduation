@@ -24,3 +24,5 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+src/main/resources/static/
+src/resources/tempFiles/
