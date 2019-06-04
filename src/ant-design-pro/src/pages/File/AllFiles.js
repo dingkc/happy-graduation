@@ -33,6 +33,8 @@ const Search = Input.Search;
 const InputGroup = Input.Group;
 
 let newParentFileId = -1;
+let moveParentFileId = -1;
+let clickParentFileId  = -1;
 let moveFile = {};
 
 const FormItem = Form.Item;
@@ -188,7 +190,7 @@ export default class AllFiles extends PureComponent{
       {
         key: 'fileSize',
         title: '大小',
-        dataIndex: 'fileSize',
+        dataIndex: 'fileUnitSize',
         width: '20%',
       },
       {
@@ -282,6 +284,7 @@ export default class AllFiles extends PureComponent{
   clickFile = (record,type) => {
     const { dispatch } = this.props;
     if(record.fileType === 'dir' && type !== 'move'){
+      clickParentFileId = record.ftpFileId;
       const params = {
         parentFileId: record.ftpFileId,
       }
@@ -297,7 +300,8 @@ export default class AllFiles extends PureComponent{
         parentFileId: record.ftpFileId,
       }
       this.getMoveFileList(params);
-      newParentFileId = record.ftpFileId
+      // newParentFileId = record.ftpFileId;
+      moveParentFileId = record.ftpFileId;
     }
   }
 
@@ -354,12 +358,23 @@ export default class AllFiles extends PureComponent{
 
   handleOk = () => {
     const { dispatch } = this.props;
+    const thiz = this;
+    const param = {
+      pageNumber: 1,
+      pageSize: 10
+    };
+    const breads = [];
     let params = moveFile;
-    params.newParentFileId = newParentFileId;
+    params.parentFileId = moveParentFileId;
     params.ftpFileId = Number(params.ftpFileId)
     dispatch({
       type: 'file/moveFile',
       payload: params
+    }).then((status) => {
+      // newParentFileId = -1;
+      moveParentFileId = -1;
+      thiz.getFileList(param);
+      thiz.cleanParams(breads);
     })
     this.setState({
       visible: false
@@ -381,7 +396,7 @@ export default class AllFiles extends PureComponent{
         const params = {
           fileType: 'dir',
           fileName: values.fileName,
-          parentFileId: newParentFileId,
+          parentFileId: clickParentFileId,
         };
         this.setState({
           addVisible: false
@@ -391,6 +406,7 @@ export default class AllFiles extends PureComponent{
           payload: params,
           callback(rep){
             thiz.getFileList();
+            thiz.cleanParams([]);
             thiz.props.form.resetFields();
           }
         })
@@ -462,6 +478,7 @@ export default class AllFiles extends PureComponent{
       payload: params,
     }).then((response) => {
       thiz.getFileList();
+      thiz.backToMain();
     });
   }
 

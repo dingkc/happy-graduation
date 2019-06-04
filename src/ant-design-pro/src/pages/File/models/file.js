@@ -114,7 +114,8 @@ export default {
       const response = yield call(moveFile, payload);
       if(response){
         if(response.status === '0'){
-          message.success('移动成功')
+          message.success('移动成功');
+          return true;
         }
         else {
           message.error(response.errMessage);
