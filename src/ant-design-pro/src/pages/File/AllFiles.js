@@ -54,7 +54,7 @@ class EditableCell extends React.Component {
     const editing = !this.state.editing;
     this.setState({ editing }, () => {
       if (editing) {
-        this.input.focus();
+        // this.input.focus();
       }
     });
   }
@@ -164,11 +164,13 @@ export default class AllFiles extends PureComponent{
                 <Tooltip placement="top" title='分享'>
                   <img src={shareIcon} />
                 </Tooltip>
-                <Tooltip placement="top" title='下载'>
+                {record.fileType !== 'dir' ? <Tooltip placement="top" title='下载'>
                   <a href={`${RequestUtils.requestPath}/ftpFiles/downloads?fileUuidName=${record.fileUuidName}&fileName=${record.fileName}`} download="">
                     <img src={downloadIcon} className={styles.marginIcon} onClick={() => this.downloadFile(record.fileUuidName, record.fileName)}/>
                   </a>
                 </Tooltip>
+                : null
+                }
                 <Tooltip placement="top" title='重命名'>
                   <img src={renameIcon} className={styles.marginIcon} onClick={() => this.resetFileName(record.ftpFileId)}/>
                 </Tooltip>
