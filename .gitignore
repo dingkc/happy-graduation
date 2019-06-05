@@ -24,3 +24,5 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+src/antd-pro/node_modules/
+src/main/resources/static/
