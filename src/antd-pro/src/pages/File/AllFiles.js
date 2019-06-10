@@ -188,7 +188,7 @@ export default class AllFiles extends PureComponent{
         }
       },
       {
-        key: 'fileSize',
+        key: 'fileUnitSize',
         title: '大小',
         dataIndex: 'fileUnitSize',
         width: '20%',
@@ -445,7 +445,7 @@ export default class AllFiles extends PureComponent{
     if(info.file.response){
       if(info.file.response.status === '0'){
         message.success('上传成功');
-        this.getFileList();
+        this.getFileList({parentFileId: clickParentFileId});
       }
       else {
         message.error(info.file.response.errMessage)
@@ -474,7 +474,7 @@ export default class AllFiles extends PureComponent{
     // }
     const params = values;
     dispatch({
-      type: 'file/moveFile',
+      type: 'file/renameFile',
       payload: params,
     }).then((response) => {
       thiz.getFileList();
@@ -524,7 +524,7 @@ export default class AllFiles extends PureComponent{
     };
     const props = {
       name: 'file',
-      action: '/api/v1/ftpFiles/uploads?parentFileId=-1',
+      action: `/api/v1/ftpFiles/uploads?parentFileId=${clickParentFileId}`,
       showUploadList: false,
       onChange:this.uploadFile,
     };
