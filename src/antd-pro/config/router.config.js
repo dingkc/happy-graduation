@@ -52,6 +52,10 @@ export default [
         // ],
       },
       {
+        path: '/file/:ftpFileId/fileDetail',
+        component: './File/FileDetail',
+      },
+      {
         name: '记事',
         path: '/notes',
         component: './Note/NoteLayout'
@@ -205,6 +209,11 @@ export default [
           //   ],
           // },
       //   ],
+      },
+      {
+        name: '分享',
+        path: '/share',
+        component: './Share/Share',
       },
       {
         component: '404',

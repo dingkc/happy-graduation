@@ -20,6 +20,10 @@ export async function addFile(params) {
   return RequestUtils.requestPOST(`/ftpFiles/dirs`,params);
 }
 
+export async function getFileDetail(params) {
+  return RequestUtils.requestGET(`/ftpFiles/${params.ftpFileId}/previews`,params);
+}
+
 export async function getRecycleList(params) {
   return RequestUtils.requestGET(`/recycle-bins`,params);
 }

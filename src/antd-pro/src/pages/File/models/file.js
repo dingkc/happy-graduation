@@ -5,7 +5,8 @@ import {
   deleteFile,
   downloadFile,
   moveFile,
-  addFile
+  addFile,
+  getFileDetail
 }
   from '@/services/fileApi';
 
@@ -133,6 +134,21 @@ export default {
           message.error(response.errMessage);
         }
       }
+    },
+
+    *getFileDetail({ payload }, { call, put }) {
+      const response = yield call(getFileDetail,payload);
+      if(response) {
+        if(response.status === '0'){
+          yield put({
+            type: 'saveFile',
+            payload: response,
+          })
+        }
+        else {
+          message.error(response.errMessage);
+        }
+      }
     }
 
 
@@ -173,6 +189,13 @@ export default {
       return {
         ...state,
         breads: action.payload,
+      }
+    },
+
+    saveFile(state, action) {
+      console.log('文件预览=====',action.payload)
+      return {
+        ...state
       }
     }
 

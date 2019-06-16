@@ -293,7 +293,7 @@ export default class AllFiles extends PureComponent{
     }
     else {
       //跳转到文件预览页面
-      // this.pageJump(`/file/${record.ftpFileId}/fileDetail`)
+      this.pageJump(`/file/${record.ftpFileId}/fileDetail`)
     }
     if(record.fileType === 'dir' && type === 'move'){
       const params = {
